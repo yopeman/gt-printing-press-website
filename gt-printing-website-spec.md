@@ -29,14 +29,66 @@ A trilingual (English, Amharic, Afaan Oromo) corporate website that converts bus
 
 ---
 
-## 2. Brand & Design Direction
+## 2. Brand, Themes & Advanced UI/UX Design System
 
-- **Brand colors:** Red, Black, White (use the client's existing logo and brand guidelines).
-- **Suggested usage:** White as the dominant background, black for text and footer, red reserved for CTAs, highlights and key accents. This keeps the site clean and professional and makes the "Request a Quote" button stand out.
-- **Tone:** Professional, technical, confident, fast and reliable.
-- **Imagery:** Real photos of the machines, workshop, finished jobs and installed signage. Avoid generic stock photos wherever possible.
-- **Typography:** Must support Latin and Ethiopic (Ge'ez) scripts well (e.g. Noto Sans / Noto Sans Ethiopic). Test Amharic text rendering and line height carefully.
-- **Responsive:** Mobile-first. A large share of Ethiopian traffic is on mobile and on slower connections, so optimize images and keep pages light.
+### 2.1 Brand Identity & Color Tokens
+- **Core brand palette:** Red, Black, White (derived from GT Printing's established logo and visual guidelines).
+- **Accent Red:** Vibrant, precision industrial red (`#E11D48` / `#DC2626` in light modes; luminous ruby `#FF2E56` in dark/night modes) used purposefully for high-conversion CTAs, active tab indicators, machinery status dots, and focal highlights.
+- **Tone:** High-tech industrial, hyper-precise, institutional, fast, and authoritative.
+- **Imagery:** High-definition real photography of machines, workshop, finished packaging, and installed 3D architectural signage. Avoid generic stock photos.
+
+### 2.2 Four-State Theme Architecture
+The site implements a robust 4-state theme system with zero flash of unstyled content (FOUC), smooth color transitions (200–300ms ease), and persistence via `localStorage`:
+
+| Theme Mode | Visual Signature | Color Specification | Use Case |
+|------------|------------------|---------------------|----------|
+| **Light** | Studio Clean & Precision Minimalist | Pure white background (`#FFFFFF`), cool off-white cards (`#F8FAFC`), crisp charcoal text (`#0F172A`), subtle borders (`#E2E8F0`). | Daytime office browsing, formal corporate presentations, high-readability printed aesthetics. |
+| **Dark** | Sleek Industrial Slate | Deep slate/charcoal background (`#0F172A`), rich card surfaces (`#1E293B`), subdued slate borders (`rgba(255,255,255,0.08)`), frosted glass layers. | Standard low-light environment, reduced eye strain, premium modern agency feel. |
+| **Night** | True Pitch-Black OLED / Cyberpunk Luxury | Absolute black background (`#000000`), ultra-deep obsidian cards (`#0A0A0A` to `#121212`), high-contrast luminous typography, vibrant neon ruby glows (`#FF2E56`). | Maximum contrast, battery saving on OLED/mobile devices, dramatic visual punch showcasing illuminated 3D signage. |
+| **System** | Adaptive OS Sync | Automatically mirrors device preference (`prefers-color-scheme: dark` → Dark/Night based on user setting, otherwise Light). | Default fallback for first-time visitors. |
+
+- **Theme Toggle UX:** Accessible multi-state segmented control or interactive icon cycle in the navigation header (☀️ Light → 🌙 Dark → 🌌 Night → 💻 System) accompanied by smooth icon rotation and micro-haptic visual feedback.
+
+### 2.3 Animation-Intensive Motion System
+The visual experience is dynamic, tactile, and cinematic while maintaining strict 60fps performance and respecting `prefers-reduced-motion`:
+
+- **Scroll-Driven Entrances & Viewport Reveals:**
+  - Hero section elements stagger in with smooth cubic-bezier easing (`opacity: 0, y: 24` to `opacity: 1, y: 0`).
+  - Portfolio items and service cards reveal with staggered spring physics as they enter the viewport.
+  - Number counters (e.g. "Since 2000 E.C.", "100% In-house", "Same-Day Quote") animate count-up upon scrolling into view.
+- **Interactive Machinery & Workflow Pipeline:**
+  - An animated interactive pipeline showing print production stages (Design ➔ Pre-press & Proofing ➔ Print ➔ Structural Finishing ➔ Installation).
+  - Active nodes pulse with glowing laser paths connecting each phase when hovered or scrolled.
+- **Micro-Interactions & Hover Physics:**
+  - **Magnetic Buttons:** Primary CTAs gently pull towards cursor coordinates on desktop hover.
+  - **Card Tilt & Dynamic Lighting:** 3D perspective hover effect on portfolio cards with dynamic radial gradient light tracking the mouse position.
+  - **Fluid Tab Morphing:** Language switchers and theme selectors use layout-spring morphing pills (`layoutId` in Framer Motion) that smoothly slide between options.
+  - **Live Turnaround Badges:** Shimmering gradient waves across "Express Production" and "Same-day quote" badges.
+- **Quote Form Step Transitions:** Smooth directional slide-in/slide-out animations between form steps with an animated SVG completion checkmark upon submission.
+
+### 2.4 Icon-Intensive Visual Architecture
+To communicate technical capabilities across three languages effortlessly, icons serve as primary visual anchors:
+
+- **Icon Framework:** Lucide Icons / Tabler Icons paired with custom SVG industrial printing glyphs.
+- **Comprehensive Visual Signifiers:** Every service, specification option, finishing method, machine spec, and contact medium features an illuminated icon container:
+  - **Machinery Badges:** Offset cylinders (⚙️/Roller), Laser cutters (⚡/Laser beam), UV flatbeds (🖨️/Layered UV), CNC routers (📐/Precision bit), Guillotines (✂️/Blade).
+  - **Finishing & Materials:** Thermal lamination, kiss-cut, emboss/deboss, foil stamping, saddle-stitch each have a dedicated illustrated micro-icon.
+  - **Form Options:** Visual selector cards with prominent icons for artwork status ("Ready to Print" vs "Need Design Help") and contact methods (Telegram, Phone, Email).
+- **Animated SVG Micro-Icons:**
+  - Rotating gears on machine cards on hover.
+  - Pulse effects on live status indicators (e.g., Telegram connection active, quote team online).
+  - Duotone icons with theme-reactive fills (glow in Dark/Night, sharp duo-tone in Light).
+
+### 2.5 Modern Component & Layout Patterns
+- **Glassmorphism & Layered Depth:**
+  - High-performance backdrop blur (`backdrop-blur-md` or `backdrop-blur-xl`) on navigation headers, floating quick-contact docks, modal overlays, and quote cards.
+  - Translucent border outlines with subtle gradient highlights.
+- **Typography & Script Tuning:**
+  - **Latin:** Clean, technical geometric sans (e.g. Inter / Plus Jakarta Sans / Outfit).
+  - **Ethiopic (Ge'ez):** Noto Sans Ethiopic with tuned line-height multipliers (1.6–1.8) and font-size adjustments to prevent clipping and ensure comfortable reading across Amharic body copy.
+- **Mobile-First Touch Architecture:**
+  - Persistent bottom quick-contact dock on mobile: 1-tap Telegram chat, 1-tap phone dial, and quick "Quote" drawer.
+
 
 ---
 
@@ -319,9 +371,12 @@ This is a recommendation; adjust to your team's skills.
 
 | Layer | Suggestion |
 |-------|------------|
-| Frontend | **Next.js** and Tailwind CSS |
+| Frontend | **Next.js** (App Router) & **Tailwind CSS** (CSS custom properties for themes) |
+| Theming | `next-themes` supporting **Light**, **Dark**, **Night**, and **System** |
+| Animation & Motion | `framer-motion` (spring physics, scroll reveals, layout morphing) |
+| Icons | `lucide-react` + custom SVG industrial glyphs |
 | i18n | `next-intl` (or `next-i18next`) with `en`, `am`, `om` locales |
-| Backend / API | Next.js API routes |
+| Backend / API | Next.js Route Handlers / Server Actions |
 | Database | MongoDB |
 | CMS / Admin | Custom admin built into the app |
 | Telegram | **Neogram** |
