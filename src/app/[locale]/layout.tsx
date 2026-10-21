@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { sansFont, ethiopicFont } from "@/app/fonts";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { AppShell } from "@/components/layout/app-shell";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
@@ -75,7 +76,7 @@ export default async function LocaleLayout({
       <body className="min-h-screen bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary">
         <ThemeProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
+            <AppShell>{children}</AppShell>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

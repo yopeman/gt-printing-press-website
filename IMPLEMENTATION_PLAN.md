@@ -103,28 +103,28 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Build the visual identity system, navigation headers, glassmorphism layers, micro-interactions, and mobile touch docks.
 
-- [ ] **Task 2.1: Navigation Bar & Locale/Theme Switchers**
+- [x] **Task 2.1: Navigation Bar & Locale/Theme Switchers**
   - Responsive header with high-performance backdrop blur (`backdrop-blur-md`).
   - Interactive multi-state Theme Segmented Switcher (☀️ Light → 🌙 Dark → 🌌 Night → 💻 System) with icon transitions.
   - Trilingual Language Switcher (EN | አማ | OM) with smooth spring layout indicator (`layoutId`).
   - Desktop navigation links with animated hover underlines and direct "Request a Quote" CTA button.
   - Mobile full-screen slide-in drawer menu with staggered entrance animations.
 
-- [ ] **Task 2.2: Mobile Quick-Contact Floating Dock**
+- [x] **Task 2.2: Mobile Quick-Contact Floating Dock**
   - Persistent bottom touch dock on mobile viewports:
     - 1-tap Telegram quick direct chat link.
     - 1-tap phone dialer (`tel:+251...`).
     - Quick "Instant Quote" trigger opening the quote drawer/modal.
   - Auto-hides on rapid scroll down, reappears smoothly on scroll up.
 
-- [ ] **Task 2.3: Reusable Modern Component Kit**
+- [x] **Task 2.3: Reusable Modern Component Kit**
   - **Magnetic Buttons:** Primary CTAs gently snap to cursor position on desktop hover.
   - **3D Tilt Cards:** Glassmorphism cards with mouse-tracking radial gradient light and tilt perspective for portfolio & service highlights.
   - **Icon Container System:** Standardized glowing icon boxes with theme-reactive fills using `lucide-react` and custom printing equipment glyphs.
   - **Animated Counter:** Viewport-triggered scroll counter for metrics ("Since 2000 E.C.", "100% In-House", "Same-Day Quote").
   - **Status & Express Badges:** Glowing pill indicators with shimmer wave animations.
 
-- [ ] **Task 2.4: Footer & Trust Anchors**
+- [x] **Task 2.4: Footer & Trust Anchors**
   - Comprehensive footer containing legal company name (`Advanced Digital Production Printing Plc / GT Printing Plc`).
   - Africa Avenue (Bole Road) location link, interactive working hours, trilingual sitemap links, and social channel links.
   - Live Ethiopian local time display (East Africa Time, UTC+3) and current workshop operating status (Open / Closed).

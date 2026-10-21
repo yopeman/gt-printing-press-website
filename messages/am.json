@@ -115,6 +115,15 @@
     "servicesTitle": "አገልግሎቶች",
     "contactInfo": "ቀጥታ ግንኙነት",
     "operatingHours": "የስራ ሰዓታት",
-    "hours": "ከሰኞ – ቅዳሜ፡ ከጠዋቱ 2:30 – ከሰዓት 12:00"
+    "hours": "ከሰኞ – ቅዳሜ፡ ከጠዋቱ 2:30 – ከሰዓት 12:00",
+    "statusOpen": "ፋብሪካው ክፍት ነው (ምርት ላይ)",
+    "statusClosed": "ፋብሪካው ዝግ ነው (በድረ-ገጽ የዋጋ ጥያቄ መቀበል ይቀጥላል)",
+    "localTime": "የአዲስ አበባ ሰዓት (EAT)",
+    "followUs": "ማህበራዊ ገጾቻችን",
+    "directions": "አድራሻ በካርታ (Google Maps)",
+    "callNow": "ወደ ማተሚያ ቤቱ ይደውሉ",
+    "telegramChat": "የቴሌግራም ሽያጭ መስመር",
+    "quickQuote": "ፈጣን ዋጋ",
+    "privacy": "የግላዊነት ፖሊሲ"
   }
 }
