@@ -194,7 +194,7 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Implement the primary business conversion funnel with Ethiopian phone validation, file attachment handling, spam mitigation, and instant Telegram alerts via Neogram.
 
-- [ ] **Task 4.1: Interactive Multi-Step Quote / Order Form**
+- [x] **Task 4.1: Interactive Multi-Step Quote / Order Form**
   - **Step 1: Service Selection:** Interactive grid of visual cards with icons; pre-selects service if arriving from a specific service page.
   - **Step 2: Contact Details:**
     - Full Name (required).
@@ -212,12 +212,12 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
     - Large file alternative: External file share link field (Google Drive, WeTransfer, Telegram).
   - Directional slide animations between steps and progress indicator.
 
-- [ ] **Task 4.2: Spam Protection & Form Security**
+- [x] **Task 4.2: Spam Protection & Form Security**
   - Hidden honeypot field to trap automated bots.
   - IP-based rate limiting on quote submission endpoints.
   - Server-side Zod validation for all form fields.
 
-- [ ] **Task 4.3: Neogram Telegram Bot Integration**
+- [x] **Task 4.3: Neogram Telegram Bot Integration**
   - Initialize Neogram bot instance with secure environment credentials (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`).
   - Build formatted Markdown/HTML message template:
     - Unique Quote ID (`#GT-2026-XXXX`).
@@ -230,7 +230,7 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
     - `[📂 View in Admin Dashboard]` (Deep link to quote management)
   - Resilient execution: Guarantee quote is saved to MongoDB first; if Telegram API encounters network issues, log error and queue retry without failing the user's submission.
 
-- [ ] **Task 4.4: User Confirmation & UX Feedback**
+- [x] **Task 4.4: User Confirmation & UX Feedback**
   - Animated submission success state with green checkmark and copyable Reference Number.
   - Friendly confirmation message matching visitor's language: "Thank you! Our production team will contact you with a quote on the same working day."
 
@@ -240,25 +240,25 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Deliver an intuitive, role-protected dashboard for GT staff to manage quote leads, update portfolio projects, publish blog posts, and modify site settings in all three languages.
 
-- [ ] **Task 5.1: Authentication & Role-Based Authorization**
+- [x] **Task 5.1: Authentication & Role-Based Authorization**
   - Secure login screen with email/password authentication.
   - Password hashing using `bcryptjs` and session handling via secure HTTP-only cookies.
   - Two user roles:
     - **Admin:** Full access (Quote management, user administration, site settings, content).
     - **Editor:** Content management (Blog, portfolio, testimonials, client logos).
 
-- [ ] **Task 5.2: Quote Pipeline & Lead Management Dashboard**
+- [x] **Task 5.2: Quote Pipeline & Lead Management Dashboard**
   - Summary metrics: New inquiries today, pending quotes, total monthly submissions.
   - Filterable quote table with status filters: `New` ➔ `Contacted` ➔ `Quoted` ➔ `Won` ➔ `Lost`.
   - Quote details modal with internal notes area for sales staff.
   - One-click CSV export of inquiries for accounting and follow-up.
 
-- [ ] **Task 5.3: Trilingual Content Managers (Tabs for EN / AM / OM)**
+- [x] **Task 5.3: Trilingual Content Managers (Tabs for EN / AM / OM)**
   - **Blog Post Manager:** Rich text editor, cover image uploader, category/tagging, publication status (`Draft`, `Published`), SEO meta title & description.
   - **Portfolio Manager:** Project title and description tabs, client name, service tag, industry tag, image gallery uploader with drag-and-drop reordering.
   - **Testimonials & Clients Manager:** Logo uploader, client quote text, position, display order.
 
-- [ ] **Task 5.4: Site Settings Manager**
+- [x] **Task 5.4: Site Settings Manager**
   - Key-value editor for global contact phone numbers, emails, office address, working hours, and social media handles.
   - Instant cache invalidation upon settings update.
 

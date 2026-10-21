@@ -40,15 +40,29 @@ export function QuickQuoteModal({ isOpen, onClose }: QuickQuoteModalProps) {
 
     setIsSubmitting(true);
 
-    // Generate reference code
-    const generatedRef = `GT-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-
     try {
-      // Simulate submission endpoint
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      setSubmittedRef(generatedRef);
+      const res = await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          serviceType: formData.serviceType,
+          name: formData.name,
+          phone: cleanPhone,
+          specification: formData.specifications,
+          quantity: "Quick Inquiry",
+          preferredContact: "phone",
+          artworkStatus: "ready",
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Could not submit quote.");
+      }
+
+      setSubmittedRef(data.reference);
     } catch (err: any) {
-      setErrorMsg("Could not submit quote. Please call or message our Telegram desk.");
+      setErrorMsg(err.message || "Could not submit quote. Please call or message our Telegram desk.");
     } finally {
       setIsSubmitting(false);
     }
