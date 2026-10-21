@@ -11,6 +11,10 @@ import {
   StatusBadge,
 } from "@/components/ui";
 import { QuickQuoteModal } from "@/components/quote/quick-quote-modal";
+import { WorkflowPipeline } from "@/components/home/workflow-pipeline";
+import { PortfolioReel } from "@/components/home/portfolio-reel";
+import { TestimonialsSlider } from "@/components/home/testimonials-slider";
+import { LatestBlogSection } from "@/components/home/latest-blog-section";
 import {
   Printer,
   Sparkles,
@@ -288,6 +292,119 @@ export default function HomePage() {
                 {t("trustSection.item3Desc")}
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Workflow Production Pipeline */}
+      <section className="py-16 md:py-24 bg-surface-secondary/30 border-y border-border/60">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
+            <StatusBadge
+              label="Turnkey Production Cycle"
+              variant="express"
+              pulsingDot
+              shimmer
+            />
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+              From File to Finished Installation
+            </h2>
+            <p className="text-sm text-foreground-muted">
+              Interactive 5-stage manufacturing pipeline with strict quality gates and zero third-party outsourcing.
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <WorkflowPipeline />
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Verified Portfolio Showcase */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
+            <StatusBadge
+              label="Verified Track Record"
+              variant="neutral"
+              pulsingDot={false}
+              shimmer={false}
+            />
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+              Featured Client Branding & Signage
+            </h2>
+            <p className="text-sm text-foreground-muted">
+              Real projects delivered across banking, aviation, hospitality, and luxury retail in Ethiopia.
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto">
+            <PortfolioReel />
+          </div>
+        </div>
+      </section>
+
+      {/* Client Logos & Testimonials Slider */}
+      <section className="py-16 md:py-24 bg-surface-secondary/30 border-y border-border/60">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <TestimonialsSlider />
+        </div>
+      </section>
+
+      {/* Latest Blog & Industry Insights */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
+            <StatusBadge
+              label="Technical Guidance"
+              variant="neutral"
+              pulsingDot={false}
+              shimmer={false}
+            />
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+              GT Printing Technical Insights
+            </h2>
+            <p className="text-sm text-foreground-muted">
+              Expert articles on pre-press artwork setup, paper selection, and technological trends.
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto">
+            <LatestBlogSection />
+          </div>
+        </div>
+      </section>
+
+      {/* Closing Quote Conversion Strip */}
+      <section className="py-20 bg-primary/5 border-t border-primary/20 relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl space-y-6">
+          <StatusBadge
+            label="Same-Day Quoting Guaranteed"
+            variant="express"
+            pulsingDot
+            shimmer
+          />
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            Ready to Discuss Your Next Print or Signage Project?
+          </h2>
+          <p className="text-sm sm:text-base text-foreground-muted leading-relaxed max-w-xl mx-auto">
+            Get an exact estimate reviewed by our senior production technicians in Addis Ababa on the same working day.
+          </p>
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
+            <MagneticButton
+              onClick={() => setQuoteModalOpen(true)}
+              className="px-8 py-4 rounded-2xl bg-primary hover:bg-primary-hover text-white font-bold text-base shadow-glow-md hover:shadow-glow-lg transition-all"
+            >
+              <span>Request Same-Day Quote</span>
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </MagneticButton>
+            <a
+              href="tel:+251115505050"
+              className="px-6 py-4 rounded-2xl bg-surface hover:bg-surface-secondary text-foreground font-semibold text-sm border border-border shadow-sm transition-colors flex items-center gap-2"
+            >
+              <PhoneCall className="w-4 h-4 text-emerald-500" />
+              <span>Direct Sales Line: +251 11 550 5050</span>
+            </a>
           </div>
         </div>
       </section>

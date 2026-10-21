@@ -135,7 +135,7 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Develop the complete trilingual public website with high-performance animations, machinery diagrams, and filterable showcases.
 
-- [ ] **Task 3.1: High-Impact Home Page**
+- [x] **Task 3.1: High-Impact Home Page**
   - **Hero Section:** Bold headline ("Design, print, fabricate and install, all under one roof"), magnetic primary quote CTA, secondary portfolio button, and dynamic background mesh/ambient glow.
   - **Quick Trust Strip:** Icon-driven key proof points ("Same-Day Turnaround", "100% In-House Production", "Est. 2000 E.C.").
   - **Services Grid:** 6 interactive cards with custom industrial icons and direct quote pre-fill links.
@@ -145,12 +145,12 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
   - **Client Wall & Testimonials Slider:** Animated client logo carousel (Marriott, Ethiopian Airlines, ethio telecom, Awash Bank, etc.) and responsive quote cards.
   - **Latest Blog Insights:** 3 featured articles with reading time and tag badges.
 
-- [ ] **Task 3.2: About Us & Company Profile**
+- [x] **Task 3.2: About Us & Company Profile**
   - GT Printing origin story (transition from high-speed digital engines to full-scale fabrication workshop behind Dembel).
   - Mission, Vision, and Institutional Trust credentials (financial, diplomatic, and NGO client track record).
   - Production Philosophy: Soft-proof validation + mandatory hard-copy proofs for color-critical work.
 
-- [ ] **Task 3.3: Services Architecture (Overview + 6 Detail Pages)**
+- [x] **Task 3.3: Services Architecture (Overview + 6 Detail Pages)**
   - Dynamic routing for services:
     1. `offset-digital-printing`
     2. `publishing-binding`
@@ -160,7 +160,7 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
     6. `corporate-promotional-items`
   - Each detail page features: technical specs, available paper stocks & finishing techniques, high-res sample gallery, and a direct "Request a Quote for this Service" button that pre-selects the service in the quote form.
 
-- [ ] **Task 3.4: Capabilities & In-House Machinery Showcase**
+- [x] **Task 3.4: Capabilities & In-House Machinery Showcase**
   - Machinery inventory cards with specs and manufacturer logos:
     - Offset: *Heidelberg Speedmaster*, *Komori Lithrone*, *Manroland ROLAND*.
     - Cutting & Finishing: *Polar Mohr Guillotines*, *Autobond / Komfi Laminators*.
@@ -168,22 +168,22 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
     - Large Format & Signage: UV flatbeds, Laser cutters, heavy CNC routers.
   - Quality assurance workflow breakdown (Color calibration, hard proofs, structural mockups).
 
-- [ ] **Task 3.5: Industries We Serve Page**
+- [x] **Task 3.5: Industries We Serve Page**
   - Tailored solution breakdowns for:
     - Schools & Universities (Exams, certificates, yearbooks).
     - Medical & Healthcare Facilities (Sensitive stationery, prescription pads, forms).
     - Corporate & Event Branding (Exhibition stands, 3D shopfront signage, rollups).
     - Financial Institutions & Telecoms (High-security print, massive campaign rollouts).
 
-- [ ] **Task 3.6: Filterable Portfolio System**
+- [x] **Task 3.6: Filterable Portfolio System**
   - Portfolio grid with animated category filters (`All`, `Signage & 3D`, `Packaging`, `Publishing`, `Corporate Branding`).
   - Project detail pages with client credits, materials used, production techniques, location, and expandable image gallery.
 
-- [ ] **Task 3.7: GT Printing Blog**
+- [x] **Task 3.7: GT Printing Blog**
   - Blog post listing with search, category filtering, and pagination.
   - Article reading view with rich markdown/HTML formatting, print-prep guidelines (bleeds, CMYK vs RGB, vector prep), social share buttons, and an inline quote CTA card.
 
-- [ ] **Task 3.8: Contact Page & Interactive Location**
+- [x] **Task 3.8: Contact Page & Interactive Location**
   - Google Maps location embed for Africa Avenue (Behind Dembel City Centre).
   - Direct telephone links for fast sales inquiries.
   - Working hours schedule and general contact inquiry form.
