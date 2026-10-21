@@ -1,0 +1,120 @@
+{
+  "common": {
+    "companyName": "ጂቲ ማተሚያ ቤት",
+    "legalName": "አድቫንስድ ዲጂታል ፕሮዳክሽን ፕሪንቲንግ ኃ/የተ/የግ/ማ / ጂቲ ፕሪንቲንግ",
+    "tagline": "ዲዛይን፣ ህትመት፣ መገጣጠም እና ተከላ — በአንድ ጣሪያ ስር",
+    "requestQuote": "የዋጋ መጠየቂያ ያቅርቡ",
+    "viewPortfolio": "ስራዎቻችንን ይመልከቱ",
+    "exploreServices": "አገልግሎቶቻችንን ይመልከቱ",
+    "contactUs": "ያግኙን",
+    "learnMore": "ተጨማሪ መረጃ",
+    "allRightsReserved": "መብቱ በህግ የተጠበቀ ነው",
+    "readMore": "ሙሉውን ያንብቡ",
+    "since": "ከ2000 ዓ.ም ጀምሮ",
+    "inHouseProduction": "100% የራስ ውስጥ ምርት",
+    "sameDayQuote": "በተመሳሳይ ቀን የዋጋ ግምት",
+    "verifiedCapability": "የተረጋገጠ የማምረት አቅም"
+  },
+  "nav": {
+    "home": "ዋና ገጽ",
+    "about": "ስለ እኛ",
+    "services": "አገልግሎቶች",
+    "capabilities": "የማምረት አቅማችን",
+    "industries": "የምንሰራላቸው ዘርፎች",
+    "portfolio": "የስራ ውጤቶች",
+    "blog": "ብሎግ",
+    "contact": "አድራሻ",
+    "requestQuote": "ዋጋ ይጠይቁ",
+    "toggleMenu": "የማውጫ ቁልፍ"
+  },
+  "theme": {
+    "light": "ብርሃን",
+    "dark": "ጨለማ",
+    "night": "ሌሊት (OLED)",
+    "system": "የስርዓቱ ምርጫ",
+    "selectTheme": "ገጽታ ይምረጡ"
+  },
+  "language": {
+    "en": "English",
+    "am": "አማርኛ",
+    "om": "Afaan Oromoo",
+    "selectLanguage": "ቋንቋ ይምረጡ"
+  },
+  "home": {
+    "hero": {
+      "badge": "አስተማማኝ የህትመት እና የሳይኔጅ አምራች",
+      "title": "ዲዛይን፣ ህትመት፣ መገጣጠም እና ተከላ — ሁሉም በአንድ ጣሪያ ስር",
+      "description": "የኢትዮጵያ ቀዳሚ የንግድ ህትመት፣ የፓኬጂንግ እና የ3D ህንጻ ሳይኔጅ አጋር። ወደ ውጭ ሳናስተላልፍ በራሳችን ማሽነሪዎች ፈጣን እና ጥራት ያለው አገልግሎት እንሰጣለን።",
+      "ctaPrimary": "ፈጣን የዋጋ ግምት ይጠይቁ",
+      "ctaSecondary": "የማምረቻ ፋሲሊቲያችንን ይመልከቱ"
+    },
+    "stats": {
+      "experienceYears": "18+ ዓመታት",
+      "experienceLabel": "ከ2000 ዓ.ም ጀምሮ በጥራት ማገልገል",
+      "inHouse": "100%",
+      "inHouseLabel": "ሙሉ በሙሉ በራስ ውስጥ የሚመረት",
+      "turnaround": "በተመሳሳይ ቀን",
+      "turnaroundLabel": "ፈጣን ምላሽ እና የዋጋ ዝርዝር",
+      "satisfaction": "500+",
+      "satisfactionLabel": "የኮርፖሬት እና ተቋማዊ ደንበኞች"
+    },
+    "servicesSection": {
+      "badge": "ሙሉ አገልግሎት",
+      "title": "የኢንዱስትሪ ደረጃ የህትመት እና የማስታወቂያ ስራዎች",
+      "description": "ከትክክለኛ የቀለም ህትመቶች ጀምሮ እስከ 3D መብራት ያላቸው የህንጻ ሳይኔጆች ድረስ ሁሉንም በራሳችን እንሰራለን።"
+    },
+    "trustSection": {
+      "badge": "ለምን ጂቲን ይመርጣሉ?",
+      "title": "ወደ ውጭ ሳናስተላልፍ በሙሉ ሀላፊነት እና ጥራት እንሰራለን",
+      "item1Title": "ከመጀመሪያ እስከ መጨረሻ በራሳችን",
+      "item1Desc": "ዲዛይን፣ ፕሌት ዝግጅት፣ ኦፍሴት፣ ዩቪ ፍላትቤድ እና ሲኤንሲ ቅርጻ ስራዎች በሙሉ ልምድ ባላቸው ባለሙያዎቻችን ይከናወናሉ።",
+      "item2Title": "ጥብቅ የቅድመ-ህትመት ማረጋገጫ",
+      "item2Desc": "ዲጂታል ማረጋገጫ ከትክክለኛ ህትመት በፊት የሚደረግ አካላዊ ናሙና ፍተሻ።",
+      "item3Title": "ተቋማዊ እምነት",
+      "item3Desc": "ለባንኮች፣ ለዲፕሎማቲክ ተልዕኮዎች እና ለአለም አቀፍ ድርጅቶች አስተማማኝ አጋር።"
+    }
+  },
+  "services": {
+    "offsetDigital": "ኦፍሴት እና ዲጂታል ህትመት",
+    "publishingBinding": "ህትመት እና የመጽሐፍት ጥረዛ",
+    "packagingSolutions": "የፓኬጂንግ እና ሳጥን ስራዎች",
+    "largeFormatSignage": "ትልልቅ ህትመቶች እና ሳይኔጅ",
+    "graphicDesignPrepress": "ግራፊክ ዲዛይን እና ቅድመ-ህትመት",
+    "corporatePromotional": "የድርጅት መለያ እና ማስታወቂያ እቃዎች"
+  },
+  "quote": {
+    "title": "የምርት ዋጋ መጠየቂያ",
+    "subtitle": "በተመሳሳይ የስራ ቀን ከባለሙያዎቻችን የተጠናከረ የዋጋ ግምት ያግኙ።",
+    "step1": "አገልግሎት",
+    "step2": "መረጃ",
+    "step3": "ዝርዝር ሁኔታ",
+    "step4": "ፋይሎች",
+    "fullName": "ሙሉ ስም",
+    "company": "ድርጅት / ተቋም",
+    "phone": "ስልክ ቁጥር",
+    "email": "ኢሜይል አድራሻ",
+    "preferredContact": "የሚመርጡት የመገናኛ መንገድ",
+    "specs": "የስራው ዝርዝር ሁኔታ",
+    "specsPlaceholder": "መጠኑን፣ ብዛቱን፣ የወረቀት አይነት፣ ቀለማትን እና የማጠናቀቂያ ምርጫዎችን ይግለጹ...",
+    "quantity": "ግምታዊ ብዛት",
+    "neededBy": "የሚያስፈልግበት ቀን",
+    "artworkStatus": "የዲዛይን ሁኔታ",
+    "artworkReady": "የተዘጋጀ ዲዛይን አለኝ",
+    "artworkHelp": "የዲዛይን እገዛ እፈልጋለሁ",
+    "submit": "ጥያቄውን ላክ",
+    "submitting": "እየተላከ ነው...",
+    "successTitle": "ጥያቄዎ በተሳካ ሁኔታ ደርሷል!",
+    "successMessage": "እናመሰግናለን! የመለያ ቁጥርዎ:",
+    "successSubtext": "የምርት ክፍላችን በተመሳሳይ የስራ ቀን በመረጡት የመገናኛ ዘዴ ምላሽ ይሰጥዎታል።"
+  },
+  "footer": {
+    "description": "የንግድ ህትመት፣ ፓኬጂንግ እና የ3D ህንጻ ሳይኔጅ በጥራት እና በትክክለኛ ቴክኖሎጂ በአዲስ አበባ፣ ኢትዮጵያ።",
+    "headOffice": "ዋና መስሪያ ቤት",
+    "address": "2ኛ ፎቅ፣ ከደንበል ሲቲ ሴንተር ጀርባ፣ አፍሪካ ጎዳና (ቦሌ መንገድ)፣ አዲስ አበባ፣ ኢትዮጵያ",
+    "quickLinks": "ፈጣን ማስፈንጠሪያዎች",
+    "servicesTitle": "አገልግሎቶች",
+    "contactInfo": "ቀጥታ ግንኙነት",
+    "operatingHours": "የስራ ሰዓታት",
+    "hours": "ከሰኞ – ቅዳሜ፡ ከጠዋቱ 2:30 – ከሰዓት 12:00"
+  }
+}

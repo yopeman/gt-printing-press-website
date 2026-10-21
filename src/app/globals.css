@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --background: 255 255 255;
+  --surface: 248 250 252;
+  --surface-secondary: 241 245 249;
+  --surface-tertiary: 226 232 240;
+  --foreground: 15 23 42;
+  --foreground-muted: 100 116 139;
+  --border-color: rgba(226, 232, 240, 0.9);
+  --primary: 220 38 38;
+  --primary-hover: 185 28 28;
+  --primary-glow: rgba(220, 38, 38, 0.25);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(226, 232, 240, 0.8);
+  accent-color: #DC2626;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: 15 23 42;
+  --surface: 30 41 59;
+  --surface-secondary: 51 65 85;
+  --surface-tertiary: 71 85 105;
+  --foreground: 248 250 252;
+  --foreground-muted: 148 163 184;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --primary: 244 63 94;
+  --primary-hover: 251 113 133;
+  --primary-glow: rgba(244, 63, 94, 0.35);
+  --glass-bg: rgba(30, 41, 59, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  accent-color: #F43F5E;
+}
+
+[data-theme="night"] {
+  color-scheme: dark;
+  --background: 0 0 0;
+  --surface: 10 10 10;
+  --surface-secondary: 18 18 18;
+  --surface-tertiary: 28 28 28;
+  --foreground: 255 255 255;
+  --foreground-muted: 161 161 170;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --primary: 255 46 86;
+  --primary-hover: 255 92 122;
+  --primary-glow: rgba(255, 46, 86, 0.55);
+  --glass-bg: rgba(10, 10, 10, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  accent-color: #FF2E56;
+}
+
+/* Fallback for system dark mode when data-theme is not yet applied */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --background: 15 23 42;
+    --surface: 30 41 59;
+    --surface-secondary: 51 65 85;
+    --surface-tertiary: 71 85 105;
+    --foreground: 248 250 252;
+    --foreground-muted: 148 163 184;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --primary: 244 63 94;
+    --primary-hover: 251 113 133;
+    --primary-glow: rgba(244, 63, 94, 0.35);
+    --glass-bg: rgba(30, 41, 59, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    accent-color: #F43F5E;
+  }
+}
+
+html {
+  transition: background-color 250ms ease, color 250ms ease;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ethiopic script typography tuning */
+:lang(am) {
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+/* Accessible focus ring */
+:focus-visible {
+  outline: 2px solid rgb(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

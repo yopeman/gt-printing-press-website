@@ -64,12 +64,12 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Set up the Next.js App Router codebase, configure the 4-state theme engine, configure trilingual routing (`en`, `am`, `om`), and initialize MongoDB schemas with embedded localization.
 
-- [ ] **Task 1.1: Project Scaffolding & Dependency Setup**
+- [x] **Task 1.1: Project Scaffolding & Dependency Setup**
   - Initialize Next.js project with TypeScript, ESLint, PostCSS, and Tailwind CSS.
   - Install dependencies: `next-intl`, `next-themes`, `framer-motion`, `lucide-react`, `mongoose` (or native MongoDB driver), `bcryptjs`, `jose` / `next-auth`, and `zod`.
   - Configure path aliases (`@/*`) and project directory structure.
 
-- [ ] **Task 1.2: 4-State Theme Engine Configuration**
+- [x] **Task 1.2: 4-State Theme Engine Configuration**
   - Configure CSS custom property tokens in `globals.css` for:
     - **Light:** Studio Clean (`#FFFFFF` bg, `#F8FAFC` cards, `#0F172A` text, `#DC2626` red).
     - **Dark:** Sleek Slate (`#0F172A` bg, `#1E293B` cards, `#94A3B8` borders, `#F43F5E` ruby).
@@ -78,7 +78,7 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
   - Wrap application in `ThemeProvider` with `attribute="data-theme"` or `class` and `themes={['light', 'dark', 'night', 'system']}`.
   - Implement zero-FOUC (Flash of Unstyled Content) script to prevent theme flickering.
 
-- [ ] **Task 1.3: Trilingual Internationalization (i18n) Engine**
+- [x] **Task 1.3: Trilingual Internationalization (i18n) Engine**
   - Configure `next-intl` with locale prefixing (`/en`, `/am`, `/om`).
   - Create base translation JSON dictionaries for common UI strings, navigation, footer, and errors.
   - Configure typography in `next/font`:
@@ -86,7 +86,7 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
     - Ethiopic: `Noto Sans Ethiopic` with tailored line-height and letter-spacing for Ge'ez script.
   - Implement language negotiation middleware and locale-aware redirection.
 
-- [ ] **Task 1.4: Database Schema & Connection Management**
+- [x] **Task 1.4: Database Schema & Connection Management**
   - Establish cached MongoDB connection utility for serverless execution.
   - Implement Mongoose models utilizing the **Embedded Localization Pattern**:
     - `QuoteRequest`: reference (`#GT-2026-XXXX`), serviceType, contact info (name, company, phone, email, contactMethod), specs (description, quantity, neededBy, artworkStatus), attachments, status (`New` | `Contacted` | `Quoted` | `Won` | `Lost`), notes, telegramDeliveryStatus.

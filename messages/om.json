@@ -1,0 +1,120 @@
+{
+  "common": {
+    "companyName": "Maxxansaa GT",
+    "legalName": "Advanced Digital Production Printing Plc / GT Printing Plc",
+    "tagline": "Dizaayinii, maxxansa, oomishaa fi dhaabbii — hunda bakka tokkotti",
+    "requestQuote": "Gatii Gaafadhaa",
+    "viewPortfolio": "Hojiiwwan Keenya",
+    "exploreServices": "Tajaajiloota Keenya",
+    "contactUs": "Nu Qunnamaa",
+    "learnMore": "Dabalata Baruuf",
+    "allRightsReserved": "Mirgi hundi seeraan eegamaadha",
+    "readMore": "Guutuu Dubbisaa",
+    "since": "Bara 2000 E.C. Jalqabee",
+    "inHouseProduction": "100% Oomisha Keessaa",
+    "sameDayQuote": "Gatii Guyyaa Tokko Keessatti",
+    "verifiedCapability": "Dandeettii Mirkanaa'e"
+  },
+  "nav": {
+    "home": "Fuula Duraa",
+    "about": "Waa'ee Keenya",
+    "services": "Tajaajiloota",
+    "capabilities": "Dandeettii Oomishaa",
+    "industries": "Dameewwan Tajaajillu",
+    "portfolio": "Hojiiwwan",
+    "blog": "Blogii",
+    "contact": "Qunnamtii",
+    "requestQuote": "Gatii Gaafadhaa",
+    "toggleMenu": "Baafata Cufaa/Banaa"
+  },
+  "theme": {
+    "light": "Ifaa",
+    "dark": "Dukkana",
+    "night": "Halkan (OLED)",
+    "system": "Sirna Meeshaa",
+    "selectTheme": "Bifa Filadhaa"
+  },
+  "language": {
+    "en": "English",
+    "am": "አማርኛ",
+    "om": "Afaan Oromoo",
+    "selectLanguage": "Afaan Filadhaa"
+  },
+  "home": {
+    "hero": {
+      "badge": "Oomisha Maxxansaa fi Mallattoo Gamoo Ammayyaa",
+      "title": "Dizaayinii, Maxxansa, Oomishaa fi Dhaabbii — Bakka Tokkotti",
+      "description": "Itoophiyaa keessatti tajaajila maxxansa daldalaa, paakeejingii fi mallattoo 3D amantamaa fi qulqullina olaanaa qabu. Alatti osoo hin kennin meeshaalee keenya ammayyaan saffisaan oomishna.",
+      "ctaPrimary": "Gatii Saffisaan Gaafadhaa",
+      "ctaSecondary": "Dandeettii Oomishaa Ilaalaa"
+    },
+    "stats": {
+      "experienceYears": "Waggaa 18+",
+      "experienceLabel": "Bara 2000 E.C. Kaasee Qulqullinaan",
+      "inHouse": "100%",
+      "inHouseLabel": "Guutummaatti Keessatti Kan Hojjetamu",
+      "turnaround": "Guyyaa Tokko",
+      "turnaroundLabel": "Tilmaama Gatii Ariifataa",
+      "satisfaction": "500+",
+      "satisfactionLabel": "Maamiltoota Dhaabbilee fi Daldalaa"
+    },
+    "servicesSection": {
+      "badge": "Tajaajila Guutuu",
+      "title": "Hojiiwwan Maxxansaa fi Beeksisa Sadarkaa Addunyaa",
+      "description": "Maxxansa halluu qulqulluu irraa kaasee hanga mallattoolee 3D ifa qabanitti hunda keenya keessatti hojjenna."
+    },
+    "trustSection": {
+      "badge": "Maaliif GT Filatu?",
+      "title": "Alatti Osoo Hin Kennin Itti Gaafatamummaa Guutuun Hojjenna",
+      "item1Title": "Jalqaba Hanga Xumuraa",
+      "item1Desc": "Dizaayinii, qophii pilaatarii, maxxansa ofseetii, UV fi boca CNC ogeeyyii keenyaan raawwatama.",
+      "item2Title": "Mirkaneessa Maxxansaan Duraa",
+      "item2Desc": "Maxxansa dura mirkaneessa dijitaalaa fi qabatamaa qulqullina halluu mirkaneessuuf raawwatamu.",
+      "item3Title": "Amantummaa Dhaabbilee",
+      "item3Desc": "Baankota daldalaa, imbaasiiwwan fi dhaabbilee idil-addunyaatiif hiriyaa amanamaa."
+    }
+  },
+  "services": {
+    "offsetDigital": "Maxxansa Ofseetii fi Dijitaalaa",
+    "publishingBinding": "Maxxansa fi Qabsiisa Kitaabaa",
+    "packagingSolutions": "Saanduqa fi Paakeejingii",
+    "largeFormatSignage": "Maxxansa Bal'aa fi Mallattoo",
+    "graphicDesignPrepress": "Giraafik Dizaayinii fi Qophii",
+    "corporatePromotional": "Meeshaalee Beeksisa Dhaabbataa"
+  },
+  "quote": {
+    "title": "Gatii Oomishaa Gaafadhaa",
+    "subtitle": "Guyyuma hojii sana keessatti tilmaama gatii ogeeyyii keenya irraa argadhaa.",
+    "step1": "Tajaajila",
+    "step2": "Oodeeffannoo",
+    "step3": "Bal'ina Hojichaa",
+    "step4": "Faayiloota",
+    "fullName": "Maqaa Guutuu",
+    "company": "Dhaabbata / Waldaa",
+    "phone": "Lakkoofsa Bilbilaa",
+    "email": "Teessoo Imeelii",
+    "preferredContact": "Mala Qunnamtii Filatamaa",
+    "specs": "Bal'ina Hojichaa",
+    "specsPlaceholder": "Hammamtaa, baay'ina, gosa waraqaa, halluu fi filannoowwan xumuraa nuuf ibsaa...",
+    "quantity": "Baay'ina Tilmaamame",
+    "neededBy": "Guyyaa Barbaadamu",
+    "artworkStatus": "Haala Dizaayinii",
+    "artworkReady": "Dizaayinii qophaa'e qaba",
+    "artworkHelp": "Gargaarsa dizaayinii nan barbaada",
+    "submit": "Gaaffii Ergi",
+    "submitting": "Ergamaa jira...",
+    "successTitle": "Gaaffiin Keessan Ergameera!",
+    "successMessage": "Galatoomaa! Lakkoofsi eenyummeessaa keessan:",
+    "successSubtext": "Kutaan oomishaa keenya guyyuma hojii sana keessatti mala qunnamtii filattaniin isin qunnama."
+  },
+  "footer": {
+    "description": "Maxxansa daldalaa, paakeejingii fi mallattoolee gamoo 3D qulqullina olaanaan Finfinnee, Itoophiyaa keessatti kan oomishamu.",
+    "headOffice": "Waajjira Muummee",
+    "address": "Foqii 2ffaa, Duuba Dembel Siitii Sentarii, Daandii Afrikaa (Bolee), Finfinnee, Itoophiyaa",
+    "quickLinks": "Geessituu Saffisaa",
+    "servicesTitle": "Tajaajiloota",
+    "contactInfo": "Qunnamtii Kallattii",
+    "operatingHours": "Sa'aatii Hojii",
+    "hours": "Wiixata – Sanbata: Ganama 2:30 – Waaree Booda 12:00"
+  }
+}

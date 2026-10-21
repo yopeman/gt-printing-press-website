@@ -1,0 +1,120 @@
+{
+  "common": {
+    "companyName": "GT Printing Press",
+    "legalName": "Advanced Digital Production Printing Plc / GT Printing Plc",
+    "tagline": "Design, print, fabricate and install, all under one roof",
+    "requestQuote": "Request a Quote",
+    "viewPortfolio": "View Portfolio",
+    "exploreServices": "Explore Services",
+    "contactUs": "Contact Us",
+    "learnMore": "Learn More",
+    "allRightsReserved": "All rights reserved",
+    "readMore": "Read More",
+    "since": "Since 2000 E.C.",
+    "inHouseProduction": "100% In-House Production",
+    "sameDayQuote": "Same-Day Quote",
+    "verifiedCapability": "Verified In-House Capability"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "capabilities": "Capabilities",
+    "industries": "Industries",
+    "portfolio": "Portfolio",
+    "blog": "Blog",
+    "contact": "Contact",
+    "requestQuote": "Get a Quote",
+    "toggleMenu": "Toggle navigation menu"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "night": "Night",
+    "system": "System",
+    "selectTheme": "Select theme"
+  },
+  "language": {
+    "en": "English",
+    "am": "አማርኛ",
+    "om": "Afaan Oromoo",
+    "selectLanguage": "Select language"
+  },
+  "home": {
+    "hero": {
+      "badge": "Turnkey Visual Branding & Industrial Print Production",
+      "title": "Design, Print, Fabricate & Install — All Under One Roof",
+      "description": "Ethiopia's premier commercial printing, precision packaging, and 3D architectural signage partner. No third-party outsourcing — just unmatched speed, institutional reliability, and craft precision.",
+      "ctaPrimary": "Request a Fast Quote",
+      "ctaSecondary": "Explore In-House Facility"
+    },
+    "stats": {
+      "experienceYears": "18+ Years",
+      "experienceLabel": "Delivering Quality Since 2000 E.C.",
+      "inHouse": "100%",
+      "inHouseLabel": "Complete In-House Production",
+      "turnaround": "Same-Day",
+      "turnaroundLabel": "Prompt Inquiry Estimates",
+      "satisfaction": "500+",
+      "satisfactionLabel": "Corporate & Institutional Clients"
+    },
+    "servicesSection": {
+      "badge": "Comprehensive Scope",
+      "title": "Industrial Printing & Signage Solutions",
+      "description": "From color-critical corporate collateral to 3D illuminated architectural signage, we execute every phase in-house."
+    },
+    "trustSection": {
+      "badge": "Why Leading Brands Trust GT",
+      "title": "Zero Outsourcing. Absolute Quality Control.",
+      "item1Title": "End-to-End Production",
+      "item1Desc": "Design, plate-making, multi-color offset, UV flatbed printing, and CNC fabrication handled by our in-house experts.",
+      "item2Title": "Rigorous Proofing Protocol",
+      "item2Desc": "Digital soft-proofing combined with mandatory hard-copy physical proofs for critical color match.",
+      "item3Title": "Institutional Reputation",
+      "item3Desc": "Trusted long-term contractor for premier commercial banks, diplomatic missions, and international agencies."
+    }
+  },
+  "services": {
+    "offsetDigital": "Offset & Digital Printing",
+    "publishingBinding": "Publishing & Binding",
+    "packagingSolutions": "Packaging Solutions",
+    "largeFormatSignage": "Large Format & Signage",
+    "graphicDesignPrepress": "Graphic Design & Pre-Press",
+    "corporatePromotional": "Corporate & Promotional Items"
+  },
+  "quote": {
+    "title": "Request a Production Quote",
+    "subtitle": "Receive an expert estimate reviewed by our production technicians on the same working day.",
+    "step1": "Service",
+    "step2": "Contact",
+    "step3": "Specifications",
+    "step4": "Attachments",
+    "fullName": "Full Name",
+    "company": "Company / Organization",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "preferredContact": "Preferred Contact Method",
+    "specs": "Project Specifications",
+    "specsPlaceholder": "Tell us about sizes, quantities, materials, colors, finishing options...",
+    "quantity": "Estimated Quantity",
+    "neededBy": "Needed-By Date",
+    "artworkStatus": "Artwork Status",
+    "artworkReady": "I have print-ready artwork",
+    "artworkHelp": "I need graphic design assistance",
+    "submit": "Submit Quote Request",
+    "submitting": "Submitting...",
+    "successTitle": "Quote Request Submitted!",
+    "successMessage": "Thank you! Your inquiry reference is",
+    "successSubtext": "Our production desk will contact you via your preferred method on the same working day."
+  },
+  "footer": {
+    "description": "Commercial printing, structural packaging, and 3D architectural signage engineered with precision in Addis Ababa, Ethiopia.",
+    "headOffice": "Head Office",
+    "address": "2nd Floor, Behind Dembel City Centre, Africa Avenue (Bole Road), Addis Ababa, Ethiopia",
+    "quickLinks": "Quick Links",
+    "servicesTitle": "Services",
+    "contactInfo": "Direct Inquiries",
+    "operatingHours": "Operating Hours",
+    "hours": "Monday – Saturday: 8:30 AM – 6:00 PM (EAT)"
+  }
+}
