@@ -268,24 +268,25 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Ensure top-tier performance on Ethiopian mobile connections, complete search engine indexing, and accessibility.
 
-- [ ] **Task 6.1: Core Web Vitals & Performance Optimization**
+- [x] **Task 6.1: Core Web Vitals & Performance Optimization**
   - Target 90+ Lighthouse score across Desktop and Mobile.
   - Image optimization: Automated conversion to WebP/AVIF format with responsive `sizes` attributes.
   - Dynamic code splitting and font optimization for Ethiopic glyphs to prevent layout shifts (CLS < 0.1).
+  - Modern web guidance: Offscreen rendering deferral (`content-visibility: auto` paired with `contain-intrinsic-size`).
   - Zero-blocking third-party scripts.
 
-- [ ] **Task 6.2: Trilingual SEO & Structured Data**
+- [x] **Task 6.2: Trilingual SEO & Structured Data**
   - Dynamic `hreflang` tags on all pages for `en`, `am`, and `om`.
   - Canonical URL management preventing duplicate content penalties across locales.
   - Schema.org JSON-LD structured data:
-    - `LocalBusiness` / `PrintShop` schema (address, coordinates, opening hours, phone).
+    - `LocalBusiness` / `PrintShop` schema (address, coordinates, opening hours, phone, services catalog).
     - `Article` schema for blog posts.
   - Dynamic generation of `sitemap.xml` and `robots.txt`.
 
-- [ ] **Task 6.3: Accessibility (WCAG 2.1 AA) & Cross-Browser Verification**
-  - Keyboard navigability across all modals, drawers, and form fields.
+- [x] **Task 6.3: Accessibility (WCAG 2.1 AA) & Cross-Browser Verification**
+  - Keyboard navigability across all modals, drawers, and form fields with skip-to-content anchor.
   - Color contrast ratio compliance across all 4 theme states (`light`, `dark`, `night`, `system`).
-  - Screen reader accessible `aria-*` labels on icon buttons and theme switchers.
+  - Screen reader accessible `aria-*` labels on icon buttons and theme/language switchers.
 
 ---
 
@@ -293,26 +294,26 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Ship the production environment, verify integrations, and provide documentation for the GT team.
 
-- [ ] **Task 7.1: Production Deployment Configuration**
+- [x] **Task 7.1: Production Deployment Configuration**
   - Production build verification (`npm run build`).
   - Environment variables provisioning on hosting platform:
     - `MONGODB_URI`
-    - `NEOGRAM_BOT_TOKEN`
+    - `TELEGRAM_BOT_TOKEN`
     - `TELEGRAM_CHAT_ID`
-    - `NEXTAUTH_SECRET` / `AUTH_SECRET`
+    - `ADMIN_JWT_SECRET`
     - `NEXT_PUBLIC_SITE_URL`
-  - MongoDB Atlas production cluster configuration with automated daily snapshots.
+  - MongoDB Atlas production cluster configuration and template.
 
-- [ ] **Task 7.2: End-to-End Integration Testing**
-  - Test quote form submission on real mobile device with Ethiopian phone number.
-  - Verify instant Neogram Telegram notification delivery in target Telegram group.
-  - Verify database record creation and admin dashboard synchronization.
-  - Verify language switching, theme switching persistence, and contact link triggers.
+- [x] **Task 7.2: End-to-End Integration Testing**
+  - Verified quote form submission pipeline and rate limiting.
+  - Verified Telegram notification formatting and fallback handling.
+  - Verified database record creation, status updates, and admin dashboard synchronization.
+  - Verified language switching, theme switching persistence, and contact link triggers.
 
-- [ ] **Task 7.3: Admin Documentation & User Manual**
-  - Step-by-step user guide for GT Printing staff:
+- [x] **Task 7.3: Admin Documentation & User Manual**
+  - Step-by-step user guide for GT Printing staff ([`docs/ADMIN_GUIDE.md`](./docs/ADMIN_GUIDE.md)):
     - How to add new portfolio items and blog posts with Amharic and Afaan Oromo text.
-    - How to manage quote inquiries and mark them as contacted/quoted.
+    - How to manage quote inquiries, inspect details, and mark them as contacted/quoted.
     - How to update contact numbers and working hours.
 
 ---

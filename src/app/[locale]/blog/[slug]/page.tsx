@@ -16,6 +16,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { MarkdownContent } from "@/components/blog/markdown-content";
+import { ArticleJsonLd } from "@/components/seo/json-ld";
 
 export function generateStaticParams() {
   const params: { locale: string; slug: string }[] = [];
@@ -55,6 +56,15 @@ export default function BlogPostPage({
       />
 
       <article className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-10 max-w-4xl">
+        <ArticleJsonLd
+          title={post.title[loc] || post.title.en}
+          description={post.excerpt[loc] || post.excerpt.en}
+          slug={post.slug}
+          publishedDate={post.publishedDate}
+          coverImage={post.coverImage}
+          author={post.author}
+        />
+
         {/* Back Link */}
         <div className="flex items-center gap-2 text-xs font-semibold text-foreground-muted">
           <Link

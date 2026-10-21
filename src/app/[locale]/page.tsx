@@ -297,7 +297,7 @@ export default function HomePage() {
       </section>
 
       {/* Interactive Workflow Production Pipeline */}
-      <section className="py-16 md:py-24 bg-surface-secondary/30 border-y border-border/60">
+      <section className="py-16 md:py-24 bg-surface-secondary/30 border-y border-border/60 content-visibility-auto">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
             <StatusBadge
@@ -321,7 +321,7 @@ export default function HomePage() {
       </section>
 
       {/* Featured Verified Portfolio Showcase */}
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 content-visibility-auto">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
             <StatusBadge
@@ -345,14 +345,14 @@ export default function HomePage() {
       </section>
 
       {/* Client Logos & Testimonials Slider */}
-      <section className="py-16 md:py-24 bg-surface-secondary/30 border-y border-border/60">
+      <section className="py-16 md:py-24 bg-surface-secondary/30 border-y border-border/60 content-visibility-auto">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <TestimonialsSlider />
         </div>
       </section>
 
       {/* Latest Blog & Industry Insights */}
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 content-visibility-auto">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
             <StatusBadge
@@ -376,7 +376,7 @@ export default function HomePage() {
       </section>
 
       {/* Closing Quote Conversion Strip */}
-      <section className="py-20 bg-primary/5 border-t border-primary/20 relative overflow-hidden">
+      <section className="py-20 bg-primary/5 border-t border-primary/20 relative overflow-hidden content-visibility-auto">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl space-y-6">
           <StatusBadge
             label="Same-Day Quoting Guaranteed"

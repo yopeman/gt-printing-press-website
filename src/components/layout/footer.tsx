@@ -94,7 +94,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="w-full bg-surface border-t border-border transition-colors">
+    <footer className="w-full bg-surface border-t border-border transition-colors content-visibility-auto">
       {/* Top Operating Status Strip */}
       <div className="border-b border-border/70 py-4 bg-surface-secondary/40">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-4 text-xs">
