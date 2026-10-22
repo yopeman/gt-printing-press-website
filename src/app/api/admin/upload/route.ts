@@ -47,10 +47,10 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // Max size: 10MB per image
-      if (file.size > 10 * 1024 * 1024) {
+      // Max size: 50MB per image
+      if (file.size > 50 * 1024 * 1024) {
         return NextResponse.json(
-          { error: `File ${file.name} exceeds 10MB limit.` },
+          { error: `File ${file.name} exceeds 50MB limit.` },
           { status: 400 }
         );
       }

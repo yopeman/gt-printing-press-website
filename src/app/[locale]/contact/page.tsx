@@ -132,84 +132,6 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column: Coordinates & Channels */}
           <div className="lg:col-span-5 space-y-6">
-            {/* Company Locations Cards */}
-            {siteSettings?.locations?.length > 0 ? (
-              siteSettings.locations.map((loc: any) => (
-                <div key={loc.id} className="p-6 rounded-3xl bg-surface border border-border shadow-sm space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wider font-mono">
-                      <MapPin className="w-4 h-4" />
-                      <span>{loc.label === "other" ? loc.customLabel || "Facility" : loc.label}</span>
-                    </div>
-                    {loc.isPrimary && (
-                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase font-mono">
-                        Primary HQ
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="text-base font-bold text-foreground">
-                    {loc.name}
-                  </h3>
-                  <p className="text-xs text-foreground-muted leading-relaxed">
-                    {loc.address}
-                  </p>
-                  {loc.phone && (
-                    <div className="text-xs font-mono text-foreground font-semibold">
-                      Tel: <a href={`tel:${loc.phone}`} className="hover:text-primary transition-colors">{loc.phone}</a>
-                    </div>
-                  )}
-
-                  {/* Schedule for this location */}
-                  {loc.operatingHours && (
-                    <div className="pt-2 border-t border-border/60 text-xs space-y-1 text-foreground-muted">
-                      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-amber-500 font-mono">
-                        <Clock className="w-3.5 h-3.5" />
-                        <span>Operating Hours</span>
-                      </div>
-                      <p className="font-medium text-foreground text-[11px]">{loc.operatingHours.weekday}</p>
-                      {loc.operatingHours.saturday && <p className="text-[11px]">{loc.operatingHours.saturday}</p>}
-                    </div>
-                  )}
-
-                  <div className="pt-2">
-                    <a
-                      href={loc.mapUrl || "https://maps.app.goo.gl/AZBm7RVfoex7ZR6M8"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"
-                    >
-                      <span>Open in Google Maps</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="p-6 rounded-3xl bg-surface border border-border shadow-sm space-y-3">
-                <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wider font-mono">
-                  <MapPin className="w-4 h-4" />
-                  <span>Head Office & Studio</span>
-                </div>
-                <h3 className="text-base font-bold text-foreground">
-                  Africa Avenue (Bole Road)
-                </h3>
-                <p className="text-xs text-foreground-muted leading-relaxed">
-                  2nd Floor, Behind Dembel City Centre, Africa Avenue, Kirkos Sub-City, Addis Ababa, Ethiopia.
-                </p>
-                <div className="pt-2">
-                  <a
-                    href="https://maps.app.goo.gl/AZBm7RVfoex7ZR6M8"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"
-                  >
-                    <span>Open in Google Maps</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              </div>
-            )}
-
             {/* Direct Telephone & Communication Lines */}
             <div className="p-6 rounded-3xl bg-surface border border-border shadow-sm space-y-3">
               <div className="flex items-center gap-2 text-emerald-500 font-bold text-xs uppercase tracking-wider font-mono">
@@ -469,7 +391,7 @@ export default function ContactPage() {
           </div>
         </div>
 
-        {/* Interactive Multi-Location Maps Slider (Slide between all DB facilities: <- map1 | map2 ->) */}
+        {/* Interactive Multi-Location Maps Slider (One Map at a Time with Slide Navigation) */}
         {(() => {
           const locations =
             siteSettings?.locations && siteSettings.locations.length > 0
@@ -511,10 +433,8 @@ export default function ContactPage() {
                 ];
 
           const total = locations.length;
-          const firstIndex = activeMapIndex % total;
-          const secondIndex = (activeMapIndex + 1) % total;
-          const firstLoc = locations[firstIndex] || locations[0];
-          const secondLoc = total > 1 ? locations[secondIndex] : null;
+          const safeIndex = ((activeMapIndex % total) + total) % total;
+          const currentLoc = locations[safeIndex] || locations[0];
 
           const getEmbedUrl = (loc: any) => {
             if (loc.latitude && loc.longitude) {
@@ -534,130 +454,29 @@ export default function ContactPage() {
             setActiveMapIndex((prev) => (prev + 1) % total);
           };
 
-          const renderMapCard = (loc: any, mapIndex: number, isActiveSlide: boolean) => (
-            <div
-              key={loc.id || mapIndex}
-              className={`flex flex-col justify-between rounded-3xl bg-surface border transition-all duration-300 p-4 sm:p-6 space-y-4 shadow-sm hover:shadow-md ${
-                isActiveSlide
-                  ? "border-primary/60 ring-2 ring-primary/20 shadow-glow-sm"
-                  : "border-border/80"
-              }`}
-            >
-              {/* Header: Map #, Facility Type, Coordinates */}
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-1 rounded-xl bg-primary/10 border border-primary/20 text-primary font-mono font-bold text-xs">
-                      MAP {String(mapIndex + 1).padStart(2, "0")}
-                    </span>
-                    <span className="px-2.5 py-1 rounded-xl bg-surface-secondary border border-border text-foreground-muted text-[11px] font-semibold uppercase font-mono">
-                      {loc.label === "other" ? loc.customLabel || "Facility" : loc.label || "Facility"}
-                    </span>
-                    {loc.isPrimary && (
-                      <span className="px-2 py-0.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[10px] font-bold uppercase font-mono">
-                        Primary HQ
-                      </span>
-                    )}
-                  </div>
-
-                  {loc.latitude && loc.longitude && (
-                    <span className="text-[10px] font-mono text-foreground-muted flex items-center gap-1">
-                      <Compass className="w-3.5 h-3.5 text-primary" />
-                      <span>
-                        {loc.latitude.toFixed(4)}° N, {loc.longitude.toFixed(4)}° E
-                      </span>
-                    </span>
-                  )}
-                </div>
-
-                <h3 className="text-base sm:text-lg font-bold text-foreground tracking-tight leading-snug">
-                  {loc.name}
-                </h3>
-
-                <p className="text-xs text-foreground-muted flex items-start gap-1.5 leading-relaxed">
-                  <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                  <span>{loc.address}</span>
-                </p>
-              </div>
-
-              {/* Operating hours & Phone snippet */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs py-2.5 px-3 rounded-2xl bg-surface-secondary/70 border border-border/70">
-                {loc.phone && (
-                  <div className="flex items-center gap-1.5 font-mono">
-                    <Phone className="w-3.5 h-3.5 text-primary shrink-0" />
-                    <a
-                      href={`tel:${loc.phone}`}
-                      className="text-foreground hover:text-primary transition-colors font-semibold truncate"
-                    >
-                      {loc.phone}
-                    </a>
-                  </div>
-                )}
-                {loc.operatingHours?.weekday && (
-                  <div className="flex items-center gap-1.5 font-mono text-foreground-muted truncate">
-                    <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                    <span className="truncate">{loc.operatingHours.weekday}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Responsive Embedded Map Viewport */}
-              <div className="rounded-2xl overflow-hidden aspect-[16/10] sm:aspect-[16/9] min-h-[260px] sm:min-h-[300px] bg-surface-secondary border border-border/90 relative group shadow-inner">
-                <iframe
-                  title={`${loc.name} Location Map`}
-                  src={getEmbedUrl(loc)}
-                  className="w-full h-full border-0 filter contrast-105"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-
-              {/* Footer action buttons */}
-              <div className="flex items-center justify-between gap-3 pt-1 border-t border-border/60">
-                <div className="text-[11px] text-foreground-muted font-mono flex items-center gap-1.5">
-                  <Navigation className="w-3.5 h-3.5 text-primary" />
-                  <span>GPS Directions</span>
-                </div>
-
-                <a
-                  href={
-                    loc.mapUrl ||
-                    `https://maps.google.com/?q=${encodeURIComponent(loc.address)}`
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 rounded-xl bg-primary text-white hover:bg-primary-hover transition-colors font-bold text-xs flex items-center gap-1.5 shadow-sm hover:shadow-md"
-                >
-                  <span>Open in Google Maps</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-          );
-
           return (
             <div className="rounded-3xl border border-border shadow-card-glass bg-surface p-4 sm:p-7 space-y-6">
-              {/* Top Controls Header */}
+              {/* Header & Slide Controls */}
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border/80">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 font-bold text-base text-foreground">
                     <MapPin className="w-5 h-5 text-primary" />
-                    <span>Company Facilities & Location Maps Slider</span>
+                    <span>Company Facilities & Interactive Location Map</span>
                   </div>
                   <p className="text-xs text-foreground-muted">
-                    Explore all {total} production and administrative locations saved in database. Slide between maps using arrows below.
+                    Explore our corporate headquarters and industrial fabrication plants. Showing 1 facility map at a time.
                   </p>
                 </div>
 
-                {/* Top Facility Counter and Jump Controls */}
-                <div className="flex items-center gap-2 self-start md:self-auto flex-wrap">
-                  <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-xl bg-surface-secondary border border-border text-foreground">
-                    {total <= 2 ? `Showing All ${total} Maps` : `Viewing ${firstIndex + 1} & ${secondIndex + 1} of ${total}`}
+                {/* Slider Controls (<- Prev Map | Next Map ->) */}
+                <div className="flex items-center gap-2 self-start md:self-auto">
+                  <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-surface-secondary border border-border text-foreground">
+                    Facility {safeIndex + 1} of {total}
                   </span>
                   <button
                     type="button"
                     onClick={handlePrev}
-                    className="p-2 sm:px-3 sm:py-2 rounded-xl bg-surface-secondary hover:bg-primary hover:text-white border border-border text-foreground transition-all flex items-center gap-1 text-xs font-bold"
+                    className="p-2 sm:px-3 sm:py-2 rounded-xl bg-surface-secondary hover:bg-primary hover:text-white border border-border text-foreground transition-all flex items-center gap-1.5 text-xs font-bold shadow-xs"
                     title="Previous Location (<-)"
                     aria-label="Previous Location"
                   >
@@ -667,7 +486,7 @@ export default function ContactPage() {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="p-2 sm:px-3 sm:py-2 rounded-xl bg-surface-secondary hover:bg-primary hover:text-white border border-border text-foreground transition-all flex items-center gap-1 text-xs font-bold"
+                    className="p-2 sm:px-3 sm:py-2 rounded-xl bg-surface-secondary hover:bg-primary hover:text-white border border-border text-foreground transition-all flex items-center gap-1.5 text-xs font-bold shadow-xs"
                     title="Next Location (->)"
                     aria-label="Next Location"
                   >
@@ -677,32 +496,29 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Location Direct Selector Tabs */}
+              {/* Location Selector Tabs (Jump directly to any map) */}
               <div className="flex flex-wrap items-center gap-2">
                 {locations.map((loc: any, idx: number) => {
-                  const isVisibleInView =
-                    idx === firstIndex || (total > 1 && idx === secondIndex);
+                  const isSelected = safeIndex === idx;
                   return (
                     <button
                       key={loc.id || idx}
                       type="button"
                       onClick={() => setActiveMapIndex(idx)}
                       className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 border ${
-                        isVisibleInView
+                        isSelected
                           ? "bg-primary text-white border-primary shadow-glow-sm"
                           : "bg-surface-secondary hover:bg-surface border-border text-foreground-muted hover:text-foreground"
                       }`}
                     >
                       <Building className="w-3.5 h-3.5" />
                       <span>
-                        Map {idx + 1}: {loc.label || "Facility"} – {loc.name}
+                        Map {idx + 1}: {loc.label === "other" ? loc.customLabel || "Facility" : loc.label || "Facility"} – {loc.name}
                       </span>
                       {loc.isPrimary && (
                         <span
                           className={`text-[9px] font-mono px-1.5 py-0.5 rounded-md uppercase font-bold ${
-                            isVisibleInView
-                              ? "bg-white/20 text-white"
-                              : "bg-primary/10 text-primary"
+                            isSelected ? "bg-white/20 text-white" : "bg-primary/10 text-primary"
                           }`}
                         >
                           HQ
@@ -713,64 +529,116 @@ export default function ContactPage() {
                 })}
               </div>
 
-              {/* The Slide Row: (<- map1 | map2 ->) */}
-              <div className="flex items-stretch gap-2 sm:gap-4">
-                {/* Left Arrow Button (<-) */}
-                <button
-                  type="button"
-                  onClick={handlePrev}
-                  className="self-center p-2.5 sm:p-4 rounded-2xl bg-surface-secondary hover:bg-primary text-foreground hover:text-white border border-border hover:border-primary shadow-md hover:shadow-glow-sm transition-all hover:scale-105 shrink-0 flex items-center justify-center group focus:outline-none focus:ring-2 focus:ring-primary/40"
-                  title="Previous Facility Map (<-)"
-                  aria-label="Previous Facility Map (<-)"
-                >
-                  <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:-translate-x-0.5" />
-                </button>
+              {/* Active Facility Metadata Card */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-surface-secondary/70 border border-border/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20 text-primary font-mono font-bold text-xs">
+                      MAP {String(safeIndex + 1).padStart(2, "0")}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-md bg-surface border border-border text-foreground-muted text-[11px] font-semibold uppercase font-mono">
+                      {currentLoc.label === "other" ? currentLoc.customLabel || "Facility" : currentLoc.label || "Facility"}
+                    </span>
+                    {currentLoc.isPrimary && (
+                      <span className="px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[10px] font-bold uppercase font-mono">
+                        Primary HQ
+                      </span>
+                    )}
+                    {currentLoc.latitude && currentLoc.longitude && (
+                      <span className="text-[10px] font-mono text-foreground-muted flex items-center gap-1 ml-1">
+                        <Compass className="w-3 h-3 text-primary" />
+                        <span>
+                          {currentLoc.latitude.toFixed(4)}° N, {currentLoc.longitude.toFixed(4)}° E
+                        </span>
+                      </span>
+                    )}
+                  </div>
 
-                {/* Multi-Map Slide Viewport: Map 1 | Map 2 */}
-                <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 relative">
-                  {/* First Map Slide */}
-                  {renderMapCard(firstLoc, firstIndex, activeMapIndex === firstIndex)}
+                  <h3 className="text-base sm:text-lg font-bold text-foreground">
+                    {currentLoc.name}
+                  </h3>
 
-                  {/* Vertical Divider | on Desktop */}
-                  {secondLoc && (
-                    <div className="hidden lg:flex absolute left-1/2 top-4 bottom-4 -translate-x-1/2 w-px bg-gradient-to-b from-transparent via-border to-transparent pointer-events-none items-center justify-center z-10">
-                      <div className="p-1 rounded-full bg-surface border border-border shadow-xs text-foreground-muted">
-                        <MapPin className="w-3.5 h-3.5 text-primary" />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Second Map Slide (Desktop side-by-side, or slide on mobile) */}
-                  {secondLoc && (
-                    <div className="hidden lg:block">
-                      {renderMapCard(secondLoc, secondIndex, activeMapIndex === secondIndex)}
-                    </div>
-                  )}
+                  <p className="text-xs text-foreground-muted flex items-start gap-1.5 leading-relaxed">
+                    <MapPin className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                    <span>{currentLoc.address}</span>
+                  </p>
                 </div>
 
-                {/* Right Arrow Button (->) */}
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="self-center p-2.5 sm:p-4 rounded-2xl bg-surface-secondary hover:bg-primary text-foreground hover:text-white border border-border hover:border-primary shadow-md hover:shadow-glow-sm transition-all hover:scale-105 shrink-0 flex items-center justify-center group focus:outline-none focus:ring-2 focus:ring-primary/40"
-                  title="Next Facility Map (->)"
-                  aria-label="Next Facility Map (->)"
-                >
-                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:translate-x-0.5" />
-                </button>
+                <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+                  {currentLoc.phone && (
+                    <a
+                      href={`tel:${currentLoc.phone}`}
+                      className="px-3.5 py-2 rounded-xl bg-surface border border-border text-foreground hover:text-primary transition-colors font-mono font-semibold text-xs flex items-center gap-1.5"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-primary" />
+                      <span>{currentLoc.phone}</span>
+                    </a>
+                  )}
+
+                  {currentLoc.operatingHours?.weekday && (
+                    <div className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-surface border border-border text-foreground-muted font-mono text-xs">
+                      <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                      <span>{currentLoc.operatingHours.weekday}</span>
+                    </div>
+                  )}
+
+                  <a
+                    href={
+                      currentLoc.mapUrl ||
+                      `https://maps.google.com/?q=${encodeURIComponent(currentLoc.address)}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded-xl bg-primary text-white hover:bg-primary-hover transition-colors font-bold text-xs flex items-center gap-1.5 shadow-sm"
+                  >
+                    <span>Open in Google Maps</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
 
-              {/* Mobile Slide Switcher Notification */}
-              <div className="lg:hidden text-center">
-                <p className="text-xs text-foreground-muted font-mono">
-                  Showing Map {firstIndex + 1} of {total}. Tap arrows <span className="font-bold text-foreground">&lt;- / -&gt;</span> to slide between facilities.
-                </p>
+              {/* Responsive Single Map Viewport with Left/Right Slide Arrows */}
+              <div className="rounded-2xl overflow-hidden aspect-[21/9] min-h-[340px] sm:min-h-[440px] bg-surface-secondary border border-border/90 relative group shadow-inner">
+                <iframe
+                  key={currentLoc.id || safeIndex}
+                  title={`${currentLoc.name} Location Map`}
+                  src={getEmbedUrl(currentLoc)}
+                  className="w-full h-full border-0 filter contrast-105"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+
+                {/* Left Floating Slide Button (<-) */}
+                {total > 1 && (
+                  <button
+                    type="button"
+                    onClick={handlePrev}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/75 hover:bg-black text-white border border-white/20 shadow-xl transition-all hover:scale-110 flex items-center justify-center backdrop-blur-xs focus:outline-none focus:ring-2 focus:ring-white/40 z-10"
+                    title="Previous Facility Map (<-)"
+                    aria-label="Previous Facility Map (<-)"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                )}
+
+                {/* Right Floating Slide Button (->) */}
+                {total > 1 && (
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/75 hover:bg-black text-white border border-white/20 shadow-xl transition-all hover:scale-110 flex items-center justify-center backdrop-blur-xs focus:outline-none focus:ring-2 focus:ring-white/40 z-10"
+                    title="Next Facility Map (->)"
+                    aria-label="Next Facility Map (->)"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                )}
               </div>
 
               {/* Slide Pagination Dots Indicator */}
-              <div className="flex items-center justify-center gap-2 pt-2">
+              <div className="flex items-center justify-center gap-2 pt-1">
                 {locations.map((loc: any, idx: number) => {
-                  const isCurrent = activeMapIndex === idx;
+                  const isCurrent = safeIndex === idx;
                   return (
                     <button
                       key={loc.id || idx}
