@@ -97,17 +97,17 @@ export default function HomePage() {
       <section className="py-10 bg-surface/80 border-b border-border/80 backdrop-blur-md">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <TiltCard className="p-5 text-left border border-border/80 hover:border-brand-red/40 transition-colors">
-              <div className="text-2xl sm:text-3xl font-extrabold text-brand-red mb-1">
-                <AnimatedCounter value={18} suffix="+ Years" duration={1.8} />
+            <TiltCard className="p-4 sm:p-5 text-left border border-border/80 hover:border-brand-red/40 transition-colors">
+              <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-brand-red mb-1">
+                <AnimatedCounter value={18} suffix="+" duration={1.8} />
               </div>
               <div className="text-xs text-foreground-muted font-medium">
                 {t("stats.experienceLabel")}
               </div>
             </TiltCard>
 
-            <TiltCard className="p-5 text-left border border-border/80 hover:border-brand-red/40 transition-colors">
-              <div className="text-2xl sm:text-3xl font-extrabold text-foreground mb-1">
+            <TiltCard className="p-4 sm:p-5 text-left border border-border/80 hover:border-brand-red/40 transition-colors">
+              <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-foreground mb-1">
                 <AnimatedCounter value={100} suffix="%" duration={1.5} />
               </div>
               <div className="text-xs text-foreground-muted font-medium">
@@ -115,8 +115,8 @@ export default function HomePage() {
               </div>
             </TiltCard>
 
-            <TiltCard className="p-5 text-left border border-border/80 hover:border-brand-red/40 transition-colors">
-              <div className="text-2xl sm:text-3xl font-extrabold text-brand-red mb-1">
+            <TiltCard className="p-4 sm:p-5 text-left border border-border/80 hover:border-brand-red/40 transition-colors">
+              <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-brand-red mb-1 truncate">
                 {t("stats.turnaround")}
               </div>
               <div className="text-xs text-foreground-muted font-medium">
@@ -124,8 +124,8 @@ export default function HomePage() {
               </div>
             </TiltCard>
 
-            <TiltCard className="p-5 text-left border border-border/80 hover:border-brand-red/40 transition-colors">
-              <div className="text-2xl sm:text-3xl font-extrabold text-foreground mb-1">
+            <TiltCard className="p-4 sm:p-5 text-left border border-border/80 hover:border-brand-red/40 transition-colors">
+              <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-foreground mb-1">
                 <AnimatedCounter value={500} suffix="+" duration={2} />
               </div>
               <div className="text-xs text-foreground-muted font-medium">

@@ -260,7 +260,7 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
       </div>
 
       {/* Main Hero Content */}
-      <div className="container relative z-10 mx-auto px-4 py-10 sm:px-6 sm:py-16 md:py-24 lg:px-8">
+      <div className="container relative z-10 mx-auto px-4 pt-8 pb-24 sm:px-6 sm:py-16 md:py-24 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Left: dynamic brand content */}
           <div className="space-y-6 text-center sm:space-y-8 lg:col-span-7 lg:text-left xl:col-span-6">
