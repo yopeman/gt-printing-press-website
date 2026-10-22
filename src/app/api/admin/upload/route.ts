@@ -2,8 +2,66 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import fs from "fs/promises";
 import path from "path";
+import { v2 as cloudinary } from "cloudinary";
 
 export const dynamic = "force-dynamic";
+
+function getCloudinaryClient() {
+  const cloudinaryUrl = process.env.CLOUDINARY_URL;
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME || process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  const apiKey = process.env.CLOUDINARY_API_KEY;
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+  if (cloudinaryUrl) {
+    cloudinary.config({ url: cloudinaryUrl });
+    return cloudinary;
+  }
+
+  if (cloudName && apiKey && apiSecret) {
+    cloudinary.config({
+      cloud_name: cloudName,
+      api_key: apiKey,
+      api_secret: apiSecret,
+      secure: true,
+    });
+    return cloudinary;
+  }
+
+  return null;
+}
+
+async function uploadToCloudinary(
+  client: typeof cloudinary,
+  buffer: Buffer,
+  fileName: string
+): Promise<string> {
+  const ext = path.extname(fileName) || ".jpg";
+  const cleanName = path
+    .basename(fileName, ext)
+    .replace(/[^a-zA-Z0-9_-]/g, "_")
+    .slice(0, 30);
+  const publicId = `${Date.now()}-${Math.floor(Math.random() * 10000)}-${cleanName}`;
+
+  return new Promise((resolve, reject) => {
+    const uploadStream = client.uploader.upload_stream(
+      {
+        folder: "gt-printing-press",
+        public_id: publicId,
+        resource_type: "auto",
+        overwrite: false,
+      },
+      (error, result) => {
+        if (error || !result) {
+          reject(error || new Error("Cloudinary upload failed"));
+        } else {
+          resolve(result.secure_url || result.url);
+        }
+      }
+    );
+
+    uploadStream.end(buffer);
+  });
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,8 +90,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No image files provided" }, { status: 400 });
     }
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    await fs.mkdir(uploadDir, { recursive: true });
+    const cloudinaryClient = getCloudinaryClient();
+    const isCloudinary = Boolean(cloudinaryClient);
+
+    let uploadDir = "";
+    if (!isCloudinary) {
+      uploadDir = path.join(process.cwd(), "public", "uploads");
+      await fs.mkdir(uploadDir, { recursive: true });
+    }
 
     const uploadedUrls: string[] = [];
 
@@ -56,16 +120,22 @@ export async function POST(req: NextRequest) {
       }
 
       const buffer = Buffer.from(await file.arrayBuffer());
-      const ext = path.extname(file.name) || ".jpg";
-      const cleanName = path
-        .basename(file.name, ext)
-        .replace(/[^a-zA-Z0-9_-]/g, "_")
-        .slice(0, 30);
-      const uniqueName = `${Date.now()}-${Math.floor(Math.random() * 10000)}-${cleanName}${ext}`;
-      const destination = path.join(uploadDir, uniqueName);
 
-      await fs.writeFile(destination, buffer);
-      uploadedUrls.push(`/uploads/${uniqueName}`);
+      if (isCloudinary && cloudinaryClient) {
+        const secureUrl = await uploadToCloudinary(cloudinaryClient, buffer, file.name);
+        uploadedUrls.push(secureUrl);
+      } else {
+        const ext = path.extname(file.name) || ".jpg";
+        const cleanName = path
+          .basename(file.name, ext)
+          .replace(/[^a-zA-Z0-9_-]/g, "_")
+          .slice(0, 30);
+        const uniqueName = `${Date.now()}-${Math.floor(Math.random() * 10000)}-${cleanName}${ext}`;
+        const destination = path.join(uploadDir, uniqueName);
+
+        await fs.writeFile(destination, buffer);
+        uploadedUrls.push(`/uploads/${uniqueName}`);
+      }
     }
 
     return NextResponse.json({
@@ -73,6 +143,7 @@ export async function POST(req: NextRequest) {
       url: uploadedUrls[0],
       urls: uploadedUrls,
       count: uploadedUrls.length,
+      storage: isCloudinary ? "cloudinary" : "local",
     });
   } catch (error: any) {
     console.error("[IMAGE UPLOAD ERROR]", error);
