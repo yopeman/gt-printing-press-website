@@ -232,7 +232,7 @@ export default function ServiceDetailPage({
                     decoding="async"
                     className="w-20 h-20 rounded-xl object-cover shrink-0"
                   />
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-[10px] font-bold text-primary uppercase tracking-wider block">
                       {p.clientName}
                     </span>

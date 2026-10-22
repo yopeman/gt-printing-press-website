@@ -143,7 +143,9 @@ export function Navbar({ onOpenQuoteModal }: NavbarProps) {
 
           {/* Mobile Right Controls: Language + Hamburger */}
           <div className="flex xl:hidden items-center gap-1.5 sm:gap-2 shrink-0">
-            <LanguageSwitcher className="scale-90" />
+            <div className="hidden min-[400px]:block">
+              <LanguageSwitcher className="scale-90" />
+            </div>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -207,6 +209,11 @@ export function Navbar({ onOpenQuoteModal }: NavbarProps) {
 
             {/* Drawer Bottom Controls */}
             <div className="pt-8 pb-4 space-y-4 border-t border-border mt-6">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-xs font-semibold text-foreground-muted">Language</span>
+                <LanguageSwitcher />
+              </div>
+
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-foreground-muted">Theme</span>
                 <ThemeToggle />
