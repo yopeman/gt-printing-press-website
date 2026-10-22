@@ -191,10 +191,10 @@ export function AddisPlantMap() {
           {/* Right Column: Interactive Embedded Google Map pointing to 9.0311144, 38.8324246 */}
           <div className="lg:col-span-7 rounded-3xl overflow-hidden border border-border shadow-2xl relative min-h-[420px] lg:min-h-[500px] bg-slate-950 flex flex-col">
             {/* Map Top Bar */}
-            <div className="px-5 py-3 bg-surface/90 backdrop-blur-md border-b border-border flex items-center justify-between text-xs z-10">
+            <div className="px-4 sm:px-5 py-3 bg-surface/90 backdrop-blur-md border-b border-border flex flex-wrap items-center justify-between gap-2 text-xs z-10">
               <div className="flex items-center gap-2 font-mono">
-                <MapPin className="w-4 h-4 text-brand-red animate-bounce" />
-                <span className="font-bold text-foreground">
+                <MapPin className="w-4 h-4 text-brand-red animate-bounce shrink-0" />
+                <span className="font-bold text-foreground text-[11px] sm:text-xs">
                   Addis Ababa: 9.031194, 38.832306
                 </span>
               </div>
@@ -203,7 +203,7 @@ export function AddisPlantMap() {
                 href={PLANT_COORDINATES.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1"
+                className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1 shrink-0"
               >
                 <span>Fullscreen Map</span>
                 <ExternalLink className="w-3 h-3" />
