@@ -208,7 +208,7 @@ export function MultiStepQuoteForm({
   // SUCCESS SCREEN
   if (submittedRef) {
     return (
-      <div className="p-8 sm:p-12 rounded-3xl bg-surface border border-border shadow-card-glass text-center space-y-6">
+      <div className="p-6 sm:p-12 rounded-3xl bg-surface border border-border shadow-card-glass text-center space-y-6">
         <div className="w-20 h-20 rounded-full bg-emerald-500/10 text-emerald-500 mx-auto flex items-center justify-center border border-emerald-500/20 shadow-glow-sm">
           <CheckCircle2 className="w-10 h-10" />
         </div>
@@ -223,8 +223,8 @@ export function MultiStepQuoteForm({
         </div>
 
         {/* Copyable Reference Box */}
-        <div className="inline-flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl bg-surface-secondary border border-border">
-          <span className="font-mono text-xl sm:text-2xl font-black text-primary">
+        <div className="inline-flex max-w-full flex-wrap items-center justify-center gap-2 sm:gap-3 p-3.5 sm:p-4 rounded-2xl bg-surface-secondary border border-border">
+          <span className="font-mono text-lg sm:text-2xl font-black text-primary break-anywhere">
             #{submittedRef}
           </span>
           <button
@@ -277,12 +277,12 @@ export function MultiStepQuoteForm({
   }
 
   return (
-    <div className="p-6 sm:p-10 rounded-3xl bg-surface border border-border shadow-card-glass space-y-8">
+    <div className="p-5 sm:p-10 rounded-3xl bg-surface border border-border shadow-card-glass space-y-8">
       {/* Progress Tracker */}
       <nav aria-label="Quote submission progress" className="space-y-3">
-        <div className="flex items-center justify-between text-xs font-bold font-mono text-foreground-muted">
+        <div className="flex flex-wrap items-center justify-between gap-1.5 text-[11px] sm:text-xs font-bold font-mono text-foreground-muted">
           <span>STEP 0{step} OF 0{totalSteps}</span>
-          <span className="text-primary uppercase">
+          <span className="text-primary uppercase text-right">
             {step === 1 && "Service Selection"}
             {step === 2 && "Contact Information"}
             {step === 3 && "Job Specifications"}
@@ -456,7 +456,7 @@ export function MultiStepQuoteForm({
                 <label className="block text-xs font-semibold text-foreground mb-2">
                   {quoteT("preferredContact")}
                 </label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 min-[380px]:grid-cols-3 gap-2 sm:gap-3">
                   {[
                     { id: "phone", label: "Phone Call", icon: Phone },
                     { id: "telegram", label: "Telegram", icon: Send },
@@ -651,8 +651,8 @@ export function MultiStepQuoteForm({
                         key={i}
                         className="p-2.5 rounded-xl bg-surface-secondary border border-border flex items-center justify-between text-xs text-foreground"
                       >
-                        <span className="font-mono truncate max-w-[200px] sm:max-w-xs">{f.fileName}</span>
-                        <span className="text-foreground-muted">{(f.size / 1024).toFixed(0)} KB</span>
+                        <span className="min-w-0 font-mono truncate mr-2">{f.fileName}</span>
+                        <span className="text-foreground-muted shrink-0">{(f.size / 1024).toFixed(0)} KB</span>
                       </div>
                     ))}
                   </div>
@@ -679,11 +679,11 @@ export function MultiStepQuoteForm({
               {/* Review Summary Pill */}
               <div className="p-4 rounded-2xl bg-surface-secondary/70 border border-border space-y-2 text-xs">
                 <span className="font-bold text-foreground block font-mono">Order Inquiry Summary</span>
-                <div className="grid grid-cols-2 gap-2 text-foreground-muted">
-                  <div>Name: <span className="text-foreground font-semibold">{formData.name}</span></div>
-                  <div>Phone: <span className="text-foreground font-semibold">{formData.phone}</span></div>
-                  <div>Quantity: <span className="text-foreground font-semibold">{formData.quantity}</span></div>
-                  <div>Urgency: <span className="text-foreground font-semibold">{formData.neededBy}</span></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-foreground-muted">
+                  <div className="break-anywhere">Name: <span className="text-foreground font-semibold">{formData.name}</span></div>
+                  <div className="break-anywhere">Phone: <span className="text-foreground font-semibold">{formData.phone}</span></div>
+                  <div className="break-anywhere">Quantity: <span className="text-foreground font-semibold">{formData.quantity}</span></div>
+                  <div className="break-anywhere">Urgency: <span className="text-foreground font-semibold">{formData.neededBy}</span></div>
                 </div>
               </div>
             </motion.div>
@@ -691,7 +691,7 @@ export function MultiStepQuoteForm({
         </AnimatePresence>
 
         {/* Navigation Buttons */}
-        <div className="pt-6 border-t border-border flex items-center justify-between gap-4">
+        <div className="pt-6 border-t border-border flex flex-wrap items-center justify-between gap-3 sm:gap-4">
           {step > 1 ? (
             <button
               type="button"
@@ -709,7 +709,7 @@ export function MultiStepQuoteForm({
             <button
               type="button"
               onClick={nextStep}
-              className="px-6 py-3 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-xs sm:text-sm shadow-glow-sm transition-all flex items-center gap-2"
+              className="ml-auto px-6 py-3 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-xs sm:text-sm shadow-glow-sm transition-all flex items-center justify-center gap-2"
             >
               <span>Continue</span>
               <ArrowRight className="w-4 h-4" />
@@ -718,7 +718,7 @@ export function MultiStepQuoteForm({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-8 py-3.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-sm sm:text-base shadow-glow-md hover:shadow-glow-lg transition-all flex items-center gap-2 disabled:opacity-50"
+              className="ml-auto flex-1 sm:flex-none justify-center px-5 sm:px-8 py-3.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-xs sm:text-base shadow-glow-md hover:shadow-glow-lg transition-all flex items-center gap-2 disabled:opacity-50"
             >
               {isSubmitting ? (
                 <span>Transmitting Quote...</span>

@@ -154,14 +154,14 @@ export function MediaModal({
         </div>
 
         {/* Media Player / Viewer Viewport */}
-        <div className="relative flex-1 bg-black/40 flex items-center justify-center min-h-[340px] sm:min-h-[480px] p-2 sm:p-6 overflow-hidden">
+        <div className="relative flex-1 bg-black/40 flex items-center justify-center min-h-[220px] sm:min-h-[480px] p-2 sm:p-6 overflow-hidden">
           {/* YouTube Video or Short */}
           {ytId ? (
             <div
               className={`w-full ${
                 currentItem.type === "youtube_short"
-                  ? "max-w-[340px] aspect-[9/16]"
-                  : "max-w-4xl aspect-[16/9]"
+                  ? "max-w-[min(340px,100%)] max-h-[70dvh] aspect-[9/16]"
+                  : "w-full max-w-4xl aspect-[16/9]"
               } mx-auto rounded-2xl overflow-hidden shadow-2xl border border-white/10`}
             >
               <iframe

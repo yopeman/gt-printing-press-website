@@ -90,9 +90,9 @@ export function ModalDialog({
       {...({ closedby: "any" } as any)}
       aria-labelledby={title ? "modal-dialog-title" : undefined}
       aria-describedby={description ? "modal-dialog-desc" : undefined}
-      className={`fixed inset-0 m-auto p-0 rounded-3xl bg-surface border border-border shadow-2xl backdrop:bg-black/60 backdrop:backdrop-blur-sm backdrop:overflow-hidden backdrop:overscroll-contain overscroll-contain w-full ${maxWidthMap[maxWidth]} ${className}`}
+      className={`fixed inset-0 m-auto p-0 rounded-2xl sm:rounded-3xl bg-surface border border-border shadow-2xl backdrop:bg-black/60 backdrop:backdrop-blur-sm backdrop:overflow-hidden backdrop:overscroll-contain overscroll-contain w-[calc(100%-1.5rem)] max-h-[calc(100dvh-2rem)] overflow-y-auto ${maxWidthMap[maxWidth]} ${className}`}
     >
-      <div className="p-6 sm:p-8 space-y-4">
+      <div className="p-5 sm:p-8 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between gap-4 border-b border-border/80 pb-4">
           <div>

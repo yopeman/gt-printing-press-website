@@ -155,20 +155,20 @@ export function ServicesHeroSection({ locale }: ServicesHeroSectionProps) {
           </div>
 
           {/* Key capability pills */}
-          <div className="grid grid-cols-2 gap-2.5 pt-1">
-            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-surface border border-border/80 shadow-sm text-xs font-medium text-foreground">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-2.5 pt-1">
+            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-surface border border-border/80 shadow-sm text-[11px] sm:text-xs font-medium text-foreground">
               <CheckCircle2 className="w-4 h-4 text-brand-red shrink-0" />
               <span>Multi-Unit Offset & Digital</span>
             </div>
-            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-surface border border-border/80 shadow-sm text-xs font-medium text-foreground">
+            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-surface border border-border/80 shadow-sm text-[11px] sm:text-xs font-medium text-foreground">
               <CheckCircle2 className="w-4 h-4 text-brand-red shrink-0" />
               <span>3D Illuminated Signage</span>
             </div>
-            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-surface border border-border/80 shadow-sm text-xs font-medium text-foreground">
+            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-surface border border-border/80 shadow-sm text-[11px] sm:text-xs font-medium text-foreground">
               <CheckCircle2 className="w-4 h-4 text-brand-red shrink-0" />
               <span>Custom Luxury Packaging</span>
             </div>
-            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-surface border border-border/80 shadow-sm text-xs font-medium text-foreground">
+            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-surface border border-border/80 shadow-sm text-[11px] sm:text-xs font-medium text-foreground">
               <CheckCircle2 className="w-4 h-4 text-brand-red shrink-0" />
               <span>Same-Day Fast Turnaround</span>
             </div>
@@ -231,10 +231,7 @@ export function ServicesHeroSection({ locale }: ServicesHeroSectionProps) {
 
         {/* Right Side: Circular Carousel with Portfolio CMS images */}
         <div className="lg:col-span-6 xl:col-span-7 flex justify-center items-center">
-          <div
-            className="w-full relative rounded-3xl overflow-hidden border border-border/60 bg-gradient-to-b from-surface/50 to-surface-secondary/80 backdrop-blur-md shadow-2xl p-2 sm:p-4"
-            style={{ minHeight: '560px' }}
-          >
+          <div className="w-full relative rounded-3xl overflow-hidden border border-border/60 bg-gradient-to-b from-surface/50 to-surface-secondary/80 backdrop-blur-md shadow-2xl p-2 sm:p-4 min-h-[340px] sm:min-h-[460px] lg:min-h-[560px]">
             {/* Ambient vignette background glow */}
             <div
               className="absolute inset-0 bg-radial-gradient pointer-events-none opacity-40 -z-10"
@@ -245,12 +242,12 @@ export function ServicesHeroSection({ locale }: ServicesHeroSectionProps) {
             />
 
             {/* Exact CircularCarousel configuration requested */}
-            <div style={{ width: '100%', height: '560px', position: 'relative' }}>
+            <div className="relative w-full h-[320px] sm:h-[430px] lg:h-[560px]">
               <CircularCarousel
                 items={items}
                 preset="cylinder"
                 intro="rise"
-                cardWidth={220}
+                cardWidth={190}
                 aspectRatio={1}
                 speed={14}
                 captions={false}

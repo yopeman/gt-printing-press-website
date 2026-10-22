@@ -76,7 +76,7 @@ export function TestimonialsSlider() {
 
       {/* Testimonials Carousel Card */}
       <div className="max-w-4xl mx-auto relative">
-        <div className="p-8 sm:p-12 rounded-3xl bg-surface border border-border shadow-card-glass relative overflow-hidden">
+        <div className="p-5 sm:p-12 rounded-3xl bg-surface border border-border shadow-card-glass relative overflow-hidden">
           <Quote className="absolute top-6 right-8 w-20 h-20 text-primary/10 pointer-events-none -z-0" />
 
           <AnimatePresence mode="wait">
@@ -101,8 +101,8 @@ export function TestimonialsSlider() {
               </blockquote>
 
               {/* Author */}
-              <div className="flex items-center justify-between pt-4 border-t border-border/70">
-                <div>
+              <div className="flex items-center justify-between gap-3 pt-4 border-t border-border/70">
+                <div className="min-w-0">
                   <div className="font-bold text-foreground text-sm sm:text-base">
                     {current.name}
                   </div>

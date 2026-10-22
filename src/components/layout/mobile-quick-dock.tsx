@@ -47,9 +47,10 @@ export function MobileQuickDock({ onOpenQuoteModal }: MobileQuickDockProps) {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ type: "spring", stiffness: 350, damping: 28 }}
-          className="fixed bottom-4 left-4 right-4 z-40 md:hidden"
+          className="fixed bottom-3 left-3 right-3 z-40 md:hidden"
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
-          <div className="flex items-center justify-between p-2 rounded-2xl glass-panel shadow-2xl border border-border/80">
+          <div className="flex items-center justify-between gap-1 p-1.5 sm:p-2 rounded-2xl glass-panel shadow-2xl border border-border/80">
             {/* 1-Tap Telegram Direct Chat */}
             <a
               href="https://t.me/gtprintadmin"
@@ -87,16 +88,16 @@ export function MobileQuickDock({ onOpenQuoteModal }: MobileQuickDockProps) {
                 type="button"
                 onClick={onOpenQuoteModal}
                 aria-label={footerT("quickQuote")}
-                className="flex-[1.4] flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-primary hover:bg-primary-hover text-white shadow-glow-sm font-bold text-xs"
+                className="flex-[1.4] min-w-0 flex items-center justify-center gap-1.5 py-2.5 px-2 sm:px-3 rounded-xl bg-primary hover:bg-primary-hover text-white shadow-glow-sm font-bold text-[11px] sm:text-xs"
               >
-                <FileText className="w-4 h-4" />
-                <span>{footerT("quickQuote")}</span>
+                <FileText className="w-4 h-4 shrink-0" />
+                <span className="truncate">{footerT("quickQuote")}</span>
               </button>
             ) : (
               <Link
                 href="/quote"
                 aria-label={footerT("quickQuote")}
-                className="flex-[1.4] flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-primary hover:bg-primary-hover text-white shadow-glow-sm font-bold text-xs"
+                className="flex-[1.4] min-w-0 flex items-center justify-center gap-1.5 py-2.5 px-2 sm:px-3 rounded-xl bg-primary hover:bg-primary-hover text-white shadow-glow-sm font-bold text-[11px] sm:text-xs"
               >
                 <FileText className="w-4 h-4" />
                 <span>{footerT("quickQuote")}</span>

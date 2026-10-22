@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import {
-  Printer,
   MapPin,
   Phone,
   Mail,
@@ -112,8 +112,8 @@ export function Footer() {
     <footer className="w-full bg-surface border-t border-border transition-colors content-visibility-auto">
       {/* Top Operating Status Strip */}
       <div className="border-b border-border/70 py-4 bg-surface-secondary/40">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-4 text-xs">
-          <div className="flex items-center gap-3">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-3 sm:gap-4 text-xs">
+          <div className="flex flex-wrap items-center gap-3">
             <StatusBadge
               label={isWorkshopOpen ? t("statusOpen") : t("statusClosed")}
               variant={isWorkshopOpen ? "success" : "neutral"}
@@ -125,10 +125,10 @@ export function Footer() {
             </span>
           </div>
 
-          <div className="flex items-center gap-2 font-mono text-foreground font-semibold">
-            <Clock className="w-3.5 h-3.5 text-primary" />
+          <div className="flex flex-wrap items-center gap-2 font-mono text-foreground font-semibold">
+            <Clock className="w-3.5 h-3.5 text-primary shrink-0" />
             <span>{t("localTime")}:</span>
-            <span className="text-primary tracking-wide">
+            <span className="text-primary tracking-wide break-all">
               {ethiopianTime || "08:30:00 AM"}
             </span>
           </div>
@@ -140,15 +140,22 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Column 1: Brand & Origin (Spans 2 cols on lg) */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-white shadow-glow-sm">
-                <Printer className="w-5 h-5" />
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex items-center justify-center w-10 h-10 shrink-0 rounded-xl overflow-hidden shadow-glow-sm">
+                <Image
+                  src="/gt-logo-mark.png"
+                  alt="GT Printing Press logo"
+                  width={512}
+                  height={512}
+                  sizes="40px"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <div>
+              <div className="min-w-0">
                 <span className="text-xl font-extrabold tracking-tight text-foreground block leading-tight">
                   GT <span className="text-primary font-black">PRINTING</span>
                 </span>
-                <span className="text-[10px] uppercase font-semibold text-foreground-muted block">
+                <span className="text-[10px] uppercase font-semibold text-foreground-muted block truncate">
                   {common("legalName")}
                 </span>
               </div>
@@ -365,12 +372,12 @@ export function Footer() {
         </div>
 
       {/* Bottom Legal Bar */}
-      <div className="border-t border-border py-6 text-xs text-foreground-muted bg-surface-secondary/20">
+      <div className="border-t border-border pt-6 pb-24 md:pb-6 text-xs text-foreground-muted bg-surface-secondary/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-          <p>© 2026 {common("legalName")}. {common("allRightsReserved")}.</p>
-          <div className="flex items-center gap-4 text-[11px]">
+          <p className="max-w-full break-words">© 2026 {common("legalName")}. {common("allRightsReserved")}.</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px]">
             <span>Africa Avenue (Bole Road), Addis Ababa</span>
-            <span>•</span>
+            <span aria-hidden="true">•</span>
             <a
               href="https://maps.app.goo.gl/AZBm7RVfoex7ZR6M8"
               target="_blank"

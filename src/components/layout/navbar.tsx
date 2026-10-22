@@ -2,18 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { Link, usePathname } from "@/i18n/routing";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Printer,
-  Menu,
-  X,
-  ArrowRight,
-  Phone,
-  Send,
-  Layers,
-  ChevronDown,
-} from "lucide-react";
+import { Menu, X, ArrowRight, Phone, Send } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
 import { MagneticButton } from "@/components/ui/magnetic-button";
@@ -63,25 +55,29 @@ export function Navbar({ onOpenQuoteModal }: NavbarProps) {
             : "bg-background/80 backdrop-blur-md border-b border-border/40"
         }`}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3 sm:gap-4">
           {/* Brand Logo & Name */}
           <Link
             href="/"
-            className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xl"
+            className="flex min-w-0 items-center gap-2.5 sm:gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xl"
             aria-label="GT Printing Press Home"
           >
-            <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-primary text-white shadow-glow-sm group-hover:scale-105 transition-transform duration-300">
-              <Printer className="w-6 h-6" />
-              <div
-                className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-background animate-pulse-subtle"
-                title="Workshop Production Active"
+            <div className="relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-xl overflow-hidden shadow-glow-sm group-hover:scale-105 transition-transform duration-300">
+              <Image
+                src="/gt-logo-mark.png"
+                alt="GT Printing Press logo"
+                width={512}
+                height={512}
+                priority
+                sizes="(max-width: 640px) 40px, 44px"
+                className="w-full h-full object-cover"
               />
             </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-extrabold tracking-tight text-foreground block leading-tight">
+            <div className="flex min-w-0 flex-col">
+              <span className="text-lg sm:text-xl font-extrabold tracking-tight text-foreground block leading-tight whitespace-nowrap">
                 GT <span className="text-primary font-black">PRINTING</span>
               </span>
-              <span className="text-[10px] tracking-wider uppercase font-semibold text-foreground-muted block truncate max-w-[170px] sm:max-w-none">
+              <span className="text-[9px] sm:text-[10px] tracking-wider uppercase font-semibold text-foreground-muted block truncate max-w-[150px] sm:max-w-none">
                 Since 2000 E.C. • In-House
               </span>
             </div>
@@ -146,7 +142,7 @@ export function Navbar({ onOpenQuoteModal }: NavbarProps) {
           </div>
 
           {/* Mobile Right Controls: Language + Hamburger */}
-          <div className="flex xl:hidden items-center gap-2">
+          <div className="flex xl:hidden items-center gap-1.5 sm:gap-2 shrink-0">
             <LanguageSwitcher className="scale-90" />
             <button
               type="button"
@@ -154,6 +150,7 @@ export function Navbar({ onOpenQuoteModal }: NavbarProps) {
               className="p-2.5 rounded-xl bg-surface border border-border text-foreground hover:bg-surface-secondary transition-colors"
               aria-label={t("toggleMenu")}
               aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {mobileMenuOpen ? (
                 <X className="w-5 h-5 text-primary" />
@@ -169,11 +166,12 @@ export function Navbar({ onOpenQuoteModal }: NavbarProps) {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            id="mobile-navigation"
             initial={{ opacity: 0, x: "100%" }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 220 }}
-            className="fixed inset-0 top-20 z-40 xl:hidden bg-background/95 backdrop-blur-xl border-t border-border flex flex-col justify-between p-6 overflow-y-auto"
+            className="fixed inset-x-0 bottom-0 top-16 sm:top-20 z-40 xl:hidden bg-background/95 backdrop-blur-xl border-t border-border flex flex-col justify-between p-4 sm:p-6 pb-[max(1rem,env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain"
           >
             {/* Nav list */}
             <nav className="flex flex-col space-y-2 pt-2">
