@@ -1,16 +1,47 @@
-import { IQuoteRequest } from "@/types/database";
+import { IQuoteRequest, IContactMessage } from "@/types/database";
+import { dbConnect } from "@/lib/db";
+import SiteSetting from "@/models/SiteSetting";
+import { DEFAULT_SETTINGS } from "@/lib/default-settings";
 
-interface TelegramAlertResult {
+export interface TelegramAlertResult {
   success: boolean;
   messageId?: number;
   error?: string;
 }
 
+/**
+ * Retrieve Telegram credentials dynamically from MongoDB database first,
+ * with fallback to default settings or .env.local
+ */
+export async function getTelegramCredentials(): Promise<{ token: string; chatId: string }> {
+  try {
+    await dbConnect();
+    const settingsDoc = await SiteSetting.findOne({ key: "general_config" }).lean();
+    const config = (settingsDoc as any)?.value;
+
+    const dbToken = config?.telegramBotToken?.trim();
+    const dbChatId = config?.telegramChatId?.trim();
+
+    if (dbToken && dbChatId) {
+      return { token: dbToken, chatId: dbChatId };
+    }
+  } catch (err) {
+    console.warn("Could not retrieve Telegram credentials from DB:", err);
+  }
+
+  // Fallback to DEFAULT_SETTINGS, then process.env
+  const fallbackToken =
+    DEFAULT_SETTINGS.telegramBotToken || process.env.TELEGRAM_BOT_TOKEN || "";
+  const fallbackChatId =
+    DEFAULT_SETTINGS.telegramChatId || process.env.TELEGRAM_CHAT_ID || "";
+
+  return { token: fallbackToken, chatId: fallbackChatId };
+}
+
 export async function sendTelegramQuoteAlert(
   quote: IQuoteRequest
 ): Promise<TelegramAlertResult> {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+  const { token, chatId } = await getTelegramCredentials();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gtprinting.et";
 
   if (!token || !chatId || token === "your_bot_token_from_botfather" || token.includes("dummy")) {
@@ -129,6 +160,169 @@ ${quote.quantity ? `📦 <b>Quantity:</b> ${escapeHtml(quote.quantity)}\n` : ""}
     return {
       success: false,
       error: error?.message || "Telegram service unreachable",
+    };
+  }
+}
+
+export async function sendTelegramContactAlert(
+  contact: IContactMessage
+): Promise<TelegramAlertResult> {
+  const { token, chatId } = await getTelegramCredentials();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gtprinting.et";
+
+  if (!token || !chatId || token === "your_bot_token_from_botfather" || token.includes("dummy")) {
+    console.warn("⚠️ Telegram Alert: Bot token or Chat ID not configured. Simulated dispatch for reference:", contact.reference);
+    return {
+      success: true,
+      messageId: 1000,
+      error: "Simulated in development mode",
+    };
+  }
+
+  // Format submission date in East Africa Time (UTC+3)
+  const submittedAt = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Africa/Addis_Ababa",
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(contact.createdAt || Date.now()));
+
+  // Formatted Telegram Alert message (HTML parse mode)
+  const messageText = `
+📬 <b>New Contact Form Inquiry — GT Printing</b>
+<b>Reference:</b> <code>#${escapeHtml(contact.reference)}</code>
+
+👤 <b>Client:</b> ${escapeHtml(contact.name)}
+📞 <b>Phone:</b> <code>${escapeHtml(contact.phone)}</code>
+${contact.email ? `✉️ <b>Email:</b> ${escapeHtml(contact.email)}\n` : ""}📌 <b>Subject:</b> ${escapeHtml(contact.subject)}
+
+📝 <b>Message:</b>
+${escapeHtml(contact.message)}
+
+🌐 <b>Language:</b> ${escapeHtml((contact.locale || "en").toUpperCase())}
+🕒 <b>Submitted:</b> ${escapeHtml(submittedAt)} (EAT)
+`.trim();
+
+  // Clean phone number for links
+  const cleanPhone = contact.phone.replace(/[\s-]/g, "");
+  const telegramPhone = cleanPhone.startsWith("+")
+    ? cleanPhone.slice(1)
+    : cleanPhone.startsWith("0")
+    ? `251${cleanPhone.slice(1)}`
+    : cleanPhone;
+
+  // Inline action buttons
+  const replyMarkup = {
+    inline_keyboard: [
+      [
+        {
+          text: "💬 Chat on Telegram",
+          url: `https://t.me/+${telegramPhone}`,
+        },
+        {
+          text: "🌐 View Website",
+          url: siteUrl,
+        },
+      ],
+    ],
+  };
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: messageText,
+        parse_mode: "HTML",
+        reply_markup: replyMarkup,
+      }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      console.error("Telegram Bot API Error (Contact):", data);
+      return {
+        success: false,
+        error: data.description || "Failed to deliver Telegram notification",
+      };
+    }
+
+    return {
+      success: true,
+      messageId: data.result?.message_id,
+    };
+  } catch (error: any) {
+    console.error("Telegram contact notification delivery failure:", error?.message || error);
+    return {
+      success: false,
+      error: error?.message || "Telegram service unreachable",
+    };
+  }
+}
+
+export async function sendTelegramTestAlert(
+  customToken?: string,
+  customChatId?: string
+): Promise<TelegramAlertResult> {
+  const creds = await getTelegramCredentials();
+  const token = customToken?.trim() || creds.token;
+  const chatId = customChatId?.trim() || creds.chatId;
+
+  if (!token || !chatId) {
+    return {
+      success: false,
+      error: "Telegram Bot Token or Chat ID is missing",
+    };
+  }
+
+  const testMessage = `
+✅ <b>Telegram Alert System Verified!</b>
+🏢 <b>GT Printing Press (Addis Ababa)</b>
+
+This test dispatch verifies that your Telegram Bot Token and Chat ID stored in the <b>MongoDB database</b> are fully operational and ready to receive production quote requests and contact inquiries.
+
+🕒 <b>Timestamp:</b> ${new Date().toISOString()}
+  `.trim();
+
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: testMessage,
+        parse_mode: "HTML",
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      return {
+        success: false,
+        error: data.description || "Failed to deliver Telegram test message",
+      };
+    }
+
+    return {
+      success: true,
+      messageId: data.result?.message_id,
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      error: err.message || "Telegram service unreachable",
     };
   }
 }

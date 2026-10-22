@@ -29,6 +29,8 @@ export async function PUT(
           featured: body.featured,
           order: body.order,
           galleryUrls: body.galleryUrls,
+          tags: body.tags || [],
+          mediaLinks: body.mediaLinks || [],
           translations: body.translations,
         },
       },

@@ -104,6 +104,8 @@ export async function POST(req: NextRequest) {
       galleryUrls: body.galleryUrls && body.galleryUrls.length > 0
         ? body.galleryUrls
         : ["https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80"],
+      tags: body.tags || [],
+      mediaLinks: body.mediaLinks || [],
       translations: {
         en: {
           title: body.translations.en.title,

@@ -24,7 +24,10 @@ export async function PUT(
         $set: {
           slug: body.slug,
           coverImage: body.coverImage,
+          galleryUrls: body.galleryUrls || [],
           category: body.category,
+          tags: body.tags || [],
+          mediaLinks: body.mediaLinks || [],
           status: body.status,
           publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
           translations: body.translations,

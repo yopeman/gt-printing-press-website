@@ -47,6 +47,39 @@ export interface IQuoteRequest {
   updatedAt: Date;
 }
 
+export type ContactMessageStatus = "New" | "Read" | "Replied" | "Archived";
+
+export interface IContactMessage {
+  _id?: string;
+  reference: string;
+  name: string;
+  email?: string;
+  phone: string;
+  subject: string;
+  message: string;
+  locale: Locale;
+  status: ContactMessageStatus;
+  notes?: string;
+  telegramDeliveryStatus: TelegramDeliveryStatus;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type MediaLinkType =
+  | "youtube"
+  | "youtube_short"
+  | "vimeo"
+  | "image"
+  | "social"
+  | "website"
+  | "other";
+
+export interface IMediaLink {
+  type: MediaLinkType;
+  url: string;
+  title?: string;
+}
+
 export interface IBlogPostTranslation {
   title: string;
   excerpt: string;
@@ -59,8 +92,11 @@ export interface IBlogPost {
   _id?: string;
   slug: string;
   coverImage: string;
+  galleryUrls?: string[];
   category: string;
   status: "draft" | "scheduled" | "published";
+  tags?: string[];
+  mediaLinks?: IMediaLink[];
   publishedAt?: Date;
   translations: Record<Locale, IBlogPostTranslation>;
   createdAt: Date;
@@ -84,6 +120,8 @@ export interface IPortfolioProject {
   featured: boolean;
   order: number;
   galleryUrls: string[];
+  tags?: string[];
+  mediaLinks?: IMediaLink[];
   translations: Record<Locale, IPortfolioTranslation>;
   createdAt: Date;
   updatedAt: Date;

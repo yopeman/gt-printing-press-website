@@ -15,7 +15,13 @@ import {
   X,
   AlertCircle,
   RefreshCw,
+  Video,
+  Hash,
 } from "lucide-react";
+import { MultiImageUploader } from "@/components/admin/multi-image-uploader";
+import { MediaLinksEditor } from "@/components/admin/media-links-editor";
+import { HashtagsEditor } from "@/components/admin/hashtags-editor";
+import { IMediaLink } from "@/types/database";
 
 interface PortfolioProjectItem {
   _id: string;
@@ -26,6 +32,8 @@ interface PortfolioProjectItem {
   featured: boolean;
   order: number;
   galleryUrls: string[];
+  tags?: string[];
+  mediaLinks?: IMediaLink[];
   translations: {
     en: { title: string; description: string; materials: string; clientName: string; location: string };
     am: { title: string; description: string; materials: string; clientName: string; location: string };
@@ -51,7 +59,9 @@ function PortfolioCMSContent() {
     year: 2026,
     featured: false,
     order: 0,
-    galleryUrls: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80",
+    galleryUrls: ["https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80"] as string[],
+    tags: [] as string[],
+    mediaLinks: [] as IMediaLink[],
     translations: {
       en: { title: "", description: "", materials: "", clientName: "", location: "Addis Ababa, Ethiopia" },
       am: { title: "", description: "", materials: "", clientName: "", location: "አዲስ አበባ፣ ኢትዮጵያ" },
@@ -87,7 +97,11 @@ function PortfolioCMSContent() {
       year: 2026,
       featured: false,
       order: projects.length,
-      galleryUrls: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80",
+      galleryUrls: [
+        "https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80",
+      ],
+      tags: ["commercial", "signage", "addis-ababa"],
+      mediaLinks: [],
       translations: {
         en: { title: "", description: "", materials: "", clientName: "", location: "Addis Ababa, Ethiopia" },
         am: { title: "", description: "", materials: "", clientName: "", location: "አዲስ አበባ፣ ኢትዮጵያ" },
@@ -107,7 +121,9 @@ function PortfolioCMSContent() {
       year: proj.year,
       featured: proj.featured,
       order: proj.order,
-      galleryUrls: (proj.galleryUrls || []).join("\n"),
+      galleryUrls: proj.galleryUrls || [],
+      tags: proj.tags || [],
+      mediaLinks: proj.mediaLinks || [],
       translations: {
         en: {
           title: proj.translations?.en?.title || "",
@@ -156,14 +172,9 @@ function PortfolioCMSContent() {
         : "/api/admin/portfolio";
       const method = editingProject ? "PUT" : "POST";
 
-      const parsedGallery = formData.galleryUrls
-        .split("\n")
-        .map((u) => u.trim())
-        .filter(Boolean);
-
       const payload = {
         ...formData,
-        galleryUrls: parsedGallery,
+        galleryUrls: formData.galleryUrls.filter(Boolean),
       };
 
       const res = await fetch(endpoint, {
@@ -290,6 +301,32 @@ function PortfolioCMSContent() {
                         {proj.translations?.en?.title}
                       </div>
                       <div className="text-[11px] font-mono text-foreground-muted">/{proj.slug}</div>
+                      {/* Tags & Media Indicators */}
+                      <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                        {proj.tags && proj.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1">
+                            {proj.tags.slice(0, 3).map((t) => (
+                              <span
+                                key={t}
+                                className="px-1.5 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-mono font-semibold"
+                              >
+                                #{t}
+                              </span>
+                            ))}
+                            {proj.tags.length > 3 && (
+                              <span className="text-[10px] font-mono text-foreground-muted">
+                                +{proj.tags.length - 3}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        {proj.mediaLinks && proj.mediaLinks.length > 0 && (
+                          <span className="px-1.5 py-0.5 rounded-md bg-surface-secondary border border-border text-foreground-muted text-[10px] font-mono flex items-center gap-1">
+                            <Video className="w-2.5 h-2.5 text-primary" />
+                            <span>{proj.mediaLinks.length} media</span>
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="py-3 px-3 font-semibold text-foreground">
                       {proj.translations?.en?.clientName || "Corporate Client"}
@@ -462,18 +499,43 @@ function PortfolioCMSContent() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-foreground mb-1">
-                  Image Gallery URLs (one per line)
-                </label>
-                <textarea
-                  rows={2}
-                  value={formData.galleryUrls}
-                  onChange={(e) => setFormData({ ...formData, galleryUrls: e.target.value })}
-                  placeholder="https://..."
-                  className="w-full p-2.5 rounded-xl bg-surface-secondary border border-border text-foreground text-xs font-mono focus:outline-none focus:ring-2 focus:ring-primary/40"
-                />
-              </div>
+              {/* Multi-Image Uploader for Project Gallery */}
+              <MultiImageUploader
+                images={formData.galleryUrls || []}
+                coverImage={formData.galleryUrls?.[0] || ""}
+                onSetCover={(newCover) => {
+                  const current = formData.galleryUrls || [];
+                  const reordered = [newCover, ...current.filter((u) => u !== newCover)];
+                  setFormData({ ...formData, galleryUrls: reordered });
+                }}
+                onChange={(updated) => setFormData({ ...formData, galleryUrls: updated })}
+                label="Project Showcase Gallery Images"
+                description="Upload multiple project photographs (stored locally). The first image serves as the primary cover thumbnail on project cards."
+              />
+
+              {/* Hashtags Editor */}
+              <HashtagsEditor
+                tags={formData.tags || []}
+                onChange={(tags) => setFormData({ ...formData, tags })}
+                suggestions={[
+                  "signage",
+                  "packaging",
+                  "3d-letters",
+                  "offset",
+                  "aviation",
+                  "luxury-finishes",
+                  "corporate-branding",
+                  "led-facade",
+                ]}
+              />
+
+              {/* Media Links Editor */}
+              <MediaLinksEditor
+                links={formData.mediaLinks || []}
+                onChange={(mediaLinks) => setFormData({ ...formData, mediaLinks })}
+                label="Project Video Showcases & Media Links"
+                description="Add YouTube videos/Shorts, Vimeo, or social media post links that show fabrication, CNC cutting, and on-site installation."
+              />
 
               {/* Trilingual Tabs */}
               <div className="pt-2 border-t border-border">

@@ -8,54 +8,55 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     await dbConnect();
-    const dbProjects = await PortfolioProject.find().sort({ order: 1, createdAt: -1 }).lean();
-    if (dbProjects && dbProjects.length > 0) {
-      return NextResponse.json({ projects: dbProjects });
-    }
-  } catch (error) {
-    // If DB is offline or empty, fallback to curated portfolio data
-  }
+    const dbProjects = await PortfolioProject.find({}).sort({ order: 1, createdAt: -1 }).lean();
 
-  return NextResponse.json({
-    projects: PORTFOLIO_DATA.map((p, idx) => ({
-      _id: p.slug,
-      slug: p.slug,
-      serviceType:
-        p.category === "signage"
-          ? "large-format-signage"
-          : p.category === "packaging"
-          ? "packaging-solutions"
-          : p.category === "publishing"
-          ? "publishing-binding"
-          : "offset-digital-printing",
-      industry: "corporate",
-      year: p.year,
-      featured: p.featured,
-      order: idx,
-      galleryUrls: [p.coverImage, ...(p.galleryImages || [])],
-      translations: {
-        en: {
-          title: p.title.en,
-          description: p.summary.en,
-          materials: p.materialsUsed.join(", "),
-          clientName: p.clientName,
-          location: p.location,
+    if (!dbProjects || dbProjects.length === 0) {
+      return NextResponse.json({ projects: PORTFOLIO_DATA });
+    }
+
+    // Format DB projects to match frontend expectations
+    const formattedDb = dbProjects.map((p: any) => {
+      const cover = p.galleryUrls?.[0] || "https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80";
+      return {
+        slug: p.slug,
+        category: p.serviceType || "signage",
+        categoryLabel: {
+          en: (p.serviceType || "Signage").replace(/-/g, " "),
+          am: (p.serviceType || "ሳይኔጅ").replace(/-/g, " "),
+          om: (p.serviceType || "Mallattoo").replace(/-/g, " "),
         },
-        am: {
-          title: p.title.am || p.title.en,
-          description: p.summary.am || p.summary.en,
-          materials: p.materialsUsed.join(", "),
-          clientName: p.clientName,
-          location: p.location,
+        title: {
+          en: p.translations?.en?.title || p.slug,
+          am: p.translations?.am?.title || p.translations?.en?.title || p.slug,
+          om: p.translations?.om?.title || p.translations?.en?.title || p.slug,
         },
-        om: {
-          title: p.title.om || p.title.en,
-          description: p.summary.om || p.summary.en,
-          materials: p.materialsUsed.join(", "),
-          clientName: p.clientName,
-          location: p.location,
+        clientName: p.translations?.en?.clientName || "Corporate Client",
+        year: p.year || 2026,
+        location: p.translations?.en?.location || "Addis Ababa, Ethiopia",
+        summary: {
+          en: p.translations?.en?.description || "",
+          am: p.translations?.am?.description || p.translations?.en?.description || "",
+          om: p.translations?.om?.description || p.translations?.en?.description || "",
         },
-      },
-    })),
-  });
+        fullDescription: {
+          en: p.translations?.en?.description || "",
+          am: p.translations?.am?.description || p.translations?.en?.description || "",
+          om: p.translations?.om?.description || p.translations?.en?.description || "",
+        },
+        materialsUsed: p.translations?.en?.materials
+          ? p.translations.en.materials.split(",").map((m: string) => m.trim())
+          : ["Industrial Offset", "Custom Finishing"],
+        coverImage: cover,
+        galleryImages: p.galleryUrls && p.galleryUrls.length > 0 ? p.galleryUrls : [cover],
+        featured: Boolean(p.featured),
+        tags: p.tags || [],
+        mediaLinks: p.mediaLinks || [],
+      };
+    });
+
+    return NextResponse.json({ projects: formattedDb });
+  } catch (err: any) {
+    console.error("[PUBLIC PORTFOLIO GET ERROR]", err);
+    return NextResponse.json({ projects: PORTFOLIO_DATA });
+  }
 }

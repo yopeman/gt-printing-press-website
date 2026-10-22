@@ -16,14 +16,23 @@ import {
   Sparkles,
   AlertCircle,
   RefreshCw,
+  Video,
+  Hash,
 } from "lucide-react";
+import { MultiImageUploader } from "@/components/admin/multi-image-uploader";
+import { MediaLinksEditor } from "@/components/admin/media-links-editor";
+import { HashtagsEditor } from "@/components/admin/hashtags-editor";
+import { IMediaLink } from "@/types/database";
 
 interface BlogPostItem {
   _id: string;
   slug: string;
   coverImage: string;
+  galleryUrls?: string[];
   category: string;
   status: "draft" | "published";
+  tags?: string[];
+  mediaLinks?: IMediaLink[];
   publishedAt: string;
   translations: {
     en: { title: string; excerpt: string; body: string };
@@ -47,6 +56,9 @@ function BlogCMSContent() {
     slug: "",
     category: "commercial-printing",
     coverImage: "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1200&q=80",
+    galleryUrls: [] as string[],
+    tags: [] as string[],
+    mediaLinks: [] as IMediaLink[],
     status: "published" as "draft" | "published",
     translations: {
       en: { title: "", excerpt: "", body: "" },
@@ -80,6 +92,9 @@ function BlogCMSContent() {
       slug: "",
       category: "commercial-printing",
       coverImage: "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1200&q=80",
+      galleryUrls: [],
+      tags: ["printing", "addis-ababa"],
+      mediaLinks: [],
       status: "published",
       translations: {
         en: { title: "", excerpt: "", body: "" },
@@ -97,6 +112,9 @@ function BlogCMSContent() {
       slug: post.slug,
       category: post.category,
       coverImage: post.coverImage,
+      galleryUrls: post.galleryUrls || [],
+      tags: post.tags || [],
+      mediaLinks: post.mediaLinks || [],
       status: post.status,
       translations: {
         en: {
@@ -264,6 +282,32 @@ function BlogCMSContent() {
                       <div className="text-[11px] text-foreground-muted font-mono mt-0.5">
                         /{post.slug}
                       </div>
+                      {/* Tags & Media Indicators */}
+                      <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                        {post.tags && post.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1">
+                            {post.tags.slice(0, 3).map((t) => (
+                              <span
+                                key={t}
+                                className="px-1.5 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-mono font-semibold"
+                              >
+                                #{t}
+                              </span>
+                            ))}
+                            {post.tags.length > 3 && (
+                              <span className="text-[10px] font-mono text-foreground-muted">
+                                +{post.tags.length - 3}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        {post.mediaLinks && post.mediaLinks.length > 0 && (
+                          <span className="px-1.5 py-0.5 rounded-md bg-surface-secondary border border-border text-foreground-muted text-[10px] font-mono flex items-center gap-1">
+                            <Video className="w-2.5 h-2.5 text-primary" />
+                            <span>{post.mediaLinks.length} media</span>
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="py-3 px-3">
                       <span className="px-2.5 py-0.5 rounded-full bg-surface-secondary border border-border text-[11px] font-mono capitalize">
@@ -382,33 +426,86 @@ function BlogCMSContent() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-foreground mb-1">
-                    Cover Image URL
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.coverImage}
-                    onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-                    placeholder="https://..."
-                    className="w-full px-3.5 py-2 rounded-xl bg-surface-secondary border border-border text-foreground text-xs focus:outline-none focus:ring-2 focus:ring-primary/40"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-foreground mb-1">
-                    Publication Status
-                  </label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                    className="w-full px-3.5 py-2 rounded-xl bg-surface-secondary border border-border text-foreground text-xs focus:outline-none focus:ring-2 focus:ring-primary/40"
-                  >
-                    <option value="published">Published (Live)</option>
-                    <option value="draft">Draft (Unpublished)</option>
-                  </select>
-                </div>
+              <div>
+                <label className="block text-xs font-semibold text-foreground mb-1">
+                  Publication Status
+                </label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                  className="w-full px-3.5 py-2 rounded-xl bg-surface-secondary border border-border text-foreground text-xs focus:outline-none focus:ring-2 focus:ring-primary/40"
+                >
+                  <option value="published">Published (Live)</option>
+                  <option value="draft">Draft (Unpublished)</option>
+                </select>
               </div>
+
+              {/* Multi-Image Uploader */}
+              <MultiImageUploader
+                images={
+                  Array.from(
+                    new Set(
+                      [formData.coverImage, ...(formData.galleryUrls || [])].filter(Boolean)
+                    )
+                  )
+                }
+                coverImage={formData.coverImage}
+                onSetCover={(newCover) => {
+                  const currentAll = Array.from(
+                    new Set(
+                      [formData.coverImage, ...(formData.galleryUrls || [])].filter(Boolean)
+                    )
+                  );
+                  setFormData({
+                    ...formData,
+                    coverImage: newCover,
+                    galleryUrls: currentAll.filter((u) => u !== newCover),
+                  });
+                }}
+                onChange={(updatedImages) => {
+                  if (updatedImages.length === 0) {
+                    setFormData({
+                      ...formData,
+                      coverImage: "",
+                      galleryUrls: [],
+                    });
+                  } else {
+                    const currentCoverValid = updatedImages.includes(formData.coverImage);
+                    const cover = currentCoverValid ? formData.coverImage : updatedImages[0];
+                    setFormData({
+                      ...formData,
+                      coverImage: cover,
+                      galleryUrls: updatedImages.filter((u) => u !== cover),
+                    });
+                  }
+                }}
+                label="Article Images (Cover & Gallery)"
+                description="Upload multiple images (saved to local storage). Pick one as the primary Cover photo. Additional images form the article gallery."
+              />
+
+              {/* Hashtags Editor */}
+              <HashtagsEditor
+                tags={formData.tags || []}
+                onChange={(tags) => setFormData({ ...formData, tags })}
+                suggestions={[
+                  "packaging",
+                  "signage",
+                  "offset",
+                  "prepress",
+                  "finishing",
+                  "cmyk",
+                  "branding",
+                  "color-management",
+                ]}
+              />
+
+              {/* Media Links Editor */}
+              <MediaLinksEditor
+                links={formData.mediaLinks || []}
+                onChange={(mediaLinks) => setFormData({ ...formData, mediaLinks })}
+                label="Article Media Links (YouTube, Shorts, Vimeo, Social)"
+                description="Add YouTube videos/Shorts, Vimeo, image links, or social media posts that readers can watch in a modal on the frontend."
+              />
 
               {/* Trilingual Language Selector Tabs */}
               <div className="pt-2 border-t border-border">
