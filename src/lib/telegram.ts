@@ -1,4 +1,7 @@
 import { IQuoteRequest, IContactMessage } from "@/types/database";
+import { dbConnect } from "@/lib/db";
+import SiteSetting from "@/models/SiteSetting";
+import { DEFAULT_SETTINGS } from "@/lib/default-settings";
 
 export interface TelegramAlertResult {
   success: boolean;
@@ -6,11 +9,39 @@ export interface TelegramAlertResult {
   error?: string;
 }
 
+/**
+ * Retrieve Telegram credentials dynamically from MongoDB database first,
+ * with fallback to default settings or .env.local
+ */
+export async function getTelegramCredentials(): Promise<{ token: string; chatId: string }> {
+  try {
+    await dbConnect();
+    const settingsDoc = await SiteSetting.findOne({ key: "general_config" }).lean();
+    const config = (settingsDoc as any)?.value;
+
+    const dbToken = config?.telegramBotToken?.trim();
+    const dbChatId = config?.telegramChatId?.trim();
+
+    if (dbToken && dbChatId) {
+      return { token: dbToken, chatId: dbChatId };
+    }
+  } catch (err) {
+    console.warn("Could not retrieve Telegram credentials from DB:", err);
+  }
+
+  // Fallback to DEFAULT_SETTINGS, then process.env
+  const fallbackToken =
+    DEFAULT_SETTINGS.telegramBotToken || process.env.TELEGRAM_BOT_TOKEN || "";
+  const fallbackChatId =
+    DEFAULT_SETTINGS.telegramChatId || process.env.TELEGRAM_CHAT_ID || "";
+
+  return { token: fallbackToken, chatId: fallbackChatId };
+}
+
 export async function sendTelegramQuoteAlert(
   quote: IQuoteRequest
 ): Promise<TelegramAlertResult> {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+  const { token, chatId } = await getTelegramCredentials();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gtprinting.et";
 
   if (!token || !chatId || token === "your_bot_token_from_botfather" || token.includes("dummy")) {
@@ -136,8 +167,7 @@ ${quote.quantity ? `📦 <b>Quantity:</b> ${escapeHtml(quote.quantity)}\n` : ""}
 export async function sendTelegramContactAlert(
   contact: IContactMessage
 ): Promise<TelegramAlertResult> {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+  const { token, chatId } = await getTelegramCredentials();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gtprinting.et";
 
   if (!token || !chatId || token === "your_bot_token_from_botfather" || token.includes("dummy")) {
@@ -235,6 +265,64 @@ ${escapeHtml(contact.message)}
     return {
       success: false,
       error: error?.message || "Telegram service unreachable",
+    };
+  }
+}
+
+export async function sendTelegramTestAlert(
+  customToken?: string,
+  customChatId?: string
+): Promise<TelegramAlertResult> {
+  const creds = await getTelegramCredentials();
+  const token = customToken?.trim() || creds.token;
+  const chatId = customChatId?.trim() || creds.chatId;
+
+  if (!token || !chatId) {
+    return {
+      success: false,
+      error: "Telegram Bot Token or Chat ID is missing",
+    };
+  }
+
+  const testMessage = `
+✅ <b>Telegram Alert System Verified!</b>
+🏢 <b>GT Printing Press (Addis Ababa)</b>
+
+This test dispatch verifies that your Telegram Bot Token and Chat ID stored in the <b>MongoDB database</b> are fully operational and ready to receive production quote requests and contact inquiries.
+
+🕒 <b>Timestamp:</b> ${new Date().toISOString()}
+  `.trim();
+
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: testMessage,
+        parse_mode: "HTML",
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      return {
+        success: false,
+        error: data.description || "Failed to deliver Telegram test message",
+      };
+    }
+
+    return {
+      success: true,
+      messageId: data.result?.message_id,
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      error: err.message || "Telegram service unreachable",
     };
   }
 }

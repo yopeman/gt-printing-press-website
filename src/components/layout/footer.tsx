@@ -25,9 +25,24 @@ export function Footer() {
   const nav = useTranslations("nav");
   const services = useTranslations("services");
 
-  // State for live Ethiopian Local Time (EAT, UTC+3)
   const [ethiopianTime, setEthiopianTime] = useState<string>("");
   const [isWorkshopOpen, setIsWorkshopOpen] = useState<boolean>(true);
+  const [siteSettings, setSiteSettings] = useState<any>(null);
+
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const res = await fetch("/api/settings");
+        if (res.ok) {
+          const data = await res.json();
+          setSiteSettings(data.settings);
+        }
+      } catch (e) {
+        // Fallback gracefully
+      }
+    }
+    loadSettings();
+  }, []);
 
   useEffect(() => {
     const updateTimeAndStatus = () => {
@@ -156,51 +171,80 @@ export function Footer() {
               </span>
             </div>
 
-            {/* Social channels */}
-            <div className="pt-3">
-              <p className="text-xs font-bold text-foreground mb-2.5">
-                {t("followUs")}
-              </p>
-              <div className="flex items-center gap-2.5">
-                <a
-                  href="https://t.me/gtprintingpress"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Telegram Channel"
-                  className="p-2 rounded-xl bg-surface-secondary hover:bg-surface text-foreground hover:text-sky-500 border border-border transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                </a>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn"
-                  className="p-2 rounded-xl bg-surface-secondary hover:bg-surface text-foreground hover:text-blue-500 border border-border transition-colors"
-                >
-                  <Linkedin className="w-4 h-4" />
-                </a>
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="p-2 rounded-xl bg-surface-secondary hover:bg-surface text-foreground hover:text-pink-500 border border-border transition-colors"
-                >
-                  <Instagram className="w-4 h-4" />
-                </a>
-                <a
-                  href="https://youtube.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="YouTube"
-                  className="p-2 rounded-xl bg-surface-secondary hover:bg-surface text-foreground hover:text-red-500 border border-border transition-colors"
-                >
-                  <Youtube className="w-4 h-4" />
-                </a>
+              {/* Social channels */}
+              <div className="pt-3">
+                <p className="text-xs font-bold text-foreground mb-2.5">
+                  {t("followUs")}
+                </p>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  {siteSettings?.socialLinks?.length > 0 ? (
+                    siteSettings.socialLinks.map((soc: any) => (
+                      <a
+                        key={soc.id || soc.platform}
+                        href={soc.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={soc.title || soc.platform}
+                        title={soc.title || soc.platform}
+                        className="p-2 rounded-xl bg-surface-secondary hover:bg-surface text-foreground hover:text-primary border border-border transition-colors capitalize flex items-center gap-1.5"
+                      >
+                        {soc.platform === "telegram" ? (
+                          <Send className="w-4 h-4 text-sky-500" />
+                        ) : soc.platform === "linkedin" ? (
+                          <Linkedin className="w-4 h-4 text-blue-500" />
+                        ) : soc.platform === "instagram" ? (
+                          <Instagram className="w-4 h-4 text-pink-500" />
+                        ) : soc.platform === "youtube" || soc.platform === "vimeo" ? (
+                          <Youtube className="w-4 h-4 text-red-500" />
+                        ) : (
+                          <Globe className="w-4 h-4 text-primary" />
+                        )}
+                        {soc.title && <span className="text-[11px] font-semibold pr-1 hidden sm:inline">{soc.title}</span>}
+                      </a>
+                    ))
+                  ) : (
+                    <>
+                      <a
+                        href="https://t.me/gtprintingpress"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Telegram Channel"
+                        className="p-2 rounded-xl bg-surface-secondary hover:bg-surface text-foreground hover:text-sky-500 border border-border transition-colors"
+                      >
+                        <Send className="w-4 h-4" />
+                      </a>
+                      <a
+                        href="https://linkedin.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn"
+                        className="p-2 rounded-xl bg-surface-secondary hover:bg-surface text-foreground hover:text-blue-500 border border-border transition-colors"
+                      >
+                        <Linkedin className="w-4 h-4" />
+                      </a>
+                      <a
+                        href="https://instagram.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Instagram"
+                        className="p-2 rounded-xl bg-surface-secondary hover:bg-surface text-foreground hover:text-pink-500 border border-border transition-colors"
+                      >
+                        <Instagram className="w-4 h-4" />
+                      </a>
+                      <a
+                        href="https://youtube.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="YouTube"
+                        className="p-2 rounded-xl bg-surface-secondary hover:bg-surface text-foreground hover:text-red-500 border border-border transition-colors"
+                      >
+                        <Youtube className="w-4 h-4" />
+                      </a>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
           {/* Column 2: Quick Links */}
           <div className="space-y-4">
@@ -242,54 +286,83 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Contact & Physical Location */}
-          <div className="space-y-4">
-            <h4 className="text-sm font-bold text-foreground uppercase tracking-wider">
-              {t("contactInfo")}
-            </h4>
-            <div className="space-y-3 text-sm text-foreground-muted">
-              <a
-                href="https://maps.app.goo.gl/AZBm7RVfoex7ZR6M8"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-2.5 hover:text-primary transition-colors group"
-              >
-                <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <span className="text-xs leading-relaxed group-hover:underline">
-                  {t("address")}
-                </span>
-              </a>
+            {/* Column 4: Contact & Physical Location */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-foreground uppercase tracking-wider">
+                {t("contactInfo")}
+              </h4>
+              <div className="space-y-3 text-sm text-foreground-muted">
+                {siteSettings?.locations?.length > 0 ? (
+                  siteSettings.locations.map((loc: any) => (
+                    <div key={loc.id} className="space-y-1">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-primary font-mono flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5" />
+                        <span>{loc.label}</span>
+                      </div>
+                      <a
+                        href={loc.mapUrl || "https://maps.app.goo.gl/AZBm7RVfoex7ZR6M8"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-xs leading-relaxed hover:text-primary transition-colors"
+                      >
+                        {loc.address}
+                      </a>
+                    </div>
+                  ))
+                ) : (
+                  <a
+                    href="https://maps.app.goo.gl/AZBm7RVfoex7ZR6M8"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-2.5 hover:text-primary transition-colors group"
+                  >
+                    <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                    <span className="text-xs leading-relaxed group-hover:underline">
+                      {t("address")}
+                    </span>
+                  </a>
+                )}
 
-              <a
-                href="tel:+251115505050"
-                className="flex items-center gap-2.5 hover:text-primary transition-colors text-xs"
-              >
-                <Phone className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>+251 11 550 5050 / +251 91 123 4567</span>
-              </a>
+                <div className="pt-1 space-y-2">
+                  <a
+                    href={`tel:${siteSettings?.contactEndpoints?.find((e: any) => e.type === "phone")?.value || "+251115505050"}`}
+                    className="flex items-center gap-2.5 hover:text-primary transition-colors text-xs font-mono"
+                  >
+                    <Phone className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>
+                      {siteSettings?.contactEndpoints?.find((e: any) => e.type === "phone")?.value || "+251 11 550 5050 / +251 91 123 4567"}
+                    </span>
+                  </a>
 
-              <a
-                href="mailto:info@gtprinting.et"
-                className="flex items-center gap-2.5 hover:text-primary transition-colors text-xs"
-              >
-                <Mail className="w-4 h-4 text-sky-500 shrink-0" />
-                <span>info@gtprinting.et</span>
-              </a>
+                  <a
+                    href={`mailto:${siteSettings?.contactEndpoints?.find((e: any) => e.type === "email")?.value || "info@gtprinting.et"}`}
+                    className="flex items-center gap-2.5 hover:text-primary transition-colors text-xs"
+                  >
+                    <Mail className="w-4 h-4 text-sky-500 shrink-0" />
+                    <span>
+                      {siteSettings?.contactEndpoints?.find((e: any) => e.type === "email")?.value || "info@gtprinting.et"}
+                    </span>
+                  </a>
 
-              <a
-                href="https://t.me/gtprintadmin"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-600 dark:text-sky-400 text-xs font-semibold hover:bg-sky-500/20 transition-colors"
-              >
-                <Send className="w-3.5 h-3.5" />
-                <span>{t("telegramChat")}</span>
-                <ExternalLink className="w-3 h-3 ml-auto" />
-              </a>
+                  <a
+                    href={
+                      siteSettings?.contactEndpoints?.find((e: any) => e.type === "telegram")?.value?.startsWith("http")
+                        ? siteSettings.contactEndpoints.find((e: any) => e.type === "telegram").value
+                        : `https://t.me/${(siteSettings?.contactEndpoints?.find((e: any) => e.type === "telegram")?.value || "gtprintadmin").replace("@", "")}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-600 dark:text-sky-400 text-xs font-semibold hover:bg-sky-500/20 transition-colors"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>{t("telegramChat")}</span>
+                    <ExternalLink className="w-3 h-3 ml-auto" />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
       {/* Bottom Legal Bar */}
       <div className="border-t border-border py-6 text-xs text-foreground-muted bg-surface-secondary/20">

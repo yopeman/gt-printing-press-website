@@ -9,17 +9,50 @@ import { Star, ChevronLeft, ChevronRight, Quote, Building2 } from "lucide-react"
 
 export function TestimonialsSlider() {
   const locale = useLocale() as Locale;
+  const [items, setItems] = useState<any[]>(TESTIMONIALS_DATA);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  React.useEffect(() => {
+    async function loadTestimonials() {
+      try {
+        const res = await fetch("/api/testimonials");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.testimonials && data.testimonials.length > 0) {
+            const mapped = data.testimonials.map((t: any) => ({
+              id: t._id || t.id,
+              name: t.clientName || t.name,
+              role: t.role,
+              company: t.company,
+              rating: t.rating || 5,
+              avatarUrl: t.avatarUrl,
+              quote: t.translations
+                ? {
+                    en: t.translations.en?.quote || "",
+                    am: t.translations.am?.quote || t.translations.en?.quote || "",
+                    om: t.translations.om?.quote || t.translations.en?.quote || "",
+                  }
+                : t.quote,
+            }));
+            setItems(mapped);
+          }
+        }
+      } catch (err) {
+        console.warn("Using offline fallback testimonials:", err);
+      }
+    }
+    loadTestimonials();
+  }, []);
+
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? TESTIMONIALS_DATA.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
   };
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === TESTIMONIALS_DATA.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
   };
 
-  const current = TESTIMONIALS_DATA[currentIndex];
+  const current = items[currentIndex] || items[0] || TESTIMONIALS_DATA[0];
 
   return (
     <div className="w-full space-y-16">

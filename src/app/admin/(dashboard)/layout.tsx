@@ -9,6 +9,7 @@ import {
   FileEdit,
   FolderKanban,
   MessageSquareQuote,
+  MessageSquare,
   Settings,
   LogOut,
   ExternalLink,
@@ -79,6 +80,11 @@ export default function AdminDashboardLayout({
       href: "/admin/quotes",
       icon: Inbox,
       badge: "Live Leads",
+    },
+    {
+      label: "Contact Inquiries",
+      href: "/admin/messages",
+      icon: MessageSquare,
     },
     {
       label: "Blog CMS",

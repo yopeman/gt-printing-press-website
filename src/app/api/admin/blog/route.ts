@@ -89,7 +89,10 @@ export async function POST(req: NextRequest) {
     const newPost = await BlogPost.create({
       slug: body.slug,
       coverImage: body.coverImage || "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1200&q=80",
+      galleryUrls: body.galleryUrls || [],
       category: body.category || "commercial-printing",
+      tags: body.tags || [],
+      mediaLinks: body.mediaLinks || [],
       status: body.status || "draft",
       publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
       translations: {

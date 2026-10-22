@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { StatusBadge } from "@/components/ui";
 import {
@@ -29,11 +29,27 @@ export default function ContactPage() {
     website_honey: "",
   });
 
+  const [siteSettings, setSiteSettings] = useState<any>(null);
   const [submitted, setSubmitted] = useState(false);
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [copiedRef, setCopiedRef] = useState(false);
+
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const res = await fetch("/api/settings");
+        if (res.ok) {
+          const data = await res.json();
+          setSiteSettings(data.settings);
+        }
+      } catch (e) {
+        // Fallback gracefully
+      }
+    }
+    loadSettings();
+  }, []);
 
   const handleCopyRef = () => {
     if (!submittedRef) return;
@@ -110,50 +126,124 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column: Coordinates & Channels */}
           <div className="lg:col-span-5 space-y-6">
-            {/* Office Address Card */}
-            <div className="p-6 rounded-3xl bg-surface border border-border shadow-sm space-y-3">
-              <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wider font-mono">
-                <MapPin className="w-4 h-4" />
-                <span>Head Office & Studio</span>
-              </div>
-              <h3 className="text-base font-bold text-foreground">
-                Africa Avenue (Bole Road)
-              </h3>
-              <p className="text-xs text-foreground-muted leading-relaxed">
-                2nd Floor, Behind Dembel City Centre, Africa Avenue, Kirkos Sub-City, Addis Ababa, Ethiopia.
-              </p>
-              <div className="pt-2">
-                <a
-                  href="https://maps.app.goo.gl/AZBm7RVfoex7ZR6M8"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"
-                >
-                  <span>Open in Google Maps</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
+            {/* Company Locations Cards */}
+            {siteSettings?.locations?.length > 0 ? (
+              siteSettings.locations.map((loc: any) => (
+                <div key={loc.id} className="p-6 rounded-3xl bg-surface border border-border shadow-sm space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wider font-mono">
+                      <MapPin className="w-4 h-4" />
+                      <span>{loc.label === "other" ? loc.customLabel || "Facility" : loc.label}</span>
+                    </div>
+                    {loc.isPrimary && (
+                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase font-mono">
+                        Primary HQ
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-base font-bold text-foreground">
+                    {loc.name}
+                  </h3>
+                  <p className="text-xs text-foreground-muted leading-relaxed">
+                    {loc.address}
+                  </p>
+                  {loc.phone && (
+                    <div className="text-xs font-mono text-foreground font-semibold">
+                      Tel: <a href={`tel:${loc.phone}`} className="hover:text-primary transition-colors">{loc.phone}</a>
+                    </div>
+                  )}
 
-            {/* Direct Telephone Lines */}
+                  {/* Schedule for this location */}
+                  {loc.operatingHours && (
+                    <div className="pt-2 border-t border-border/60 text-xs space-y-1 text-foreground-muted">
+                      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-amber-500 font-mono">
+                        <Clock className="w-3.5 h-3.5" />
+                        <span>Operating Hours</span>
+                      </div>
+                      <p className="font-medium text-foreground text-[11px]">{loc.operatingHours.weekday}</p>
+                      {loc.operatingHours.saturday && <p className="text-[11px]">{loc.operatingHours.saturday}</p>}
+                    </div>
+                  )}
+
+                  <div className="pt-2">
+                    <a
+                      href={loc.mapUrl || "https://maps.app.goo.gl/AZBm7RVfoex7ZR6M8"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"
+                    >
+                      <span>Open in Google Maps</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="p-6 rounded-3xl bg-surface border border-border shadow-sm space-y-3">
+                <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wider font-mono">
+                  <MapPin className="w-4 h-4" />
+                  <span>Head Office & Studio</span>
+                </div>
+                <h3 className="text-base font-bold text-foreground">
+                  Africa Avenue (Bole Road)
+                </h3>
+                <p className="text-xs text-foreground-muted leading-relaxed">
+                  2nd Floor, Behind Dembel City Centre, Africa Avenue, Kirkos Sub-City, Addis Ababa, Ethiopia.
+                </p>
+                <div className="pt-2">
+                  <a
+                    href="https://maps.app.goo.gl/AZBm7RVfoex7ZR6M8"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"
+                  >
+                    <span>Open in Google Maps</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* Direct Telephone & Communication Lines */}
             <div className="p-6 rounded-3xl bg-surface border border-border shadow-sm space-y-3">
               <div className="flex items-center gap-2 text-emerald-500 font-bold text-xs uppercase tracking-wider font-mono">
                 <Phone className="w-4 h-4" />
-                <span>Telephone & Sales Desk</span>
+                <span>Contact Channels & Desks</span>
               </div>
-              <div className="space-y-1.5 text-sm text-foreground">
-                <div>
-                  <span className="text-xs text-foreground-muted block">Office PBX:</span>
-                  <a href="tel:+251115505050" className="font-bold hover:text-primary transition-colors">
-                    +251 11 550 5050
-                  </a>
-                </div>
-                <div>
-                  <span className="text-xs text-foreground-muted block">Quotation Mobile:</span>
-                  <a href="tel:+251911234567" className="font-bold hover:text-primary transition-colors">
-                    +251 91 123 4567
-                  </a>
-                </div>
+              <div className="space-y-2 text-sm text-foreground">
+                {siteSettings?.contactEndpoints?.length > 0 ? (
+                  siteSettings.contactEndpoints.map((ep: any) => (
+                    <div key={ep.id} className="text-xs">
+                      <span className="text-foreground-muted block text-[11px]">{ep.title}:</span>
+                      {ep.type === "phone" || ep.type === "whatsapp" ? (
+                        <a href={`tel:${ep.value}`} className="font-bold hover:text-primary transition-colors font-mono">
+                          {ep.value}
+                        </a>
+                      ) : ep.type === "email" ? (
+                        <a href={`mailto:${ep.value}`} className="font-bold hover:text-primary transition-colors">
+                          {ep.value}
+                        </a>
+                      ) : (
+                        <span className="font-semibold text-foreground">{ep.value}</span>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <div>
+                      <span className="text-xs text-foreground-muted block">Office PBX:</span>
+                      <a href="tel:+251115505050" className="font-bold hover:text-primary transition-colors">
+                        +251 11 550 5050
+                      </a>
+                    </div>
+                    <div>
+                      <span className="text-xs text-foreground-muted block">Quotation Mobile:</span>
+                      <a href="tel:+251911234567" className="font-bold hover:text-primary transition-colors">
+                        +251 91 123 4567
+                      </a>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -168,7 +258,11 @@ export default function ContactPage() {
               </p>
               <div className="pt-2 flex flex-col sm:flex-row gap-2">
                 <a
-                  href="https://t.me/gtprintadmin"
+                  href={
+                    siteSettings?.contactEndpoints?.find((e: any) => e.type === "telegram")?.value?.startsWith("http")
+                      ? siteSettings.contactEndpoints.find((e: any) => e.type === "telegram").value
+                      : `https://t.me/${(siteSettings?.contactEndpoints?.find((e: any) => e.type === "telegram")?.value || "gtprintadmin").replace("@", "")}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 py-2.5 px-3 rounded-xl bg-sky-500/10 border border-sky-500/25 text-sky-600 dark:text-sky-400 font-semibold text-xs text-center hover:bg-sky-500/20 transition-colors flex items-center justify-center gap-1.5"
@@ -177,7 +271,10 @@ export default function ContactPage() {
                   <span>Direct Sales Chat</span>
                 </a>
                 <a
-                  href="https://t.me/gtprintingpress"
+                  href={
+                    siteSettings?.socialLinks?.find((s: any) => s.platform === "telegram")?.url ||
+                    "https://t.me/gtprintingpress"
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 py-2.5 px-3 rounded-xl bg-surface-secondary border border-border text-foreground font-semibold text-xs text-center hover:bg-surface transition-colors flex items-center justify-center gap-1.5"
@@ -186,20 +283,6 @@ export default function ContactPage() {
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
-            </div>
-
-            {/* Working Hours */}
-            <div className="p-6 rounded-3xl bg-surface border border-border shadow-sm space-y-2 text-xs">
-              <div className="flex items-center gap-2 text-amber-500 font-bold uppercase tracking-wider font-mono">
-                <Clock className="w-4 h-4" />
-                <span>Operating Schedule</span>
-              </div>
-              <p className="font-semibold text-foreground">
-                Monday – Saturday: 8:30 AM – 6:00 PM (East Africa Time)
-              </p>
-              <p className="text-foreground-muted">
-                Sunday: Closed (Online quote inquiries accepted 24/7)
-              </p>
             </div>
           </div>
 

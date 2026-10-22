@@ -26,12 +26,28 @@ const BlogPostSchema = new Schema<IBlogPost>(
       required: true,
       trim: true,
     },
+    galleryUrls: {
+      type: [String],
+      default: [],
+    },
     category: {
       type: String,
       required: true,
       trim: true,
       index: true,
     },
+    tags: {
+      type: [String],
+      default: [],
+      index: true,
+    },
+    mediaLinks: [
+      {
+        type: { type: String, required: true },
+        url: { type: String, required: true },
+        title: { type: String, default: "" },
+      },
+    ],
     status: {
       type: String,
       enum: ["draft", "scheduled", "published"],

@@ -51,6 +51,10 @@ const ContactMessageSchema = new Schema<IContactMessage>(
       default: "New",
       index: true,
     },
+    notes: {
+      type: String,
+      default: "",
+    },
     telegramDeliveryStatus: {
       type: String,
       enum: ["pending", "sent", "failed"],

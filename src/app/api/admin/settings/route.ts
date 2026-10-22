@@ -2,25 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/db";
 import SiteSetting from "@/models/SiteSetting";
 import { getSession } from "@/lib/auth";
+import { DEFAULT_SETTINGS } from "@/lib/default-settings";
 
 export const dynamic = "force-dynamic";
-
-const DEFAULT_SETTINGS = {
-  companyName: "GT Printing Press (Advanced Digital Production Printing Plc)",
-  phonePrimary: "+251 91 123 4567",
-  phoneSecondary: "+251 11 661 2345",
-  emailGeneral: "info@gtprintingpress.com",
-  emailQuotes: "sales@gtprintingpress.com",
-  telegramChannel: "@gtprintingethiopia",
-  telegramAdminDesk: "@gtprintadmin",
-  addressBole: "Africa Avenue (Bole Road), Behind Edna Mall / Tele Medhanialem, Addis Ababa, Ethiopia",
-  latitude: 8.9954,
-  longitude: 38.7885,
-  workingHoursWeekday: "Monday – Friday: 8:00 AM – 7:30 PM",
-  workingHoursSaturday: "Saturday: 8:30 AM – 5:00 PM",
-  workingHoursSunday: "Sunday: Closed (On-call for emergency production)",
-  turnaroundGuarantee: "Same-Working-Day Estimation Guarantee",
-};
 
 export async function GET() {
   try {
@@ -41,7 +25,24 @@ export async function GET() {
       return NextResponse.json({ settings: created.value });
     }
 
-    return NextResponse.json({ settings: settingsDoc.value });
+    // Merge missing keys with default settings to ensure new structured fields are always present
+    const merged = {
+      ...DEFAULT_SETTINGS,
+      ...settingsDoc.value,
+      contactEndpoints: settingsDoc.value?.contactEndpoints?.length
+        ? settingsDoc.value.contactEndpoints
+        : DEFAULT_SETTINGS.contactEndpoints,
+      socialLinks: settingsDoc.value?.socialLinks?.length
+        ? settingsDoc.value.socialLinks
+        : DEFAULT_SETTINGS.socialLinks,
+      locations: settingsDoc.value?.locations?.length
+        ? settingsDoc.value.locations
+        : DEFAULT_SETTINGS.locations,
+      telegramBotToken: settingsDoc.value?.telegramBotToken || DEFAULT_SETTINGS.telegramBotToken,
+      telegramChatId: settingsDoc.value?.telegramChatId || DEFAULT_SETTINGS.telegramChatId,
+    };
+
+    return NextResponse.json({ settings: merged });
   } catch (error: any) {
     console.error("[ADMIN SETTINGS GET ERROR]", error);
     return NextResponse.json({ error: "Failed to fetch settings" }, { status: 500 });

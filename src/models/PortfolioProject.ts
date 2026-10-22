@@ -50,6 +50,18 @@ const PortfolioProjectSchema = new Schema<IPortfolioProject>(
       type: [String],
       default: [],
     },
+    tags: {
+      type: [String],
+      default: [],
+      index: true,
+    },
+    mediaLinks: [
+      {
+        type: { type: String, required: true },
+        url: { type: String, required: true },
+        title: { type: String, default: "" },
+      },
+    ],
     translations: {
       en: { type: TranslationSchema, required: true },
       am: { type: TranslationSchema, required: false },

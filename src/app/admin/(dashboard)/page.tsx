@@ -15,6 +15,7 @@ import {
   PhoneCall,
   Send,
   RefreshCw,
+  MessageSquare,
 } from "lucide-react";
 
 interface QuoteStats {
@@ -36,16 +37,28 @@ export default function AdminOverviewPage() {
     lost: 0,
   });
   const [recentQuotes, setRecentQuotes] = useState<any[]>([]);
+  const [recentMessages, setRecentMessages] = useState<any[]>([]);
+  const [messageStats, setMessageStats] = useState({ total: 0, new: 0 });
   const [loading, setLoading] = useState(true);
 
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/quotes");
-      if (res.ok) {
-        const data = await res.json();
+      const [quotesRes, messagesRes] = await Promise.all([
+        fetch("/api/admin/quotes"),
+        fetch("/api/admin/messages"),
+      ]);
+
+      if (quotesRes.ok) {
+        const data = await quotesRes.json();
         setStats(data.stats);
         setRecentQuotes(data.quotes.slice(0, 6));
+      }
+
+      if (messagesRes.ok) {
+        const msgData = await messagesRes.json();
+        setRecentMessages(msgData.messages?.slice(0, 5) || []);
+        setMessageStats(msgData.stats || { total: 0, new: 0 });
       }
     } catch (err) {
       console.error(err);
@@ -164,7 +177,7 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* Quick Actions Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Link
           href="/admin/quotes"
           className="p-5 rounded-2xl bg-surface border border-border hover:border-primary/40 hover:bg-surface-secondary/70 transition-all group flex items-center justify-between"
@@ -174,8 +187,24 @@ export default function AdminOverviewPage() {
               <Inbox className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-foreground">Manage Pipeline</h3>
-              <p className="text-xs text-foreground-muted">Update inquiry status & notes</p>
+              <h3 className="text-sm font-bold text-foreground">Quote Pipeline</h3>
+              <p className="text-xs text-foreground-muted">{stats.new} new &bull; {stats.total} total</p>
+            </div>
+          </div>
+          <ArrowRight className="w-4 h-4 text-foreground-muted group-hover:text-primary group-hover:translate-x-1 transition-all" />
+        </Link>
+
+        <Link
+          href="/admin/messages"
+          className="p-5 rounded-2xl bg-surface border border-border hover:border-sky-500/40 hover:bg-surface-secondary/70 transition-all group flex items-center justify-between"
+        >
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <MessageSquare className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-foreground">Contact Inquiries</h3>
+              <p className="text-xs text-foreground-muted">{messageStats.new} unread &bull; {messageStats.total} total</p>
             </div>
           </div>
           <ArrowRight className="w-4 h-4 text-foreground-muted group-hover:text-primary group-hover:translate-x-1 transition-all" />
@@ -315,6 +344,109 @@ export default function AdminOverviewPage() {
                     </tr>
                   );
                 })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Recent Contact Inquiries Section */}
+      <div className="p-6 rounded-3xl bg-surface border border-border shadow-card-glass space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <h2 className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-sky-500" />
+              <span>Recent Contact Form Submissions</span>
+            </h2>
+            <p className="text-xs text-foreground-muted">
+              General messages and customer questions from the website contact page.
+            </p>
+          </div>
+          <Link
+            href="/admin/messages"
+            className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
+          >
+            <span>View All Inquiries ({messageStats.total})</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        {recentMessages.length === 0 ? (
+          <div className="py-10 text-center text-foreground-muted text-sm space-y-2">
+            <MessageSquare className="w-8 h-8 mx-auto text-foreground-muted/40" />
+            <p>No contact messages recorded yet.</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead>
+                <tr className="border-b border-border text-foreground-muted uppercase font-mono text-[11px]">
+                  <th className="py-3 px-3">Reference</th>
+                  <th className="py-3 px-3">Client</th>
+                  <th className="py-3 px-3">Subject & Excerpt</th>
+                  <th className="py-3 px-3">Phone</th>
+                  <th className="py-3 px-3">Status</th>
+                  <th className="py-3 px-3">Date</th>
+                  <th className="py-3 px-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {recentMessages.map((m) => (
+                  <tr key={m._id} className="hover:bg-surface-secondary/40 transition-colors">
+                    <td className="py-3 px-3 font-mono font-bold text-sky-600 dark:text-sky-400">
+                      #{m.reference}
+                    </td>
+                    <td className="py-3 px-3">
+                      <div className="font-bold text-foreground">{m.name}</div>
+                      {m.email && <div className="text-[11px] text-foreground-muted">{m.email}</div>}
+                    </td>
+                    <td className="py-3 px-3 max-w-xs">
+                      <div className="font-semibold text-foreground truncate">{m.subject}</div>
+                      <div className="text-[11px] text-foreground-muted truncate">{m.message}</div>
+                    </td>
+                    <td className="py-3 px-3 font-mono">
+                      <a
+                        href={`tel:${m.phone}`}
+                        className="hover:text-primary transition-colors inline-flex items-center gap-1"
+                      >
+                        <PhoneCall className="w-3 h-3 text-foreground-muted" />
+                        <span>{m.phone}</span>
+                      </a>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span
+                        className={`px-2.5 py-0.5 rounded-full border text-[11px] font-mono font-bold uppercase tracking-wider ${
+                          m.status === "New"
+                            ? "bg-primary/10 text-primary border-primary/20"
+                            : m.status === "Replied"
+                            ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+                            : m.status === "Read"
+                            ? "bg-sky-500/10 text-sky-600 border-sky-500/20"
+                            : "bg-surface-secondary text-foreground-muted border-border"
+                        }`}
+                      >
+                        {m.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 text-foreground-muted text-xs">
+                      {new Date(m.createdAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </td>
+                    <td className="py-3 px-3 text-right">
+                      <Link
+                        href="/admin/messages"
+                        className="px-3 py-1.5 rounded-lg bg-surface-secondary hover:bg-sky-500 hover:text-white text-xs font-semibold transition-all inline-flex items-center gap-1"
+                      >
+                        <span>Open</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
