@@ -12,6 +12,7 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleOpenQuoteModal = () => {
     setQuoteModalOpen(true);
@@ -29,7 +30,11 @@ export function AppShell({ children }: AppShellProps) {
       </a>
 
       {/* Top Navbar */}
-      <Navbar onOpenQuoteModal={handleOpenQuoteModal} />
+      <Navbar
+        onOpenQuoteModal={handleOpenQuoteModal}
+        mobileMenuOpen={mobileMenuOpen}
+        onMobileMenuChange={setMobileMenuOpen}
+      />
 
       {/* Main Page Body */}
       <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
@@ -39,8 +44,10 @@ export function AppShell({ children }: AppShellProps) {
       {/* Footer */}
       <Footer />
 
-      {/* Mobile Quick-Contact Floating Dock */}
-      <MobileQuickDock onOpenQuoteModal={handleOpenQuoteModal} />
+      {/* Mobile Quick-Contact Floating Dock (hidden when mobile drawer or modal is open) */}
+      {!mobileMenuOpen && !quoteModalOpen && (
+        <MobileQuickDock onOpenQuoteModal={handleOpenQuoteModal} />
+      )}
 
       {/* Global Quick Quote Modal */}
       <QuickQuoteModal

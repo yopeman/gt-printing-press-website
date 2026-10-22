@@ -12,14 +12,42 @@ import { MagneticButton } from "@/components/ui/magnetic-button";
 
 interface NavbarProps {
   onOpenQuoteModal?: () => void;
+  mobileMenuOpen?: boolean;
+  onMobileMenuChange?: (open: boolean) => void;
 }
 
-export function Navbar({ onOpenQuoteModal }: NavbarProps) {
+export function Navbar({
+  onOpenQuoteModal,
+  mobileMenuOpen: controlledOpen,
+  onMobileMenuChange,
+}: NavbarProps) {
   const t = useTranslations("nav");
   const common = useTranslations("common");
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const mobileMenuOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
+
+  const setMobileMenuOpen = (open: boolean) => {
+    if (onMobileMenuChange) {
+      onMobileMenuChange(open);
+    } else {
+      setInternalOpen(open);
+    }
+  };
+
   const [scrolled, setScrolled] = useState(false);
+
+  // Lock body scroll when mobile menu drawer is active
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   // Monitor scroll for shadow & blur elevation
   useEffect(() => {
@@ -206,7 +234,12 @@ export function Navbar({ onOpenQuoteModal }: NavbarProps) {
             </nav>
 
             {/* Drawer Bottom Controls */}
-            <div className="pt-8 pb-4 space-y-4 border-t border-border mt-6">
+            <div className="pt-6 pb-8 space-y-4 border-t border-border mt-6">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-foreground-muted">{common("language") || "Language"}</span>
+                <LanguageSwitcher />
+              </div>
+
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-foreground-muted">Theme</span>
                 <ThemeToggle />
