@@ -6,6 +6,7 @@ import { Link } from "@/i18n/routing";
 import { BLOG_DATA } from "@/data/blog";
 import { type Locale } from "@/types/database";
 import { StatusBadge, MediaModal, MediaItem } from "@/components/ui";
+import { LiveLocationMap } from "@/components/blog/live-location-map";
 import {
   Search,
   Clock,
@@ -311,6 +312,9 @@ export default function BlogListPage() {
             )}
           </div>
         )}
+
+        {/* Live Location Map with Fullscreen Mode */}
+        <LiveLocationMap />
       </div>
 
       {/* Media Modal */}
