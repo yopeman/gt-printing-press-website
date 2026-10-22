@@ -215,8 +215,8 @@ export default function ContactPage() {
           </div>
 
           {/* Right Column: General Contact Form */}
-          <div className="lg:col-span-7">
-            <div className="p-8 sm:p-10 rounded-3xl bg-surface border border-border shadow-card-glass space-y-6">
+          <div className="lg:col-span-7 min-w-0">
+            <div className="p-5 sm:p-10 rounded-3xl bg-surface border border-border shadow-card-glass space-y-6">
               <div className="space-y-1">
                 <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
                   <MessageSquare className="w-5 h-5 text-primary" />
@@ -469,8 +469,8 @@ export default function ContactPage() {
                 </div>
 
                 {/* Slider Controls (<- Prev Map | Next Map ->) */}
-                <div className="flex items-center gap-2 self-start md:self-auto">
-                  <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-surface-secondary border border-border text-foreground">
+                <div className="flex flex-wrap items-center gap-2 self-start md:self-auto">
+                  <span className="text-[11px] sm:text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-surface-secondary border border-border text-foreground">
                     Facility {safeIndex + 1} of {total}
                   </span>
                   <button
@@ -505,14 +505,14 @@ export default function ContactPage() {
                       key={loc.id || idx}
                       type="button"
                       onClick={() => setActiveMapIndex(idx)}
-                      className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 border ${
+                      className={`max-w-full px-3 py-2 rounded-xl text-[11px] sm:text-xs font-semibold transition-all flex items-center gap-2 border text-left ${
                         isSelected
                           ? "bg-primary text-white border-primary shadow-glow-sm"
                           : "bg-surface-secondary hover:bg-surface border-border text-foreground-muted hover:text-foreground"
                       }`}
                     >
-                      <Building className="w-3.5 h-3.5" />
-                      <span>
+                      <Building className="w-3.5 h-3.5 shrink-0" />
+                      <span className="min-w-0">
                         Map {idx + 1}: {loc.label === "other" ? loc.customLabel || "Facility" : loc.label || "Facility"} – {loc.name}
                       </span>
                       {loc.isPrimary && (
@@ -598,7 +598,7 @@ export default function ContactPage() {
               </div>
 
               {/* Responsive Single Map Viewport with Left/Right Slide Arrows */}
-              <div className="rounded-2xl overflow-hidden aspect-[21/9] min-h-[340px] sm:min-h-[440px] bg-surface-secondary border border-border/90 relative group shadow-inner">
+              <div className="rounded-2xl overflow-hidden aspect-[4/3] sm:aspect-[21/9] min-h-[300px] sm:min-h-[440px] bg-surface-secondary border border-border/90 relative group shadow-inner">
                 <iframe
                   key={currentLoc.id || safeIndex}
                   title={`${currentLoc.name} Location Map`}

@@ -199,7 +199,7 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
 
   return (
     <div
-      className="relative w-full min-h-[640px] md:min-h-[720px] lg:min-h-[780px] flex items-center justify-center overflow-hidden"
+      className="relative w-full min-h-[560px] sm:min-h-[640px] md:min-h-[720px] lg:min-h-[780px] flex items-center justify-center overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -260,7 +260,7 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
       </div>
 
       {/* Main Hero Content */}
-      <div className="container relative z-10 mx-auto px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+      <div className="container relative z-10 mx-auto px-4 py-10 sm:px-6 sm:py-16 md:py-24 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Left: dynamic brand content */}
           <div className="space-y-6 text-center sm:space-y-8 lg:col-span-7 lg:text-left xl:col-span-6">
@@ -278,7 +278,7 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
             </div>
 
             {/* Dynamic Headline with Cross-Fade */}
-            <div className="flex min-h-[120px] items-center justify-center sm:min-h-[140px] lg:justify-start">
+            <div className="flex min-h-[100px] items-center justify-center sm:min-h-[140px] lg:justify-start">
               <AnimatePresence mode="wait">
                 <motion.h1
                   key={currentSlide.id}
@@ -309,36 +309,36 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
                 <p className="text-base font-medium leading-relaxed text-slate-200 drop-shadow-md sm:text-lg">
                   {currentSlide.subtitle}
                 </p>
-                <p className="inline-block rounded-full border border-white/10 bg-black/40 px-3 py-1.5 font-mono text-xs tracking-wide text-white/70 backdrop-blur-md sm:text-sm">
+                <p className="inline-block max-w-full break-words rounded-2xl sm:rounded-full border border-white/10 bg-black/40 px-3 py-1.5 font-mono text-[11px] leading-relaxed tracking-wide text-white/70 backdrop-blur-md sm:text-sm">
                   {currentSlide.tagline}
                 </p>
               </motion.div>
             </AnimatePresence>
 
             {/* Action Button Suite */}
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-2 lg:justify-start">
+            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4 pt-2 lg:justify-start">
               <button
                 type="button"
                 onClick={onOpenQuoteModal}
-                className="flex items-center gap-2 rounded-2xl bg-brand-red px-8 py-4 text-base font-bold text-white shadow-glow-md transition-all hover:bg-brand-darkred hover:shadow-glow-lg group"
+                className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-brand-red px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-white shadow-glow-md transition-all hover:bg-brand-darkred hover:shadow-glow-lg group"
               >
                 <span>Request Same-Day Quote</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1" />
               </button>
 
               <Link
                 href={currentSlide.ctaLink}
-                className="flex items-center gap-2 rounded-2xl border border-white/20 bg-white/15 px-7 py-4 text-base font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/25"
+                className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/15 px-5 sm:px-7 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/25"
               >
-                <span>{currentSlide.ctaText}</span>
-                <ArrowRight className="h-4 w-4 text-brand-red" />
+                <span className="text-center">{currentSlide.ctaText}</span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-brand-red" />
               </Link>
 
               <a
                 href="#plant-map"
-                className="flex items-center gap-2 rounded-2xl border border-white/15 bg-black/50 px-5 py-4 text-xs font-medium text-white/90 backdrop-blur-md transition-colors hover:bg-black/70 sm:text-sm"
+                className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl border border-white/15 bg-black/50 px-5 py-3.5 sm:py-4 text-xs font-medium text-white/90 backdrop-blur-md transition-colors hover:bg-black/70 sm:text-sm"
               >
-                <MapPin className="h-4 w-4 text-emerald-400" />
+                <MapPin className="h-4 w-4 shrink-0 text-emerald-400" />
                 <span>Visit Plant (Bole Road)</span>
               </a>
             </div>
@@ -347,7 +347,7 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
             <div className="mx-auto max-w-xl pt-8 lg:mx-0">
               <div className="flex flex-col items-center justify-between gap-3 rounded-2xl border border-white/15 bg-black/60 p-2 shadow-2xl backdrop-blur-xl sm:flex-row">
                 {/* 5 Slide Tabs with Individual 3s Progress Fillers */}
-                <div className="grid w-full flex-1 grid-cols-5 gap-1.5">
+                <div className="grid w-full min-w-0 flex-1 grid-cols-5 gap-1 sm:gap-1.5">
                   {SLIDES.map((slide, idx) => {
                     const isActive = idx === currentIndex;
                     return (
@@ -355,7 +355,7 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
                         key={slide.id}
                         type="button"
                         onClick={() => handleSelect(idx)}
-                        className={`relative overflow-hidden rounded-xl p-2 text-center transition-all ${
+                        className={`relative min-w-0 overflow-hidden rounded-lg sm:rounded-xl p-1.5 sm:p-2 text-center transition-all ${
                           isActive
                             ? 'border border-brand-red/50 bg-white/20 text-white shadow-inner'
                             : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
@@ -368,10 +368,10 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
                             style={{ width: `${progress}%` }}
                           />
                         )}
-                        <span className="block font-mono text-[10px] font-bold text-brand-red">
+                        <span className="block font-mono text-[9px] sm:text-[10px] font-bold text-brand-red">
                           {slide.divisionNum}
                         </span>
-                        <span className="block truncate text-[11px] font-bold">
+                        <span className="block truncate text-[9px] sm:text-[11px] font-bold">
                           {slide.category.split(' ')[0]}
                         </span>
                       </button>
@@ -412,8 +412,8 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
           </div>
 
           {/* Right: circular 3D carousel built from the asset images */}
-          <div className="lg:col-span-5 xl:col-span-6">
-            <div className="relative h-[340px] w-full overflow-hidden rounded-[2rem] border border-white/10 bg-black/30 shadow-2xl backdrop-blur-md sm:h-[420px] lg:h-[560px]">
+          <div className="min-w-0 lg:col-span-5 xl:col-span-6">
+            <div className="relative h-[240px] w-full overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-white/10 bg-black/30 shadow-2xl backdrop-blur-md sm:h-[420px] lg:h-[560px]">
               {/* Ambient glow behind the orbit */}
               <div
                 className="pointer-events-none absolute inset-0"

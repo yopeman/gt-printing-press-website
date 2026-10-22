@@ -77,14 +77,40 @@
 html {
   transition: background-color 250ms ease, color 250ms ease;
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
   min-height: 100vh;
+  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img,
+video,
+iframe {
+  max-width: 100%;
+}
+
+/* Prevent long unbroken strings (references, URLs, emails) from breaking layouts */
+.break-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* Prevent iOS auto-zoom on focus */
+  }
 }
 
 /* Ethiopic script typography tuning */
