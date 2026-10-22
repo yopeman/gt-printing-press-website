@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { SERVICES_DATA } from "@/data/services";
-import { PORTFOLIO_DATA } from "@/data/portfolio";
+import { getDbRelatedProjectsForService } from "@/lib/data-service";
 import { type Locale } from "@/types/database";
 import { routing } from "@/i18n/routing";
 import { IconBox, StatusBadge, TiltCard } from "@/components/ui";
@@ -34,7 +34,7 @@ export function generateStaticParams() {
   return params;
 }
 
-export default function ServiceDetailPage({
+export default async function ServiceDetailPage({
   params: { locale, slug },
 }: {
   params: { locale: string; slug: string };
@@ -47,13 +47,8 @@ export default function ServiceDetailPage({
     notFound();
   }
 
-  // Related portfolio projects matching this service category
-  const relatedProjects = PORTFOLIO_DATA.filter((p) => {
-    if (slug.includes("signage")) return p.category === "signage";
-    if (slug.includes("packaging")) return p.category === "packaging";
-    if (slug.includes("publishing")) return p.category === "publishing";
-    return p.category === "branding";
-  }).slice(0, 2);
+  // Related portfolio projects from database matching this service category
+  const relatedProjects = await getDbRelatedProjectsForService(slug, 2);
 
   return (
     <div className="relative overflow-hidden py-10 md:py-16">

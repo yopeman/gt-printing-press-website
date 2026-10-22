@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { BLOG_DATA } from "@/data/blog";
 import { type Locale } from "@/types/database";
 import { StatusBadge, MediaModal, MediaItem } from "@/components/ui";
 import {
@@ -21,7 +20,8 @@ import {
 
 export default function BlogListPage() {
   const locale = useLocale() as Locale;
-  const [posts, setPosts] = useState<any[]>(BLOG_DATA);
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string>("all");
 
@@ -38,7 +38,8 @@ export default function BlogListPage() {
           setPosts(data.posts);
         }
       })
-      .catch((err) => console.error("Error loading blog posts:", err));
+      .catch((err) => console.error("Error loading blog posts:", err))
+      .finally(() => setLoading(false));
   }, []);
 
   // Sync with URL Hash (#tag)
@@ -171,8 +172,29 @@ export default function BlogListPage() {
         </div>
 
         {/* Post Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredPosts.map((post) => {
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div
+                key={i}
+                className="flex flex-col justify-between rounded-3xl bg-surface border border-border overflow-hidden animate-pulse"
+              >
+                <div className="aspect-[16/10] bg-surface-secondary/70" />
+                <div className="p-6 space-y-3">
+                  <div className="h-3 w-1/3 bg-surface-secondary rounded" />
+                  <div className="h-5 w-3/4 bg-surface-secondary rounded" />
+                  <div className="h-3 w-full bg-surface-secondary rounded" />
+                  <div className="pt-4 border-t border-border/50 flex justify-between">
+                    <div className="h-4 w-20 bg-surface-secondary rounded" />
+                    <div className="h-4 w-16 bg-surface-secondary rounded" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredPosts.map((post) => {
             const mediaList: MediaItem[] = [
               ...(post.mediaLinks || []).map((ml: any) => ({
                 type: ml.type,
@@ -292,8 +314,9 @@ export default function BlogListPage() {
             );
           })}
         </div>
+      )}
 
-        {filteredPosts.length === 0 && (
+        {!loading && filteredPosts.length === 0 && (
           <div className="py-20 text-center space-y-3">
             <BookOpen className="w-10 h-10 text-foreground-muted/40 mx-auto" />
             <h3 className="text-base font-bold text-foreground">No articles match your criteria</h3>
