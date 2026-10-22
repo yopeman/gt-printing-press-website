@@ -6,6 +6,7 @@ import { Link } from "@/i18n/routing";
 import { BLOG_DATA } from "@/data/blog";
 import { type Locale } from "@/types/database";
 import { StatusBadge } from "@/components/ui";
+import { LiveLocationMap } from "@/components/blog/live-location-map";
 import { Search, Clock, ArrowRight, BookOpen, Tag } from "lucide-react";
 
 export default function BlogListPage() {
@@ -136,6 +137,9 @@ export default function BlogListPage() {
             </article>
           ))}
         </div>
+
+        {/* Live Location Map with Fullscreen Mode */}
+        <LiveLocationMap />
       </div>
     </div>
   );
