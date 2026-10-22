@@ -110,9 +110,9 @@ export default function AdminDashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row text-foreground">
+    <div className="h-screen w-full bg-background flex flex-col md:flex-row text-foreground overflow-hidden">
       {/* Mobile Top Header */}
-      <header className="md:hidden flex items-center justify-between p-4 bg-surface/90 border-b border-border sticky top-0 z-40 backdrop-blur-md">
+      <header className="md:hidden flex items-center justify-between p-4 bg-surface/90 border-b border-border z-40 backdrop-blur-md shrink-0">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold">
             <Printer className="w-4 h-4" />
@@ -130,12 +130,12 @@ export default function AdminDashboardLayout({
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed md:sticky top-0 left-0 bottom-0 z-50 w-64 md:w-72 bg-surface border-r border-border flex flex-col transition-transform duration-200 ease-in-out md:translate-x-0 ${
+        className={`fixed md:static inset-y-0 left-0 z-50 w-64 md:w-72 h-full bg-surface border-r border-border flex flex-col shrink-0 transition-transform duration-200 ease-in-out ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
         {/* Brand */}
-        <div className="p-6 border-b border-border flex items-center gap-3">
+        <div className="p-6 border-b border-border flex items-center gap-3 shrink-0">
           <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shadow-glow-sm">
             <Printer className="w-5 h-5" />
           </div>
@@ -196,7 +196,7 @@ export default function AdminDashboardLayout({
         </div>
 
         {/* User profile & footer actions */}
-        <div className="p-4 border-t border-border space-y-3 bg-surface-secondary/30">
+        <div className="p-4 border-t border-border space-y-3 bg-surface-secondary/30 shrink-0">
           {/* User badge */}
           <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-surface border border-border">
             <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
@@ -246,7 +246,7 @@ export default function AdminDashboardLayout({
       )}
 
       {/* Main Content Area */}
-      <main className="flex-1 min-w-0 overflow-y-auto">
+      <main className="flex-1 min-w-0 h-full overflow-y-auto">
         <div className="p-4 sm:p-6 lg:p-10 max-w-7xl mx-auto space-y-8">
           {children}
         </div>
