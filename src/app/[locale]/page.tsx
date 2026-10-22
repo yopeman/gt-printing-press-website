@@ -15,6 +15,7 @@ import { WorkflowPipeline } from "@/components/home/workflow-pipeline";
 import { PortfolioReel } from "@/components/home/portfolio-reel";
 import { TestimonialsSlider } from "@/components/home/testimonials-slider";
 import { LatestBlogSection } from "@/components/home/latest-blog-section";
+import { LocationMapSection } from "@/components/home/location-map-section";
 import {
   Printer,
   Sparkles,
@@ -371,6 +372,30 @@ export default function HomePage() {
 
           <div className="max-w-6xl mx-auto">
             <LatestBlogSection />
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Production Facilities & Locations Map View */}
+      <section className="py-16 md:py-24 bg-surface-secondary/30 border-y border-border/60 content-visibility-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
+            <StatusBadge
+              label="Strategic Plant Locations"
+              variant="neutral"
+              pulsingDot={false}
+              shimmer={false}
+            />
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+              Our Facilities & Production Plants
+            </h2>
+            <p className="text-sm text-foreground-muted">
+              Visit our corporate headquarters or industrial fabrication workshops in Addis Ababa. Complete transparency, zero outsourcing.
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto">
+            <LocationMapSection />
           </div>
         </div>
       </section>
