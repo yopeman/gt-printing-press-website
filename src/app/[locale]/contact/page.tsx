@@ -14,28 +14,77 @@ import {
   AlertCircle,
   ExternalLink,
   MessageSquare,
+  Copy,
+  Check,
 } from "lucide-react";
 
 export default function ContactPage() {
+  const locale = useLocale();
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     subject: "",
     message: "",
+    website_honey: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [submittedRef, setSubmittedRef] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [copiedRef, setCopiedRef] = useState(false);
+
+  const handleCopyRef = () => {
+    if (!submittedRef) return;
+    navigator.clipboard.writeText(submittedRef);
+    setCopiedRef(true);
+    setTimeout(() => setCopiedRef(false), 2000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg(null);
     setLoading(true);
 
-    // Simulate submission
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setLoading(false);
-    setSubmitted(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+          website_honey: form.website_honey,
+          locale,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "Failed to transmit inquiry. Please call our sales desk directly.");
+      }
+
+      setSubmittedRef(result.reference);
+      setSubmitted(true);
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+        website_honey: "",
+      });
+    } catch (err: any) {
+      setErrorMsg(err?.message || "Connection error. Please call our sales desk directly.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -168,26 +217,77 @@ export default function ContactPage() {
               </div>
 
               {submitted ? (
-                <div className="py-12 text-center space-y-4">
+                <div className="py-12 text-center space-y-5">
                   <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-500 mx-auto flex items-center justify-center border border-emerald-500/20">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h4 className="text-xl font-bold text-foreground">
-                    Message Sent Successfully!
-                  </h4>
+                  <div className="space-y-1">
+                    <h4 className="text-xl font-bold text-foreground">
+                      Message Transmitted Successfully!
+                    </h4>
+                    <p className="text-xs text-foreground-muted">
+                      Your inquiry has been dispatched directly to our Telegram alert desk & sales queue.
+                    </p>
+                  </div>
+
+                  {submittedRef && (
+                    <div className="inline-flex items-center gap-2 p-3 px-4 rounded-2xl bg-surface-secondary border border-border shadow-inner">
+                      <span className="text-xs text-foreground-muted">Reference:</span>
+                      <span className="font-mono text-sm font-bold text-primary">
+                        #{submittedRef}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleCopyRef}
+                        className="p-1 rounded-lg hover:bg-surface text-foreground-muted hover:text-foreground transition-colors ml-1"
+                        title="Copy reference code"
+                      >
+                        {copiedRef ? (
+                          <Check className="w-3.5 h-3.5 text-emerald-500" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
+                  )}
+
                   <p className="text-sm text-foreground-muted max-w-sm mx-auto">
-                    Thank you. Our administrative team will review your message and reply via email or phone on the same working day.
+                    Thank you. Our administrative team will review your message and reply via phone or email on the same working day.
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => setSubmitted(false)}
-                    className="px-6 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary-hover transition-colors"
-                  >
-                    Send Another Message
-                  </button>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSubmitted(false);
+                        setSubmittedRef(null);
+                        setErrorMsg(null);
+                      }}
+                      className="px-6 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary-hover transition-colors shadow-glow-sm"
+                    >
+                      Send Another Message
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {errorMsg && (
+                    <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs flex items-center gap-2.5">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{errorMsg}</span>
+                    </div>
+                  )}
+
+                  {/* Honeypot field (hidden from real users) */}
+                  <div className="hidden" aria-hidden="true">
+                    <input
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={form.website_honey}
+                      onChange={(e) => setForm({ ...form, website_honey: e.target.value })}
+                    />
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-foreground mb-1.5">

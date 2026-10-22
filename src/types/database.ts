@@ -47,6 +47,23 @@ export interface IQuoteRequest {
   updatedAt: Date;
 }
 
+export type ContactMessageStatus = "New" | "Read" | "Replied" | "Archived";
+
+export interface IContactMessage {
+  _id?: string;
+  reference: string;
+  name: string;
+  email?: string;
+  phone: string;
+  subject: string;
+  message: string;
+  locale: Locale;
+  status: ContactMessageStatus;
+  telegramDeliveryStatus: TelegramDeliveryStatus;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface IBlogPostTranslation {
   title: string;
   excerpt: string;
