@@ -50,7 +50,7 @@ async function uploadToCloudinary(
         resource_type: "auto",
         overwrite: false,
       },
-      (error: any, result: any) => {
+      (error, result) => {
         if (error || !result) {
           reject(error || new Error("Cloudinary upload failed"));
         } else {

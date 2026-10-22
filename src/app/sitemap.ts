@@ -1,9 +1,8 @@
 import { MetadataRoute } from "next";
 import { SERVICES_DATA } from "@/data/services";
-import { PORTFOLIO_DATA } from "@/data/portfolio";
-import { BLOG_DATA } from "@/data/blog";
+import { getDbPortfolioProjects, getDbBlogPosts } from "@/lib/data-service";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gtprintingpress.com";
   const now = new Date();
 
@@ -49,8 +48,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   }));
 
-  // Portfolio Detail Pages
-  const portfolioEntries: MetadataRoute.Sitemap = PORTFOLIO_DATA.map((p) => ({
+  // Fetch real portfolio and blog items from database
+  const [portfolioProjects, blogPosts] = await Promise.all([
+    getDbPortfolioProjects(),
+    getDbBlogPosts(),
+  ]);
+
+  // Portfolio Detail Pages (Database-backed)
+  const portfolioEntries: MetadataRoute.Sitemap = portfolioProjects.map((p) => ({
     url: `${baseUrl}/en/portfolio/${p.slug}`,
     lastModified: now,
     changeFrequency: "monthly",
@@ -64,10 +69,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   }));
 
-  // Blog Detail Pages
-  const blogEntries: MetadataRoute.Sitemap = BLOG_DATA.map((b) => ({
+  // Blog Detail Pages (Database-backed)
+  const blogEntries: MetadataRoute.Sitemap = blogPosts.map((b) => ({
     url: `${baseUrl}/en/blog/${b.slug}`,
-    lastModified: new Date(b.publishedDate || now),
+    lastModified: now,
     changeFrequency: "monthly",
     priority: 0.7,
     alternates: {
