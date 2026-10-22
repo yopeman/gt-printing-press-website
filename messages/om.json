@@ -115,6 +115,15 @@
     "servicesTitle": "Tajaajiloota",
     "contactInfo": "Qunnamtii Kallattii",
     "operatingHours": "Sa'aatii Hojii",
-    "hours": "Wiixata – Sanbata: Ganama 2:30 – Waaree Booda 12:00"
+    "hours": "Wiixata – Sanbata: Ganama 2:30 – Waaree Booda 12:00",
+    "statusOpen": "Warshaan Banaadha (Oomisha Irra)",
+    "statusClosed": "Warshaan Cufaadha (Gaaffiin Gatii Toora Irratti Ni Fuudhama)",
+    "localTime": "Sa'aatii Finfinnee (EAT)",
+    "followUs": "Nu Hordofaa",
+    "directions": "Kallattii Kaartaa (Google Maps)",
+    "callNow": "Warshaatti Bilbilaa",
+    "telegramChat": "Teessoo Telegiraamii Gurgurtaa",
+    "quickQuote": "Gatii Saffisaa",
+    "privacy": "Imaammata Qunnamtii"
   }
 }

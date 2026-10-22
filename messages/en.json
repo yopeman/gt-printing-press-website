@@ -115,6 +115,15 @@
     "servicesTitle": "Services",
     "contactInfo": "Direct Inquiries",
     "operatingHours": "Operating Hours",
-    "hours": "Monday – Saturday: 8:30 AM – 6:00 PM (EAT)"
+    "hours": "Monday – Saturday: 8:30 AM – 6:00 PM (EAT)",
+    "statusOpen": "Workshop Open (Active Production)",
+    "statusClosed": "Workshop Closed (Online Quotes Active)",
+    "localTime": "Addis Ababa Local Time (EAT)",
+    "followUs": "Connect With Us",
+    "directions": "Get Directions (Google Maps)",
+    "callNow": "Call Workshop",
+    "telegramChat": "Telegram Sales Desk",
+    "quickQuote": "Quick Quote",
+    "privacy": "Privacy Policy"
   }
 }

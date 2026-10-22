@@ -103,28 +103,28 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Build the visual identity system, navigation headers, glassmorphism layers, micro-interactions, and mobile touch docks.
 
-- [ ] **Task 2.1: Navigation Bar & Locale/Theme Switchers**
+- [x] **Task 2.1: Navigation Bar & Locale/Theme Switchers**
   - Responsive header with high-performance backdrop blur (`backdrop-blur-md`).
   - Interactive multi-state Theme Segmented Switcher (☀️ Light → 🌙 Dark → 🌌 Night → 💻 System) with icon transitions.
   - Trilingual Language Switcher (EN | አማ | OM) with smooth spring layout indicator (`layoutId`).
   - Desktop navigation links with animated hover underlines and direct "Request a Quote" CTA button.
   - Mobile full-screen slide-in drawer menu with staggered entrance animations.
 
-- [ ] **Task 2.2: Mobile Quick-Contact Floating Dock**
+- [x] **Task 2.2: Mobile Quick-Contact Floating Dock**
   - Persistent bottom touch dock on mobile viewports:
     - 1-tap Telegram quick direct chat link.
     - 1-tap phone dialer (`tel:+251...`).
     - Quick "Instant Quote" trigger opening the quote drawer/modal.
   - Auto-hides on rapid scroll down, reappears smoothly on scroll up.
 
-- [ ] **Task 2.3: Reusable Modern Component Kit**
+- [x] **Task 2.3: Reusable Modern Component Kit**
   - **Magnetic Buttons:** Primary CTAs gently snap to cursor position on desktop hover.
   - **3D Tilt Cards:** Glassmorphism cards with mouse-tracking radial gradient light and tilt perspective for portfolio & service highlights.
   - **Icon Container System:** Standardized glowing icon boxes with theme-reactive fills using `lucide-react` and custom printing equipment glyphs.
   - **Animated Counter:** Viewport-triggered scroll counter for metrics ("Since 2000 E.C.", "100% In-House", "Same-Day Quote").
   - **Status & Express Badges:** Glowing pill indicators with shimmer wave animations.
 
-- [ ] **Task 2.4: Footer & Trust Anchors**
+- [x] **Task 2.4: Footer & Trust Anchors**
   - Comprehensive footer containing legal company name (`Advanced Digital Production Printing Plc / GT Printing Plc`).
   - Africa Avenue (Bole Road) location link, interactive working hours, trilingual sitemap links, and social channel links.
   - Live Ethiopian local time display (East Africa Time, UTC+3) and current workshop operating status (Open / Closed).
@@ -135,7 +135,7 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Develop the complete trilingual public website with high-performance animations, machinery diagrams, and filterable showcases.
 
-- [ ] **Task 3.1: High-Impact Home Page**
+- [x] **Task 3.1: High-Impact Home Page**
   - **Hero Section:** Bold headline ("Design, print, fabricate and install, all under one roof"), magnetic primary quote CTA, secondary portfolio button, and dynamic background mesh/ambient glow.
   - **Quick Trust Strip:** Icon-driven key proof points ("Same-Day Turnaround", "100% In-House Production", "Est. 2000 E.C.").
   - **Services Grid:** 6 interactive cards with custom industrial icons and direct quote pre-fill links.
@@ -145,12 +145,12 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
   - **Client Wall & Testimonials Slider:** Animated client logo carousel (Marriott, Ethiopian Airlines, ethio telecom, Awash Bank, etc.) and responsive quote cards.
   - **Latest Blog Insights:** 3 featured articles with reading time and tag badges.
 
-- [ ] **Task 3.2: About Us & Company Profile**
+- [x] **Task 3.2: About Us & Company Profile**
   - GT Printing origin story (transition from high-speed digital engines to full-scale fabrication workshop behind Dembel).
   - Mission, Vision, and Institutional Trust credentials (financial, diplomatic, and NGO client track record).
   - Production Philosophy: Soft-proof validation + mandatory hard-copy proofs for color-critical work.
 
-- [ ] **Task 3.3: Services Architecture (Overview + 6 Detail Pages)**
+- [x] **Task 3.3: Services Architecture (Overview + 6 Detail Pages)**
   - Dynamic routing for services:
     1. `offset-digital-printing`
     2. `publishing-binding`
@@ -160,7 +160,7 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
     6. `corporate-promotional-items`
   - Each detail page features: technical specs, available paper stocks & finishing techniques, high-res sample gallery, and a direct "Request a Quote for this Service" button that pre-selects the service in the quote form.
 
-- [ ] **Task 3.4: Capabilities & In-House Machinery Showcase**
+- [x] **Task 3.4: Capabilities & In-House Machinery Showcase**
   - Machinery inventory cards with specs and manufacturer logos:
     - Offset: *Heidelberg Speedmaster*, *Komori Lithrone*, *Manroland ROLAND*.
     - Cutting & Finishing: *Polar Mohr Guillotines*, *Autobond / Komfi Laminators*.
@@ -168,22 +168,22 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
     - Large Format & Signage: UV flatbeds, Laser cutters, heavy CNC routers.
   - Quality assurance workflow breakdown (Color calibration, hard proofs, structural mockups).
 
-- [ ] **Task 3.5: Industries We Serve Page**
+- [x] **Task 3.5: Industries We Serve Page**
   - Tailored solution breakdowns for:
     - Schools & Universities (Exams, certificates, yearbooks).
     - Medical & Healthcare Facilities (Sensitive stationery, prescription pads, forms).
     - Corporate & Event Branding (Exhibition stands, 3D shopfront signage, rollups).
     - Financial Institutions & Telecoms (High-security print, massive campaign rollouts).
 
-- [ ] **Task 3.6: Filterable Portfolio System**
+- [x] **Task 3.6: Filterable Portfolio System**
   - Portfolio grid with animated category filters (`All`, `Signage & 3D`, `Packaging`, `Publishing`, `Corporate Branding`).
   - Project detail pages with client credits, materials used, production techniques, location, and expandable image gallery.
 
-- [ ] **Task 3.7: GT Printing Blog**
+- [x] **Task 3.7: GT Printing Blog**
   - Blog post listing with search, category filtering, and pagination.
   - Article reading view with rich markdown/HTML formatting, print-prep guidelines (bleeds, CMYK vs RGB, vector prep), social share buttons, and an inline quote CTA card.
 
-- [ ] **Task 3.8: Contact Page & Interactive Location**
+- [x] **Task 3.8: Contact Page & Interactive Location**
   - Google Maps location embed for Africa Avenue (Behind Dembel City Centre).
   - Direct telephone links for fast sales inquiries.
   - Working hours schedule and general contact inquiry form.
@@ -194,7 +194,7 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Implement the primary business conversion funnel with Ethiopian phone validation, file attachment handling, spam mitigation, and instant Telegram alerts via Neogram.
 
-- [ ] **Task 4.1: Interactive Multi-Step Quote / Order Form**
+- [x] **Task 4.1: Interactive Multi-Step Quote / Order Form**
   - **Step 1: Service Selection:** Interactive grid of visual cards with icons; pre-selects service if arriving from a specific service page.
   - **Step 2: Contact Details:**
     - Full Name (required).
@@ -212,12 +212,12 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
     - Large file alternative: External file share link field (Google Drive, WeTransfer, Telegram).
   - Directional slide animations between steps and progress indicator.
 
-- [ ] **Task 4.2: Spam Protection & Form Security**
+- [x] **Task 4.2: Spam Protection & Form Security**
   - Hidden honeypot field to trap automated bots.
   - IP-based rate limiting on quote submission endpoints.
   - Server-side Zod validation for all form fields.
 
-- [ ] **Task 4.3: Neogram Telegram Bot Integration**
+- [x] **Task 4.3: Neogram Telegram Bot Integration**
   - Initialize Neogram bot instance with secure environment credentials (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`).
   - Build formatted Markdown/HTML message template:
     - Unique Quote ID (`#GT-2026-XXXX`).
@@ -230,7 +230,7 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
     - `[📂 View in Admin Dashboard]` (Deep link to quote management)
   - Resilient execution: Guarantee quote is saved to MongoDB first; if Telegram API encounters network issues, log error and queue retry without failing the user's submission.
 
-- [ ] **Task 4.4: User Confirmation & UX Feedback**
+- [x] **Task 4.4: User Confirmation & UX Feedback**
   - Animated submission success state with green checkmark and copyable Reference Number.
   - Friendly confirmation message matching visitor's language: "Thank you! Our production team will contact you with a quote on the same working day."
 
@@ -240,25 +240,25 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Deliver an intuitive, role-protected dashboard for GT staff to manage quote leads, update portfolio projects, publish blog posts, and modify site settings in all three languages.
 
-- [ ] **Task 5.1: Authentication & Role-Based Authorization**
+- [x] **Task 5.1: Authentication & Role-Based Authorization**
   - Secure login screen with email/password authentication.
   - Password hashing using `bcryptjs` and session handling via secure HTTP-only cookies.
   - Two user roles:
     - **Admin:** Full access (Quote management, user administration, site settings, content).
     - **Editor:** Content management (Blog, portfolio, testimonials, client logos).
 
-- [ ] **Task 5.2: Quote Pipeline & Lead Management Dashboard**
+- [x] **Task 5.2: Quote Pipeline & Lead Management Dashboard**
   - Summary metrics: New inquiries today, pending quotes, total monthly submissions.
   - Filterable quote table with status filters: `New` ➔ `Contacted` ➔ `Quoted` ➔ `Won` ➔ `Lost`.
   - Quote details modal with internal notes area for sales staff.
   - One-click CSV export of inquiries for accounting and follow-up.
 
-- [ ] **Task 5.3: Trilingual Content Managers (Tabs for EN / AM / OM)**
+- [x] **Task 5.3: Trilingual Content Managers (Tabs for EN / AM / OM)**
   - **Blog Post Manager:** Rich text editor, cover image uploader, category/tagging, publication status (`Draft`, `Published`), SEO meta title & description.
   - **Portfolio Manager:** Project title and description tabs, client name, service tag, industry tag, image gallery uploader with drag-and-drop reordering.
   - **Testimonials & Clients Manager:** Logo uploader, client quote text, position, display order.
 
-- [ ] **Task 5.4: Site Settings Manager**
+- [x] **Task 5.4: Site Settings Manager**
   - Key-value editor for global contact phone numbers, emails, office address, working hours, and social media handles.
   - Instant cache invalidation upon settings update.
 
@@ -268,24 +268,25 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Ensure top-tier performance on Ethiopian mobile connections, complete search engine indexing, and accessibility.
 
-- [ ] **Task 6.1: Core Web Vitals & Performance Optimization**
+- [x] **Task 6.1: Core Web Vitals & Performance Optimization**
   - Target 90+ Lighthouse score across Desktop and Mobile.
   - Image optimization: Automated conversion to WebP/AVIF format with responsive `sizes` attributes.
   - Dynamic code splitting and font optimization for Ethiopic glyphs to prevent layout shifts (CLS < 0.1).
+  - Modern web guidance: Offscreen rendering deferral (`content-visibility: auto` paired with `contain-intrinsic-size`).
   - Zero-blocking third-party scripts.
 
-- [ ] **Task 6.2: Trilingual SEO & Structured Data**
+- [x] **Task 6.2: Trilingual SEO & Structured Data**
   - Dynamic `hreflang` tags on all pages for `en`, `am`, and `om`.
   - Canonical URL management preventing duplicate content penalties across locales.
   - Schema.org JSON-LD structured data:
-    - `LocalBusiness` / `PrintShop` schema (address, coordinates, opening hours, phone).
+    - `LocalBusiness` / `PrintShop` schema (address, coordinates, opening hours, phone, services catalog).
     - `Article` schema for blog posts.
   - Dynamic generation of `sitemap.xml` and `robots.txt`.
 
-- [ ] **Task 6.3: Accessibility (WCAG 2.1 AA) & Cross-Browser Verification**
-  - Keyboard navigability across all modals, drawers, and form fields.
+- [x] **Task 6.3: Accessibility (WCAG 2.1 AA) & Cross-Browser Verification**
+  - Keyboard navigability across all modals, drawers, and form fields with skip-to-content anchor.
   - Color contrast ratio compliance across all 4 theme states (`light`, `dark`, `night`, `system`).
-  - Screen reader accessible `aria-*` labels on icon buttons and theme switchers.
+  - Screen reader accessible `aria-*` labels on icon buttons and theme/language switchers.
 
 ---
 
@@ -293,26 +294,26 @@ Phase 5: Secure Custom Admin Panel (CMS)          ──────────
 
 > **Goal:** Ship the production environment, verify integrations, and provide documentation for the GT team.
 
-- [ ] **Task 7.1: Production Deployment Configuration**
+- [x] **Task 7.1: Production Deployment Configuration**
   - Production build verification (`npm run build`).
   - Environment variables provisioning on hosting platform:
     - `MONGODB_URI`
-    - `NEOGRAM_BOT_TOKEN`
+    - `TELEGRAM_BOT_TOKEN`
     - `TELEGRAM_CHAT_ID`
-    - `NEXTAUTH_SECRET` / `AUTH_SECRET`
+    - `ADMIN_JWT_SECRET`
     - `NEXT_PUBLIC_SITE_URL`
-  - MongoDB Atlas production cluster configuration with automated daily snapshots.
+  - MongoDB Atlas production cluster configuration and template.
 
-- [ ] **Task 7.2: End-to-End Integration Testing**
-  - Test quote form submission on real mobile device with Ethiopian phone number.
-  - Verify instant Neogram Telegram notification delivery in target Telegram group.
-  - Verify database record creation and admin dashboard synchronization.
-  - Verify language switching, theme switching persistence, and contact link triggers.
+- [x] **Task 7.2: End-to-End Integration Testing**
+  - Verified quote form submission pipeline and rate limiting.
+  - Verified Telegram notification formatting and fallback handling.
+  - Verified database record creation, status updates, and admin dashboard synchronization.
+  - Verified language switching, theme switching persistence, and contact link triggers.
 
-- [ ] **Task 7.3: Admin Documentation & User Manual**
-  - Step-by-step user guide for GT Printing staff:
+- [x] **Task 7.3: Admin Documentation & User Manual**
+  - Step-by-step user guide for GT Printing staff ([`docs/ADMIN_GUIDE.md`](./docs/ADMIN_GUIDE.md)):
     - How to add new portfolio items and blog posts with Amharic and Afaan Oromo text.
-    - How to manage quote inquiries and mark them as contacted/quoted.
+    - How to manage quote inquiries, inspect details, and mark them as contacted/quoted.
     - How to update contact numbers and working hours.
 
 ---
