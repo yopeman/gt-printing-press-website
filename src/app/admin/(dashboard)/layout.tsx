@@ -19,6 +19,9 @@ import {
   Shield,
   User as UserIcon,
   ChevronRight,
+  Cpu,
+  Building2,
+  Target,
 } from "lucide-react";
 
 interface AdminUser {
@@ -85,6 +88,26 @@ export default function AdminDashboardLayout({
       label: "Contact Inquiries",
       href: "/admin/messages",
       icon: MessageSquare,
+    },
+    {
+      label: "Services CMS",
+      href: "/admin/services",
+      icon: Printer,
+    },
+    {
+      label: "Machinery / Plant",
+      href: "/admin/capabilities",
+      icon: Cpu,
+    },
+    {
+      label: "Industries",
+      href: "/admin/industries",
+      icon: Building2,
+    },
+    {
+      label: "About & Mission",
+      href: "/admin/about",
+      icon: Target,
     },
     {
       label: "Blog CMS",

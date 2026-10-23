@@ -4,10 +4,18 @@ import PortfolioProject from "@/models/PortfolioProject";
 import Testimonial from "@/models/Testimonial";
 import ClientLogo from "@/models/ClientLogo";
 import SiteSetting from "@/models/SiteSetting";
+import Service from "@/models/Service";
+import Capability from "@/models/Capability";
+import Industry from "@/models/Industry";
+import AboutContent from "@/models/AboutContent";
 import { BLOG_DATA } from "@/data/blog";
 import { PORTFOLIO_DATA } from "@/data/portfolio";
 import { TESTIMONIALS_DATA, CLIENT_LOGOS } from "@/data/testimonials";
-import { type Locale } from "@/types/database";
+import { SERVICES_DATA, ServiceDetail } from "@/data/services";
+import { MACHINERY_DATA, MachineSpec } from "@/data/machinery";
+import { INDUSTRIES_DATA, IndustryData } from "@/data/industries";
+import { ABOUT_DATA, AboutContentData } from "@/data/about";
+import { type Locale, type IMediaLink } from "@/types/database";
 
 const CATEGORY_LABELS: Record<string, { en: string; am: string; om: string }> = {
   signage: { en: "Signage & 3D", am: "ሳይኔጅ እና 3D", om: "Mallattoo fi 3D" },
@@ -321,3 +329,212 @@ export async function getDbClientLogos() {
     order: idx,
   }));
 }
+
+function formatServiceFromDb(s: any): ServiceDetail & { _id?: string; mediaLinks?: IMediaLink[] } {
+  return {
+    _id: s._id?.toString(),
+    slug: s.slug,
+    glyph: s.glyph || "offset-roller",
+    title: {
+      en: s.translations?.en?.title || s.slug,
+      am: s.translations?.am?.title || s.translations?.en?.title || s.slug,
+      om: s.translations?.om?.title || s.translations?.en?.title || s.slug,
+    },
+    shortDesc: {
+      en: s.translations?.en?.shortDesc || "",
+      am: s.translations?.am?.shortDesc || s.translations?.en?.shortDesc || "",
+      om: s.translations?.om?.shortDesc || s.translations?.en?.shortDesc || "",
+    },
+    fullDesc: {
+      en: s.translations?.en?.fullDesc || "",
+      am: s.translations?.am?.fullDesc || s.translations?.en?.fullDesc || "",
+      om: s.translations?.om?.fullDesc || s.translations?.en?.fullDesc || "",
+    },
+    typicalProducts: {
+      en: s.translations?.en?.typicalProducts || [],
+      am: s.translations?.am?.typicalProducts || s.translations?.en?.typicalProducts || [],
+      om: s.translations?.om?.typicalProducts || s.translations?.en?.typicalProducts || [],
+    },
+    finishesAndMaterials: {
+      en: s.translations?.en?.finishesAndMaterials || [],
+      am: s.translations?.am?.finishesAndMaterials || s.translations?.en?.finishesAndMaterials || [],
+      om: s.translations?.om?.finishesAndMaterials || s.translations?.en?.finishesAndMaterials || [],
+    },
+    equipmentUsed: s.equipmentUsed || [],
+    turnaroundTime: {
+      en: s.translations?.en?.turnaroundTime || "",
+      am: s.translations?.am?.turnaroundTime || s.translations?.en?.turnaroundTime || "",
+      om: s.translations?.om?.turnaroundTime || s.translations?.en?.turnaroundTime || "",
+    },
+    coverImage:
+      s.coverImage ||
+      "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1200&q=80",
+    galleryImages:
+      s.galleryUrls && s.galleryUrls.length > 0 ? s.galleryUrls : [s.coverImage],
+    mediaLinks: s.mediaLinks || [],
+  };
+}
+
+/**
+ * Fetch all active services from MongoDB with fallback to static SERVICES_DATA
+ */
+export async function getDbServices(): Promise<(ServiceDetail & { _id?: string; mediaLinks?: IMediaLink[] })[]> {
+  try {
+    await dbConnect();
+    const docs = await Service.find({ active: { $ne: false } })
+      .sort({ order: 1, createdAt: 1 })
+      .lean();
+
+    if (docs && docs.length > 0) {
+      return docs.map(formatServiceFromDb);
+    }
+  } catch (error) {
+    console.error("[getDbServices Error]", error);
+  }
+
+  return SERVICES_DATA;
+}
+
+/**
+ * Fetch a single service by slug from MongoDB with fallback
+ */
+export async function getDbServiceBySlug(slug: string): Promise<(ServiceDetail & { _id?: string; mediaLinks?: IMediaLink[] }) | null> {
+  try {
+    await dbConnect();
+    const doc = await Service.findOne({ slug, active: { $ne: false } }).lean();
+    if (doc) {
+      return formatServiceFromDb(doc);
+    }
+  } catch (error) {
+    console.error("[getDbServiceBySlug Error]", error);
+  }
+
+  return SERVICES_DATA.find((s) => s.slug === slug) || null;
+}
+
+function formatMachineFromDb(m: any): MachineSpec & { _id?: string; mediaLinks?: IMediaLink[] } {
+  return {
+    _id: m._id?.toString(),
+    name: m.name,
+    category: m.category || "offset",
+    manufacturer: m.manufacturer,
+    origin: m.origin,
+    keySpecs: m.keySpecs || [],
+    description: {
+      en: m.translations?.en?.description || "",
+      am: m.translations?.am?.description || m.translations?.en?.description || "",
+      om: m.translations?.om?.description || m.translations?.en?.description || "",
+    },
+    image: m.image,
+    mediaLinks: m.mediaLinks || [],
+  };
+}
+
+/**
+ * Fetch all active plant machinery from MongoDB with fallback to static MACHINERY_DATA
+ */
+export async function getDbMachinery(): Promise<(MachineSpec & { _id?: string; mediaLinks?: IMediaLink[] })[]> {
+  try {
+    await dbConnect();
+    const docs = await Capability.find({ active: { $ne: false } })
+      .sort({ order: 1, createdAt: 1 })
+      .lean();
+
+    if (docs && docs.length > 0) {
+      return docs.map(formatMachineFromDb);
+    }
+  } catch (error) {
+    console.error("[getDbMachinery Error]", error);
+  }
+
+  return MACHINERY_DATA;
+}
+
+function formatIndustryFromDb(ind: any): IndustryData & { _id?: string; mediaLinks?: IMediaLink[] } {
+  return {
+    _id: ind._id?.toString(),
+    slug: ind.slug,
+    icon: ind.icon || "Building",
+    image: ind.image || "",
+    galleryUrls: ind.galleryUrls || [],
+    mediaLinks: ind.mediaLinks || [],
+    order: ind.order || 0,
+    active: ind.active !== false,
+    translations: {
+      en: {
+        title: ind.translations?.en?.title || "",
+        subtitle: ind.translations?.en?.subtitle || "",
+        description: ind.translations?.en?.description || "",
+        products: ind.translations?.en?.products || [],
+      },
+      am: {
+        title: ind.translations?.am?.title || ind.translations?.en?.title || "",
+        subtitle: ind.translations?.am?.subtitle || ind.translations?.en?.subtitle || "",
+        description: ind.translations?.am?.description || ind.translations?.en?.description || "",
+        products: ind.translations?.am?.products || ind.translations?.en?.products || [],
+      },
+      om: {
+        title: ind.translations?.om?.title || ind.translations?.en?.title || "",
+        subtitle: ind.translations?.om?.subtitle || ind.translations?.en?.subtitle || "",
+        description: ind.translations?.om?.description || ind.translations?.en?.description || "",
+        products: ind.translations?.om?.products || ind.translations?.en?.products || [],
+      },
+    },
+  };
+}
+
+/**
+ * Fetch all active industries from MongoDB with fallback to static INDUSTRIES_DATA
+ */
+export async function getDbIndustries(): Promise<(IndustryData & { _id?: string; mediaLinks?: IMediaLink[] })[]> {
+  try {
+    await dbConnect();
+    const docs = await Industry.find({ active: { $ne: false } })
+      .sort({ order: 1, createdAt: 1 })
+      .lean();
+
+    if (docs && docs.length > 0) {
+      return docs.map(formatIndustryFromDb);
+    }
+  } catch (error) {
+    console.error("[getDbIndustries Error]", error);
+  }
+
+  return INDUSTRIES_DATA;
+}
+
+/**
+ * Fetch about content from MongoDB with fallback to static ABOUT_DATA
+ */
+export async function getDbAboutContent(): Promise<AboutContentData & { _id?: string }> {
+  try {
+    await dbConnect();
+    const doc = await AboutContent.findOne().lean();
+    if (doc) {
+      return {
+        _id: doc._id?.toString(),
+        heroBadge: doc.heroBadge || ABOUT_DATA.heroBadge,
+        heroTitle: doc.heroTitle || ABOUT_DATA.heroTitle,
+        heroSubtitle: doc.heroSubtitle || ABOUT_DATA.heroSubtitle,
+        storyTag: doc.storyTag || ABOUT_DATA.storyTag,
+        storyTitle: doc.storyTitle || ABOUT_DATA.storyTitle,
+        storyParagraphs: doc.storyParagraphs || ABOUT_DATA.storyParagraphs,
+        storyImage: doc.storyImage || ABOUT_DATA.storyImage,
+        galleryUrls: doc.galleryUrls || ABOUT_DATA.galleryUrls,
+        mediaLinks: doc.mediaLinks || ABOUT_DATA.mediaLinks || [],
+        missionTitle: doc.missionTitle || ABOUT_DATA.missionTitle,
+        missionText: doc.missionText || ABOUT_DATA.missionText,
+        visionTitle: doc.visionTitle || ABOUT_DATA.visionTitle,
+        visionText: doc.visionText || ABOUT_DATA.visionText,
+        achievements: (doc.achievements && doc.achievements.length > 0) ? doc.achievements : ABOUT_DATA.achievements,
+        ctaTitle: doc.ctaTitle || ABOUT_DATA.ctaTitle,
+        ctaSubtitle: doc.ctaSubtitle || ABOUT_DATA.ctaSubtitle,
+      };
+    }
+  } catch (error) {
+    console.error("[getDbAboutContent Error]", error);
+  }
+
+  return ABOUT_DATA;
+}
+

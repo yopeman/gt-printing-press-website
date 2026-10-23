@@ -1,18 +1,20 @@
 import React from "react";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
-import { SERVICES_DATA } from "@/data/services";
+import { getDbServices } from "@/lib/data-service";
 import { type Locale } from "@/types/database";
 import { TiltCard, IconBox, StatusBadge } from "@/components/ui";
 import { ArrowRight, CheckCircle2, Sparkles, Clock } from "lucide-react";
 
-export default function ServicesPage({
+export default async function ServicesPage({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
   setRequestLocale(locale);
   const loc = locale as Locale;
+
+  const services = await getDbServices();
 
   return (
     <div className="relative overflow-hidden py-12 md:py-20">
@@ -35,7 +37,7 @@ export default function ServicesPage({
 
         {/* 6 Services Deep-Dive Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {SERVICES_DATA.map((srv, idx) => (
+          {services.map((srv, idx) => (
             <TiltCard key={srv.slug} className="flex flex-col justify-between group p-6">
               <div className="space-y-4">
                 {/* Header with Glyph & Badge */}

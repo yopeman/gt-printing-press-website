@@ -2,8 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
-import { SERVICES_DATA } from "@/data/services";
-import { getDbRelatedProjectsForService } from "@/lib/data-service";
+import { getDbServices, getDbServiceBySlug, getDbRelatedProjectsForService } from "@/lib/data-service";
 import { type Locale } from "@/types/database";
 import { routing } from "@/i18n/routing";
 import { IconBox, StatusBadge, TiltCard } from "@/components/ui";
@@ -17,13 +16,18 @@ import {
   FileText,
   MapPin,
   ChevronLeft,
+  Play,
+  ExternalLink,
+  Film,
+  Video,
 } from "lucide-react";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   const params: { locale: string; slug: string }[] = [];
+  const services = await getDbServices();
 
   for (const locale of routing.locales) {
-    for (const service of SERVICES_DATA) {
+    for (const service of services) {
       params.push({
         locale,
         slug: service.slug,
@@ -42,7 +46,7 @@ export default async function ServiceDetailPage({
   setRequestLocale(locale);
   const loc = locale as Locale;
 
-  const service = SERVICES_DATA.find((s) => s.slug === slug);
+  const service = await getDbServiceBySlug(slug);
   if (!service) {
     notFound();
   }
@@ -186,6 +190,46 @@ export default async function ServiceDetailPage({
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
+
+        {/* Media Links / Video Demos & File Downloads */}
+        {service.mediaLinks && service.mediaLinks.length > 0 && (
+          <div className="space-y-4 pt-6 border-t border-border">
+            <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
+              <Video className="w-5 h-5 text-primary" />
+              <span>Demonstration Videos & External Documents</span>
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {service.mediaLinks.map((ml, idx) => (
+                <a
+                  key={idx}
+                  href={ml.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-4 rounded-2xl bg-surface border border-border hover:border-primary/50 transition-all flex items-center justify-between gap-3 group"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      {ml.type === "youtube" || ml.type === "youtube_short" || ml.type === "vimeo" ? (
+                        <Play className="w-4 h-4 fill-primary" />
+                      ) : (
+                        <ExternalLink className="w-4 h-4" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors block truncate">
+                        {ml.title || `${service.title[loc] || service.title.en} Resource`}
+                      </span>
+                      <span className="text-[10px] font-mono text-foreground-muted capitalize">
+                        {ml.type.replace(/_/g, " ")}
+                      </span>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-3.5 h-3.5 text-foreground-muted group-hover:text-primary shrink-0 transition-colors" />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Photo Gallery */}
         <div className="space-y-4 pt-6">

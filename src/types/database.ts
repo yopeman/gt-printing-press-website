@@ -171,3 +171,107 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IServiceTranslation {
+  title: string;
+  shortDesc: string;
+  fullDesc: string;
+  typicalProducts: string[];
+  finishesAndMaterials: string[];
+  turnaroundTime: string;
+}
+
+export interface IService {
+  _id?: string;
+  slug: string;
+  glyph:
+    | "offset-roller"
+    | "uv-flatbed"
+    | "laser-beam"
+    | "cnc-router"
+    | "guillotine-blade"
+    | "foil-emboss"
+    | "thermal-laminate"
+    | "saddle-stitch";
+  coverImage: string;
+  galleryUrls: string[];
+  equipmentUsed: string[];
+  mediaLinks?: IMediaLink[];
+  order: number;
+  featured: boolean;
+  active: boolean;
+  translations: Record<Locale, IServiceTranslation>;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ICapabilityTranslation {
+  description: string;
+}
+
+export interface ICapability {
+  _id?: string;
+  name: string;
+  slug?: string;
+  category: "offset" | "cutting" | "binding" | "finishing" | "signage" | "other";
+  manufacturer: string;
+  origin: string;
+  keySpecs: string[];
+  image: string;
+  galleryUrls?: string[];
+  mediaLinks?: IMediaLink[];
+  order: number;
+  active: boolean;
+  translations: Record<Locale, ICapabilityTranslation>;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IIndustryTranslation {
+  title: string;
+  subtitle: string;
+  description: string;
+  products: string[];
+}
+
+export interface IIndustry {
+  _id?: string;
+  slug: string;
+  icon: string;
+  image?: string;
+  galleryUrls?: string[];
+  mediaLinks?: IMediaLink[];
+  order: number;
+  active: boolean;
+  translations: Record<Locale, IIndustryTranslation>;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IAboutAchievement {
+  title: Record<Locale, string>;
+  desc: Record<Locale, string>;
+}
+
+export interface IAboutContent {
+  _id?: string;
+  heroBadge: Record<Locale, string>;
+  heroTitle: Record<Locale, string>;
+  heroSubtitle: Record<Locale, string>;
+  storyTag: Record<Locale, string>;
+  storyTitle: Record<Locale, string>;
+  storyParagraphs: Record<Locale, string[]>;
+  storyImage: string;
+  galleryUrls?: string[];
+  mediaLinks?: IMediaLink[];
+  missionTitle: Record<Locale, string>;
+  missionText: Record<Locale, string>;
+  visionTitle: Record<Locale, string>;
+  visionText: Record<Locale, string>;
+  achievements: IAboutAchievement[];
+  ctaTitle: Record<Locale, string>;
+  ctaSubtitle: Record<Locale, string>;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+

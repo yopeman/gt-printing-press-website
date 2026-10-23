@@ -1,6 +1,8 @@
 import React from "react";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
+import { getDbIndustries } from "@/lib/data-service";
+import { type Locale } from "@/types/database";
 import {
   GraduationCap,
   Building,
@@ -11,60 +13,35 @@ import {
   ArrowRight,
   CheckCircle2,
   Sparkles,
+  Factory,
+  ShieldCheck,
+  Award,
+  ExternalLink,
+  Play,
 } from "lucide-react";
 import { StatusBadge, TiltCard } from "@/components/ui";
 
-export default function IndustriesPage({
+const ICON_MAP: Record<string, any> = {
+  Landmark,
+  GraduationCap,
+  HeartPulse,
+  Globe2,
+  Building,
+  UtensilsCrossed,
+  Factory,
+  ShieldCheck,
+  Award,
+};
+
+export default async function IndustriesPage({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
   setRequestLocale(locale);
+  const loc = locale as Locale;
 
-  const industries = [
-    {
-      icon: Landmark,
-      title: "Banking & Financial Institutions",
-      subtitle: "Awash Bank, Oromia Bank, Commercial Cooperatives",
-      desc: "High-security corporate printing, anti-counterfeit certificates, recurring annual reports, and standardized multi-branch 3D illuminated architectural signage.",
-      products: ["Annual reports & financial statements", "3D illuminated branch storefront letters", "Anti-copy tamper-evident forms", "Executive desk accessories & diaries"],
-    },
-    {
-      icon: GraduationCap,
-      title: "Schools, Universities & Educational Institutions",
-      subtitle: "National curriculum publishers, private academies, universities",
-      desc: "High-throughput textbook printing, serialized final examinations, security diplomas with holographic foil validation, and durable wire-stitched workbooks.",
-      products: ["Student textbooks & exercise books", "Graduation diplomas & security certificates", "School catalogs & prospectuses", "ID cards & academic yearbooks"],
-    },
-    {
-      icon: HeartPulse,
-      title: "Medical & Healthcare Facilities",
-      subtitle: "Hospitals, specialty clinics, pharmaceutical distributors",
-      desc: "Confidential diagnostic stationery, patient administrative folders, serialized prescription books, and certified folding cartons for medical supplies.",
-      products: ["Numbered prescription pads", "Patient chart folders & medical records", "Pharmaceutical packaging folding cartons", "Clinical wayfinding & clinic signage"],
-    },
-    {
-      icon: Globe2,
-      title: "Diplomatic Missions & International NGOs",
-      subtitle: "UN agencies, foreign embassies, international humanitarian bodies",
-      desc: "Bilingual and trilingual research monographs, multi-color field manuals, conference backdrops, and executive humanitarian documentation suites.",
-      products: ["Trilingual research monographs", "Durable conference roll-up banners", "Hard-cover casebound publications", "Custom event packaging kits"],
-    },
-    {
-      icon: Building,
-      title: "Corporate & Event Branding",
-      subtitle: "Telecommunications, construction enterprises, tech firms",
-      desc: "High-impact retail promotional displays, vehicle fleet branding, premium presentation folders, and rapid regional marketing campaign materials.",
-      products: ["3D channel letter facade signage", "Vehicle wrap graphics & decals", "Event exhibition booths & backdrops", "Promotional gift merchandise"],
-    },
-    {
-      icon: UtensilsCrossed,
-      title: "Consumer Brands & Luxury Hospitality",
-      subtitle: "Hotels, resorts, specialty coffee exporters, luxury retailers",
-      desc: "Rigid magnetic presentation cartons, tear-resistant restaurant menus, guest directory folios, and specialty label stickers for retail products.",
-      products: ["Rigid coffee & cosmetic gift cartons", "Laminated wipeable restaurant menus", "Keycard wallets & hotel stationery", "High-adhesion product roll labels"],
-    },
-  ];
+  const industries = await getDbIndustries();
 
   return (
     <div className="relative overflow-hidden py-12 md:py-20">
@@ -88,9 +65,15 @@ export default function IndustriesPage({
         {/* Industry Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {industries.map((ind, idx) => {
-            const Icon = ind.icon;
+            const Icon = ICON_MAP[ind.icon] || Building;
+            const t = ind.translations?.[loc] || ind.translations?.en;
+            const title = t?.title || ind.slug;
+            const subtitle = t?.subtitle || "";
+            const desc = t?.description || "";
+            const products = t?.products || [];
+
             return (
-              <TiltCard key={idx} className="p-8 flex flex-col justify-between group space-y-6">
+              <TiltCard key={ind._id || idx} className="p-8 flex flex-col justify-between group space-y-6">
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -98,36 +81,59 @@ export default function IndustriesPage({
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                        {ind.title}
+                        {title}
                       </h3>
-                      <span className="text-xs text-foreground-muted">
-                        {ind.subtitle}
-                      </span>
+                      {subtitle && (
+                        <span className="text-xs text-foreground-muted">
+                          {subtitle}
+                        </span>
+                      )}
                     </div>
                   </div>
 
                   <p className="text-xs sm:text-sm text-foreground-muted leading-relaxed">
-                    {ind.desc}
+                    {desc}
                   </p>
 
-                  <div className="pt-2">
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block mb-2 font-mono">
-                      Specialized Deliverables
-                    </span>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-foreground">
-                      {ind.products.map((p, pIdx) => (
-                        <li key={pIdx} className="flex items-center gap-1.5">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                          <span className="truncate">{p}</span>
-                        </li>
+                  {products.length > 0 && (
+                    <div className="pt-2">
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block mb-2 font-mono">
+                        Specialized Deliverables
+                      </span>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-foreground">
+                        {products.map((p, pIdx) => (
+                          <li key={pIdx} className="flex items-center gap-1.5">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                            <span className="truncate">{p}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Media / File Links if configured */}
+                  {ind.mediaLinks && ind.mediaLinks.length > 0 && (
+                    <div className="pt-3 border-t border-border/80 flex flex-wrap gap-2">
+                      {ind.mediaLinks.map((ml, mIdx) => (
+                        <a
+                          key={mIdx}
+                          href={ml.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-3 py-1.5 rounded-lg bg-surface-secondary hover:bg-primary/10 border border-border text-[11px] font-semibold text-foreground hover:text-primary transition-all flex items-center gap-1.5"
+                        >
+                          <Play className="w-3 h-3 text-primary fill-primary" />
+                          <span>{ml.title || "Industry Case Study"}</span>
+                          <ExternalLink className="w-2.5 h-2.5 text-foreground-muted" />
+                        </a>
                       ))}
-                    </ul>
-                  </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="pt-4 border-t border-border flex items-center justify-between">
                   <Link
-                    href={`/quote?industry=${encodeURIComponent(ind.title)}`}
+                    href={`/quote?industry=${encodeURIComponent(title)}`}
                     className="text-xs font-bold text-primary flex items-center gap-1 hover:gap-1.5 transition-all"
                   >
                     <span>Request Industry Package</span>

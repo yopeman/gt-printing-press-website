@@ -1,6 +1,20 @@
 import bcrypt from "bcryptjs";
 import connectToDatabase from "./db";
-import { User, SiteSetting, BlogPost, PortfolioProject, ClientLogo } from "@/models";
+import {
+  User,
+  SiteSetting,
+  BlogPost,
+  PortfolioProject,
+  ClientLogo,
+  Service,
+  Capability,
+  Industry,
+  AboutContent,
+} from "@/models";
+import { SERVICES_DATA } from "@/data/services";
+import { MACHINERY_DATA } from "@/data/machinery";
+import { INDUSTRIES_DATA } from "@/data/industries";
+import { ABOUT_DATA } from "@/data/about";
 
 export async function seedInitialData() {
   await connectToDatabase();
@@ -78,6 +92,89 @@ export async function seedInitialData() {
       { name: "Sheraton Addis / Marriott", logoUrl: "/clients/marriott.svg", category: "Hospitality", order: 6 },
     ]);
     console.log("✅ Seeded corporate client logos");
+  }
+
+  // 4. Seed Services
+  const serviceCount = await Service.countDocuments();
+  if (serviceCount === 0) {
+    const seedServices = SERVICES_DATA.map((s, idx) => ({
+      slug: s.slug,
+      glyph: s.glyph,
+      coverImage: s.coverImage,
+      galleryUrls: s.galleryImages,
+      equipmentUsed: s.equipmentUsed,
+      mediaLinks: [],
+      order: idx + 1,
+      featured: true,
+      active: true,
+      translations: {
+        en: {
+          title: s.title.en,
+          shortDesc: s.shortDesc.en,
+          fullDesc: s.fullDesc.en,
+          typicalProducts: s.typicalProducts.en,
+          finishesAndMaterials: s.finishesAndMaterials.en,
+          turnaroundTime: s.turnaroundTime.en,
+        },
+        am: {
+          title: s.title.am,
+          shortDesc: s.shortDesc.am,
+          fullDesc: s.fullDesc.am,
+          typicalProducts: s.typicalProducts.am,
+          finishesAndMaterials: s.finishesAndMaterials.am,
+          turnaroundTime: s.turnaroundTime.am,
+        },
+        om: {
+          title: s.title.om,
+          shortDesc: s.shortDesc.om,
+          fullDesc: s.fullDesc.om,
+          typicalProducts: s.typicalProducts.om,
+          finishesAndMaterials: s.finishesAndMaterials.om,
+          turnaroundTime: s.turnaroundTime.om,
+        },
+      },
+    }));
+    await Service.insertMany(seedServices);
+    console.log("✅ Seeded services collection");
+  }
+
+  // 5. Seed Capabilities (Machinery)
+  const capabilityCount = await Capability.countDocuments();
+  if (capabilityCount === 0) {
+    const seedMachinery = MACHINERY_DATA.map((m, idx) => ({
+      name: m.name,
+      slug: m.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+      category: m.category,
+      manufacturer: m.manufacturer,
+      origin: m.origin,
+      keySpecs: m.keySpecs,
+      image: m.image,
+      galleryUrls: [m.image],
+      mediaLinks: [],
+      order: idx + 1,
+      active: true,
+      translations: {
+        en: { description: m.description.en },
+        am: { description: m.description.am },
+        om: { description: m.description.om },
+      },
+    }));
+    await Capability.insertMany(seedMachinery);
+    console.log("✅ Seeded machinery capabilities collection");
+  }
+
+  // 6. Seed Industries
+  const industryCount = await Industry.countDocuments();
+  if (industryCount === 0) {
+    await Industry.insertMany(INDUSTRIES_DATA);
+    console.log("✅ Seeded industries collection");
+  }
+
+  // 7. Seed About Content
+  const aboutCount = await AboutContent.countDocuments();
+  if (aboutCount === 0) {
+    await AboutContent.create(ABOUT_DATA);
+    console.log("✅ Seeded about content collection");
   }
 
   return { success: true, message: "Initial database seed completed" };

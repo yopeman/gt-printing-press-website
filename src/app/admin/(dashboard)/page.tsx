@@ -16,6 +16,10 @@ import {
   Send,
   RefreshCw,
   MessageSquare,
+  Printer,
+  Cpu,
+  Building,
+  Target,
 } from "lucide-react";
 
 interface QuoteStats {
@@ -451,6 +455,98 @@ export default function AdminOverviewPage() {
             </table>
           </div>
         )}
+      </div>
+
+      {/* Database Content Management Modules Quick Access */}
+      <div className="space-y-4">
+        <h2 className="text-base sm:text-lg font-bold text-foreground">
+          Content & Page Management
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Link
+            href="/admin/services"
+            className="p-5 rounded-2xl bg-surface border border-border hover:border-primary/50 transition-all group flex flex-col justify-between"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Printer className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">
+                Services CMS
+              </h3>
+              <p className="text-xs text-foreground-muted">
+                Manage 6 manufacturing divisions, turnaround guarantees, specs, and gallery media.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
+              <span>Open Manager</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/capabilities"
+            className="p-5 rounded-2xl bg-surface border border-border hover:border-primary/50 transition-all group flex flex-col justify-between"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Cpu className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">
+                Plant Machinery
+              </h3>
+              <p className="text-xs text-foreground-muted">
+                Manage offset presses, Swiss binders, guillotines, CNC routers, and engineering origins.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
+              <span>Open Lineup</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/industries"
+            className="p-5 rounded-2xl bg-surface border border-border hover:border-primary/50 transition-all group flex flex-col justify-between"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Building className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">
+                Target Industries
+              </h3>
+              <p className="text-xs text-foreground-muted">
+                Banking, education, healthcare, diplomatic NGOs, luxury hospitality deliverables.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
+              <span>Open Sectors</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/about"
+            className="p-5 rounded-2xl bg-surface border border-border hover:border-primary/50 transition-all group flex flex-col justify-between"
+          >
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Target className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">
+                About & Mission
+              </h3>
+              <p className="text-xs text-foreground-muted">
+                Company narrative, mission statement, vision, achievements, and facility media links.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
+              <span>Open Profile</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );

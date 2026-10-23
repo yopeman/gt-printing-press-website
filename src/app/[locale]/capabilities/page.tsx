@@ -1,7 +1,7 @@
 import React from "react";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
-import { MACHINERY_DATA } from "@/data/machinery";
+import { getDbMachinery } from "@/lib/data-service";
 import { type Locale } from "@/types/database";
 import { WorkflowPipeline } from "@/components/home/workflow-pipeline";
 import { StatusBadge, TiltCard, IconBox } from "@/components/ui";
@@ -14,9 +14,11 @@ import {
   Factory,
   Gauge,
   Sparkles,
+  Play,
+  ExternalLink,
 } from "lucide-react";
 
-export default function CapabilitiesPage({
+export default async function CapabilitiesPage({
   params: { locale },
 }: {
   params: { locale: string };
@@ -24,13 +26,7 @@ export default function CapabilitiesPage({
   setRequestLocale(locale);
   const loc = locale as Locale;
 
-  const categories = [
-    { key: "offset", label: "Commercial Offset & Digital Presses" },
-    { key: "cutting", label: "Precision Cutting & Trimming" },
-    { key: "binding", label: "Automated Book Folding & Binding" },
-    { key: "finishing", label: "High-Speed Thermal Lamination" },
-    { key: "signage", label: "Heavy CNC Routing & UV Flatbed Fabrication" },
-  ];
+  const machinery = await getDbMachinery();
 
   return (
     <div className="relative overflow-hidden py-12 md:py-20">
@@ -94,8 +90,8 @@ export default function CapabilitiesPage({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {MACHINERY_DATA.map((machine, idx) => (
-              <TiltCard key={idx} className="p-6 flex flex-col justify-between group">
+            {machinery.map((machine, idx) => (
+              <TiltCard key={machine._id || idx} className="p-6 flex flex-col justify-between group">
                 <div className="space-y-4">
                   {/* Image */}
                   <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-surface-secondary">
@@ -139,6 +135,25 @@ export default function CapabilitiesPage({
                       ))}
                     </ul>
                   </div>
+
+                  {/* Machine Media / Video Walkthroughs */}
+                  {machine.mediaLinks && machine.mediaLinks.length > 0 && (
+                    <div className="pt-2 border-t border-border flex flex-wrap gap-2">
+                      {machine.mediaLinks.map((ml, mIdx) => (
+                        <a
+                          key={mIdx}
+                          href={ml.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-3 py-1.5 rounded-lg bg-surface-secondary hover:bg-primary/10 border border-border text-[11px] font-semibold text-foreground hover:text-primary transition-all flex items-center gap-1.5"
+                        >
+                          <Play className="w-3 h-3 text-primary fill-primary" />
+                          <span>{ml.title || "Watch Operation"}</span>
+                          <ExternalLink className="w-2.5 h-2.5 text-foreground-muted" />
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </TiltCard>
             ))}
@@ -149,32 +164,13 @@ export default function CapabilitiesPage({
         <div className="space-y-8 pt-8 border-t border-border">
           <div className="text-center space-y-2">
             <span className="text-xs uppercase font-bold tracking-wider text-primary font-mono">
-              Turnkey Production
+              Step-by-Step Workflow
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground">
-              Our 5-Stage Production Protocol
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground">
+              From Pre-Press Calibration to Delivery
             </h2>
           </div>
           <WorkflowPipeline />
-        </div>
-
-        {/* CTA Strip */}
-        <div className="p-8 rounded-3xl bg-surface border border-border text-center space-y-4">
-          <h3 className="text-xl sm:text-2xl font-bold text-foreground">
-            Need Custom Technical Consultation?
-          </h3>
-          <p className="text-xs sm:text-sm text-foreground-muted max-w-xl mx-auto">
-            Our production technicians can advise you on paper weights, grain direction, foil block feasibility, and structural packaging dielines.
-          </p>
-          <div className="pt-2">
-            <Link
-              href="/quote"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-sm shadow-glow-sm transition-all"
-            >
-              <span>Submit Technical Inquiry</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
       </div>
     </div>

@@ -6,3 +6,7 @@ export * from "./Testimonial";
 export * from "./ClientLogo";
 export * from "./SiteSetting";
 export * from "./User";
+export * from "./Service";
+export * from "./Capability";
+export * from "./Industry";
+export * from "./AboutContent";

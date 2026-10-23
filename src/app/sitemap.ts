@@ -1,6 +1,9 @@
 import { MetadataRoute } from "next";
-import { SERVICES_DATA } from "@/data/services";
-import { getDbPortfolioProjects, getDbBlogPosts } from "@/lib/data-service";
+import {
+  getDbServices,
+  getDbPortfolioProjects,
+  getDbBlogPosts,
+} from "@/lib/data-service";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gtprintingpress.com";
@@ -33,8 +36,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   }));
 
+  // Fetch real services, portfolio and blog items from database
+  const [services, portfolioProjects, blogPosts] = await Promise.all([
+    getDbServices(),
+    getDbPortfolioProjects(),
+    getDbBlogPosts(),
+  ]);
+
   // Service Detail Pages
-  const serviceEntries: MetadataRoute.Sitemap = SERVICES_DATA.map((s) => ({
+  const serviceEntries: MetadataRoute.Sitemap = services.map((s) => ({
     url: `${baseUrl}/en/services/${s.slug}`,
     lastModified: now,
     changeFrequency: "weekly",
@@ -47,12 +57,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
     },
   }));
-
-  // Fetch real portfolio and blog items from database
-  const [portfolioProjects, blogPosts] = await Promise.all([
-    getDbPortfolioProjects(),
-    getDbBlogPosts(),
-  ]);
 
   // Portfolio Detail Pages (Database-backed)
   const portfolioEntries: MetadataRoute.Sitemap = portfolioProjects.map((p) => ({
