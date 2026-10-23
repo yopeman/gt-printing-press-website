@@ -12,11 +12,11 @@ import {
 } from "@/components/ui";
 import { QuickQuoteModal } from "@/components/quote/quick-quote-modal";
 import { HeroBackgroundSlider } from "@/components/home/hero-background-slider";
-import { AddisPlantMap } from "@/components/home/addis-plant-map";
 import { WorkflowPipeline } from "@/components/home/workflow-pipeline";
 import { PortfolioReel } from "@/components/home/portfolio-reel";
 import { TestimonialsSlider } from "@/components/home/testimonials-slider";
 import { LatestBlogSection } from "@/components/home/latest-blog-section";
+import { LocationMapSection } from "@/components/home/location-map-section";
 import {
   Printer,
   Sparkles,
@@ -303,11 +303,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 7. Interactive Map Section showing exact location 9.0311144, 38.8324246 in Addis Ababa */}
-      <AddisPlantMap />
+      {/* 7. Strategic Facilities & Interactive Location Map */}
+      <section className="py-16 md:py-24 border-b border-border/60 content-visibility-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center space-y-3 mb-12">
+            <StatusBadge
+              label="Our Presence"
+              variant="express"
+              pulsingDot
+              shimmer
+            />
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+              Strategic Production Facilities
+            </h2>
+            <p className="text-sm text-foreground-muted">
+              Visit our corporate headquarters behind Dembel City Centre or tour our 24-hour industrial printing plant.
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto">
+            <LocationMapSection />
+          </div>
+        </div>
+      </section>
 
       {/* 8. Client Logos & Testimonials Slider */}
-      <section className="py-16 md:py-24 bg-surface-secondary/30 border-y border-border/60 content-visibility-auto">
+      <section className="py-16 md:py-24 bg-surface-secondary/30 border-b border-border/60 content-visibility-auto">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <TestimonialsSlider />
         </div>
