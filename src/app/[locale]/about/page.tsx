@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import {
@@ -86,13 +87,16 @@ export default function AboutPage({
 
           <div className="relative">
             <TiltCard className="p-2 overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1000&q=80"
-                alt="GT Printing Press Industrial Workshop"
-                loading="lazy"
-                decoding="async"
-                className="rounded-2xl w-full h-[380px] object-cover"
-              />
+              <div className="w-full h-[380px] rounded-2xl overflow-hidden bg-[#d3332c] flex items-center justify-center p-6 sm:p-8">
+                <Image
+                  src="/gt-logo.png"
+                  alt="GT Printing Press Logo"
+                  width={520}
+                  height={450}
+                  priority
+                  className="w-full h-full max-h-[320px] object-contain"
+                />
+              </div>
             </TiltCard>
           </div>
         </div>
