@@ -115,8 +115,8 @@ export const DEFAULT_SETTINGS = {
     },
   ],
   // Telegram Bot Alert Credentials (stored in DB instead of only .env.local)
-  telegramBotToken: "8794816879:AAG6ddrnVUo_hG4EDq4Nu7yKGkwA13g1tcg",
-  telegramChatId: "@post_timir_content",
+  telegramBotToken: "",
+  telegramChatId: "",
   // Legacy compatibility fallbacks
   phonePrimary: "+251 91 123 4567",
   phoneSecondary: "+251 11 550 5050",
