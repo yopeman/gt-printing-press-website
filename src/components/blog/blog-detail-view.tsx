@@ -215,7 +215,7 @@ export function BlogDetailView({ post, locale, relatedPosts }: BlogDetailViewPro
                   decoding="async"
                   className="w-20 h-20 rounded-xl object-cover shrink-0"
                 />
-                <div>
+                <div className="min-w-0">
                   <span className="text-[10px] font-bold text-primary uppercase tracking-wider block">
                     {r.categoryLabel?.[locale] || r.categoryLabel?.en || r.category}
                   </span>

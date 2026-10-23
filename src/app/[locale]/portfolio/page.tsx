@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { motion, AnimatePresence } from "framer-motion";
-import { PORTFOLIO_DATA } from "@/data/portfolio";
 import { type Locale } from "@/types/database";
 import { TiltCard, StatusBadge, MediaModal, MediaItem } from "@/components/ui";
 import {
@@ -30,7 +29,8 @@ const CATEGORIES = [
 
 export default function PortfolioPage() {
   const locale = useLocale() as Locale;
-  const [items, setItems] = useState<any[]>(PORTFOLIO_DATA);
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [activeHashTag, setActiveHashTag] = useState<string | null>(null);
 
@@ -47,7 +47,8 @@ export default function PortfolioPage() {
           setItems(data.projects);
         }
       })
-      .catch((err) => console.error("Error loading portfolio:", err));
+      .catch((err) => console.error("Error loading portfolio:", err))
+      .finally(() => setLoading(false));
   }, []);
 
   // Sync with URL Hash (#tag)
@@ -205,10 +206,32 @@ export default function PortfolioPage() {
           )}
         </div>
 
-        {/* Animated Grid */}
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence>
-            {filteredItems.map((item) => {
+        {/* Loading Skeleton */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div
+                key={i}
+                className="flex flex-col justify-between rounded-3xl bg-surface border border-border overflow-hidden animate-pulse h-full"
+              >
+                <div className="aspect-[16/10] bg-surface-secondary/70" />
+                <div className="p-6 space-y-3">
+                  <div className="h-3 w-1/3 bg-surface-secondary rounded" />
+                  <div className="h-5 w-3/4 bg-surface-secondary rounded" />
+                  <div className="h-3 w-full bg-surface-secondary rounded" />
+                  <div className="pt-4 border-t border-border/50 flex justify-between">
+                    <div className="h-4 w-20 bg-surface-secondary rounded" />
+                    <div className="h-4 w-16 bg-surface-secondary rounded" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Animated Grid */
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <AnimatePresence>
+              {filteredItems.map((item) => {
               const mediaItems: MediaItem[] = [
                 ...(item.mediaLinks || []).map((ml: any) => ({
                   type: ml.type,
@@ -336,8 +359,9 @@ export default function PortfolioPage() {
             })}
           </AnimatePresence>
         </motion.div>
+      )}
 
-        {filteredItems.length === 0 && (
+      {!loading && filteredItems.length === 0 && (
           <div className="py-20 text-center space-y-3">
             <Layers className="w-10 h-10 text-foreground-muted/40 mx-auto" />
             <h3 className="text-base font-bold text-foreground">No matching projects found</h3>

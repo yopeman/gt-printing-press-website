@@ -171,7 +171,9 @@ export function Navbar({
 
           {/* Mobile Right Controls: Language + Hamburger */}
           <div className="flex xl:hidden items-center gap-1.5 sm:gap-2 shrink-0">
-            <LanguageSwitcher className="scale-90" />
+            <div className="hidden min-[400px]:block">
+              <LanguageSwitcher className="scale-90" />
+            </div>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

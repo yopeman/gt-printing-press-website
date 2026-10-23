@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/db";
 import Testimonial from "@/models/Testimonial";
+import ClientLogo from "@/models/ClientLogo";
 import { TESTIMONIALS_DATA } from "@/data/testimonials";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +33,9 @@ export async function GET() {
       .sort({ order: 1, createdAt: -1 })
       .lean();
 
-    return NextResponse.json({ testimonials });
+    const clientLogos = await ClientLogo.find().sort({ order: 1, createdAt: 1 }).lean();
+
+    return NextResponse.json({ testimonials, clientLogos });
   } catch (error: any) {
     console.error("[PUBLIC TESTIMONIALS GET ERROR]", error);
     // Graceful fallback to static data if MongoDB is unreachable
@@ -50,6 +53,6 @@ export async function GET() {
         om: { quote: item.quote.om || item.quote.en },
       },
     }));
-    return NextResponse.json({ testimonials: fallback });
+    return NextResponse.json({ testimonials: fallback, clientLogos: [] });
   }
 }
