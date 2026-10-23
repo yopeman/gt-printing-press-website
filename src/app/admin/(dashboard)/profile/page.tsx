@@ -24,6 +24,7 @@ import {
   Layers,
   ExternalLink,
 } from "lucide-react";
+import { SingleImageUploader } from "@/components/admin/single-image-uploader";
 
 interface UserProfile {
   _id: string;
@@ -335,21 +336,12 @@ export default function AdminProfilePage() {
               </div>
             </div>
 
-            <div>
-              <label className="block font-semibold text-foreground mb-1.5">
-                Avatar / Profile Picture URL
-              </label>
-              <input
-                type="url"
-                value={personalData.avatarUrl}
-                onChange={(e) => setPersonalData({ ...personalData, avatarUrl: e.target.value })}
-                placeholder="https://images.unsplash.com/... or public image link"
-                className="w-full px-4 py-2.5 rounded-xl bg-surface-secondary border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-              />
-              <span className="text-[10px] text-foreground-muted mt-1 block">
-                Provide a hosted direct image URL for your profile photo.
-              </span>
-            </div>
+            <SingleImageUploader
+              value={personalData.avatarUrl}
+              onChange={(url) => setPersonalData({ ...personalData, avatarUrl: url })}
+              label="Avatar / Profile Photo"
+              description="Upload a photo from your computer (JPG, PNG, WebP up to 15MB)."
+            />
 
             <div className="pt-3 flex items-center justify-end">
               <button

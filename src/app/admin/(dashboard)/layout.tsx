@@ -134,11 +134,6 @@ export default function AdminDashboardLayout({
       adminOnly: true,
     },
     {
-      label: "My Profile",
-      href: "/admin/profile",
-      icon: UserCog,
-    },
-    {
       label: "Site Settings",
       href: "/admin/settings",
       icon: Settings,

@@ -25,7 +25,10 @@ import {
   UserCheck,
   UserX,
   Sparkles,
+  ExternalLink,
 } from "lucide-react";
+import Link from "next/link";
+import { SingleImageUploader } from "@/components/admin/single-image-uploader";
 
 interface StaffUser {
   _id: string;
@@ -144,6 +147,10 @@ export default function AdminUsersPage() {
 
   // Open Edit Modal
   const openEditModal = (u: StaffUser) => {
+    if (currentUser && (currentUser.userId === u._id || currentUser._id === u._id || currentUser.email === u.email)) {
+      showToast("error", "You cannot edit your own account from User Management. Please use My Profile.");
+      return;
+    }
     setEditingUser(u);
     setFormData({
       name: u.name,
@@ -183,6 +190,10 @@ export default function AdminUsersPage() {
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingUser) return;
+    if (currentUser && (currentUser.userId === editingUser._id || currentUser._id === editingUser._id || currentUser.email === editingUser.email)) {
+      showToast("error", "You cannot edit your own account from User Management. Please use My Profile.");
+      return;
+    }
     setFormSubmitting(true);
     try {
       const payload: any = {
@@ -217,8 +228,8 @@ export default function AdminUsersPage() {
 
   // Quick Toggle Active Status
   const handleToggleActive = async (u: StaffUser) => {
-    if (currentUser && currentUser.userId === u._id) {
-      showToast("error", "You cannot deactivate your own active session");
+    if (currentUser && (currentUser.userId === u._id || currentUser._id === u._id || currentUser.email === u.email)) {
+      showToast("error", "You cannot modify your own account status here. Please use My Profile.");
       return;
     }
     const nextState = u.active === false ? true : false;
@@ -245,6 +256,10 @@ export default function AdminUsersPage() {
   const handlePasswordResetSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!passwordResetUser) return;
+    if (currentUser && (currentUser.userId === passwordResetUser._id || currentUser._id === passwordResetUser._id || currentUser.email === passwordResetUser.email)) {
+      showToast("error", "You cannot reset your own password here. Please use My Profile.");
+      return;
+    }
     if (newPassword.length < 6) {
       showToast("error", "New password must be at least 6 characters");
       return;
@@ -272,6 +287,10 @@ export default function AdminUsersPage() {
   // Handle Delete User
   const handleDeleteUser = async () => {
     if (!deletingUser) return;
+    if (currentUser && (currentUser.userId === deletingUser._id || currentUser._id === deletingUser._id || currentUser.email === deletingUser.email)) {
+      showToast("error", "You cannot delete your own account.");
+      return;
+    }
     setFormSubmitting(true);
     try {
       const res = await fetch(`/api/admin/users/${deletingUser._id}`, {
@@ -540,24 +559,33 @@ export default function AdminUsersPage() {
 
                       {/* Status Toggle / Badge */}
                       <td className="py-4 px-4">
-                        <button
-                          type="button"
-                          onClick={() => handleToggleActive(u)}
-                          disabled={isSelf}
-                          title={isSelf ? "You cannot deactivate your own account" : "Click to toggle active state"}
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-all ${
-                            isActive
-                              ? "bg-emerald-500/10 border-emerald-500/25 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
-                              : "bg-red-500/10 border-red-500/25 text-red-600 dark:text-red-400 hover:bg-red-500/20"
-                          } ${isSelf ? "cursor-default opacity-85" : "cursor-pointer"}`}
-                        >
-                          <span
-                            className={`w-1.5 h-1.5 rounded-full ${
-                              isActive ? "bg-emerald-500 animate-pulse" : "bg-red-500"
-                            }`}
-                          />
-                          <span>{isActive ? "Active" : "Deactivated"}</span>
-                        </button>
+                        {isSelf ? (
+                          <div
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border bg-emerald-500/10 border-emerald-500/25 text-emerald-600 dark:text-emerald-400 select-none cursor-default"
+                            title="Active administrative session"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            <span>Active (You)</span>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleToggleActive(u)}
+                            title="Click to toggle active state"
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-all ${
+                              isActive
+                                ? "bg-emerald-500/10 border-emerald-500/25 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
+                                : "bg-red-500/10 border-red-500/25 text-red-600 dark:text-red-400 hover:bg-red-500/20"
+                            } cursor-pointer`}
+                          >
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full ${
+                                isActive ? "bg-emerald-500 animate-pulse" : "bg-red-500"
+                              }`}
+                            />
+                            <span>{isActive ? "Active" : "Deactivated"}</span>
+                          </button>
+                        )}
                       </td>
 
                       {/* Activity & Joined */}
@@ -581,29 +609,38 @@ export default function AdminUsersPage() {
 
                       {/* Actions */}
                       <td className="py-4 px-4 text-right">
-                        <div className="inline-flex items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => openEditModal(u)}
-                            title="Edit details"
-                            className="p-1.5 rounded-lg bg-surface-secondary hover:bg-primary hover:text-white text-foreground-muted transition-colors"
+                        {isSelf ? (
+                          <Link
+                            href="/admin/profile"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-secondary hover:bg-primary hover:text-white border border-border text-foreground text-xs font-semibold transition-all shadow-xs"
+                            title="Manage your credentials in My Profile"
                           >
-                            <Edit3 className="w-3.5 h-3.5" />
-                          </button>
+                            <span>My Profile</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </Link>
+                        ) : (
+                          <div className="inline-flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => openEditModal(u)}
+                              title="Edit details"
+                              className="p-1.5 rounded-lg bg-surface-secondary hover:bg-primary hover:text-white text-foreground-muted transition-colors"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
 
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setPasswordResetUser(u);
-                              setNewPassword("");
-                            }}
-                            title="Reset password"
-                            className="p-1.5 rounded-lg bg-surface-secondary hover:bg-amber-500 hover:text-white text-foreground-muted transition-colors"
-                          >
-                            <KeyRound className="w-3.5 h-3.5" />
-                          </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setPasswordResetUser(u);
+                                setNewPassword("");
+                              }}
+                              title="Reset password"
+                              className="p-1.5 rounded-lg bg-surface-secondary hover:bg-amber-500 hover:text-white text-foreground-muted transition-colors"
+                            >
+                              <KeyRound className="w-3.5 h-3.5" />
+                            </button>
 
-                          {!isSelf && (
                             <button
                               type="button"
                               onClick={() => setDeletingUser(u)}
@@ -612,8 +649,8 @@ export default function AdminUsersPage() {
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );
@@ -753,18 +790,12 @@ export default function AdminUsersPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block font-semibold text-foreground mb-1.5">
-                  Avatar / Profile Photo URL (Optional)
-                </label>
-                <input
-                  type="url"
-                  value={formData.avatarUrl}
-                  onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })}
-                  placeholder="https://..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-surface-secondary border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                />
-              </div>
+              <SingleImageUploader
+                value={formData.avatarUrl}
+                onChange={(url) => setFormData({ ...formData, avatarUrl: url })}
+                label="Avatar / Profile Photo (Optional)"
+                description="Upload a photo from your computer (JPG, PNG, WebP up to 15MB)."
+              />
 
               {/* Active Toggle */}
               <div className="flex items-center justify-between p-3.5 rounded-2xl bg-surface-secondary border border-border">
@@ -934,18 +965,12 @@ export default function AdminUsersPage() {
                 />
               </div>
 
-              <div>
-                <label className="block font-semibold text-foreground mb-1.5">
-                  Avatar / Photo URL
-                </label>
-                <input
-                  type="url"
-                  value={formData.avatarUrl}
-                  onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })}
-                  placeholder="https://..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-surface-secondary border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                />
-              </div>
+              <SingleImageUploader
+                value={formData.avatarUrl}
+                onChange={(url) => setFormData({ ...formData, avatarUrl: url })}
+                label="Avatar / Profile Photo (Optional)"
+                description="Upload a photo from your computer (JPG, PNG, WebP up to 15MB)."
+              />
 
               {/* Active Toggle */}
               <div className="flex items-center justify-between p-3.5 rounded-2xl bg-surface-secondary border border-border">

@@ -52,6 +52,15 @@ export async function PATCH(
     }
 
     const { id } = params;
+
+    // Strict guard: Admin cannot modify their own account from User Management
+    if (id === session.userId) {
+      return NextResponse.json(
+        { error: "You cannot modify your own administrator account from User Management. Please use My Profile to update your credentials." },
+        { status: 400 }
+      );
+    }
+
     const body = await req.json();
 
     await dbConnect();
