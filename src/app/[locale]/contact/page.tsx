@@ -512,8 +512,9 @@ export default function ContactPage() {
                       }`}
                     >
                       <Building className="w-3.5 h-3.5 shrink-0" />
-                      <span className="min-w-0">
-                        Map {idx + 1}: {loc.label === "other" ? loc.customLabel || "Facility" : loc.label || "Facility"} – {loc.name}
+                      <span className="min-w-0 truncate">
+                        Map {idx + 1}: {loc.label === "other" ? loc.customLabel || "Facility" : loc.label || "Facility"}
+                        <span className="hidden sm:inline"> – {loc.name}</span>
                       </span>
                       {loc.isPrimary && (
                         <span
