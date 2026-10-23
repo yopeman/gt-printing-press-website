@@ -620,7 +620,7 @@ function SettingsContent() {
                       type={showToken ? "text" : "password"}
                       value={telegramBotToken}
                       onChange={(e) => setTelegramBotToken(e.target.value)}
-                      placeholder="e.g. 8794816879:AAG6ddrnVUo_hG4EDq4Nu7yKGkwA13g1tcg"
+                      placeholder="e.g. bot token from bot father"
                       className="w-full pl-3 pr-10 py-2.5 rounded-xl bg-surface-secondary border border-border text-foreground text-xs font-mono focus:outline-none focus:ring-2 focus:ring-primary/40"
                     />
                     <button
@@ -646,7 +646,7 @@ function SettingsContent() {
                     type="text"
                     value={telegramChatId}
                     onChange={(e) => setTelegramChatId(e.target.value)}
-                    placeholder="e.g. @post_timir_content or -1002233445566"
+                    placeholder="e.g. -1002233445566"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-surface-secondary border border-border text-foreground text-xs font-mono focus:outline-none focus:ring-2 focus:ring-primary/40"
                   />
                   <p className="text-[10px] text-foreground-muted mt-1 font-mono">
