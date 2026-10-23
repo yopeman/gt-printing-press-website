@@ -25,12 +25,35 @@ const UserSchema = new Schema<IUser>(
       enum: ["admin", "editor"],
       default: "editor",
       required: true,
+      index: true,
+    },
+    avatarUrl: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    active: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
+    lastLogin: {
+      type: Date,
     },
   },
   {
     timestamps: true,
   }
 );
+
+if (process.env.NODE_ENV !== "production" && mongoose.models.User) {
+  delete (mongoose.models as any).User;
+}
 
 export const User: Model<IUser> =
   mongoose.models.User || mongoose.model<IUser>("User", UserSchema);

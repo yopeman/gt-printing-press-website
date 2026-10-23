@@ -25,6 +25,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (user.active === false) {
+      return NextResponse.json(
+        { error: "This staff account has been deactivated. Please contact an administrator." },
+        { status: 403 }
+      );
+    }
+
     const isValid = await comparePassword(password, user.passwordHash);
     if (!isValid) {
       return NextResponse.json(
@@ -33,11 +40,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Update lastLogin timestamp
+    try {
+      await User.findByIdAndUpdate(user._id, { lastLogin: new Date() });
+    } catch (_) {}
+
     const token = await signSession({
       userId: user._id.toString(),
       email: user.email,
       name: user.name,
       role: user.role,
+      avatarUrl: user.avatarUrl || "",
     });
 
     const response = NextResponse.json({
@@ -47,6 +60,7 @@ export async function POST(req: NextRequest) {
         name: user.name,
         email: user.email,
         role: user.role,
+        avatarUrl: user.avatarUrl || "",
       },
     });
 

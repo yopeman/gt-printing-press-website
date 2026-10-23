@@ -170,6 +170,10 @@ export interface IUser {
   email: string;
   passwordHash: string;
   role: UserRole;
+  avatarUrl?: string;
+  phone?: string;
+  active?: boolean;
+  lastLogin?: Date;
   createdAt: Date;
   updatedAt: Date;
 }

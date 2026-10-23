@@ -22,6 +22,8 @@ import {
   Cpu,
   Building2,
   Target,
+  Users,
+  UserCog,
 } from "lucide-react";
 
 interface AdminUser {
@@ -29,6 +31,7 @@ interface AdminUser {
   email: string;
   name: string;
   role: "admin" | "editor";
+  avatarUrl?: string;
 }
 
 export default function AdminDashboardLayout({
@@ -123,6 +126,17 @@ export default function AdminDashboardLayout({
       label: "Testimonials",
       href: "/admin/testimonials",
       icon: MessageSquareQuote,
+    },
+    {
+      label: "User Management",
+      href: "/admin/users",
+      icon: Users,
+      adminOnly: true,
+    },
+    {
+      label: "My Profile",
+      href: "/admin/profile",
+      icon: UserCog,
     },
     {
       label: "Site Settings",
@@ -220,13 +234,26 @@ export default function AdminDashboardLayout({
 
         {/* User profile & footer actions */}
         <div className="p-4 border-t border-border space-y-3 bg-surface-secondary/30 shrink-0">
-          {/* User badge */}
-          <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-surface border border-border">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <UserIcon className="w-4 h-4" />
-            </div>
+          {/* User badge with link to Profile */}
+          <Link
+            href="/admin/profile"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center gap-3 px-3 py-2 rounded-xl bg-surface hover:bg-surface-secondary border border-border transition-colors group cursor-pointer"
+            title="Manage My Profile"
+          >
+            {user?.avatarUrl ? (
+              <img
+                src={user.avatarUrl}
+                alt={user.name}
+                className="w-8 h-8 rounded-lg object-cover border border-border shrink-0"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 font-mono">
+                {user?.name ? user.name.slice(0, 2).toUpperCase() : <UserIcon className="w-4 h-4" />}
+              </div>
+            )}
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-foreground truncate">
+              <p className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">
                 {user?.name || "Authenticating..."}
               </p>
               <div className="flex items-center gap-1.5 mt-0.5">
@@ -236,7 +263,8 @@ export default function AdminDashboardLayout({
                 </span>
               </div>
             </div>
-          </div>
+            <UserCog className="w-4 h-4 text-foreground-muted group-hover:text-primary transition-colors shrink-0" />
+          </Link>
 
           <div className="flex items-center gap-2">
             <a

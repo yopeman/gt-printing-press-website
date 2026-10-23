@@ -16,6 +16,7 @@ export interface SessionPayload {
   email: string;
   name: string;
   role: "admin" | "editor";
+  avatarUrl?: string;
   exp?: number;
 }
 
