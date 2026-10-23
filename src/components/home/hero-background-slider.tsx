@@ -5,32 +5,38 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from '@/i18n/routing';
 import { StatusBadge } from '@/components/ui/status-badge';
 import CircularCarousel, { type CarouselItem } from '@/components/ui/CircularCarousel';
-import bgDesignImage from '@/assets/image.png';
-import bgCircuitImage from '@/assets/image copy.png';
-import bgWaveImage from '@/assets/image copy 2.png';
-import bgBrandImage from '@/assets/image copy 3.png';
-import bgRedBrandImage from '@/assets/image copy 4.png';
-import bgShowcaseImage from '@/assets/image copy 5.png';
-
-const HERO_BACKGROUNDS = [
-  bgDesignImage,
-  bgCircuitImage,
-  bgWaveImage,
-  bgBrandImage,
-  bgRedBrandImage,
-  bgShowcaseImage,
-] as const;
-
-const HERO_GALLERY: CarouselItem[] = [
-  { src: bgDesignImage.src, alt: 'Creative design showcase', title: 'Creative Design' },
-  { src: bgCircuitImage.src, alt: 'Digital precision artwork', title: 'Digital Precision' },
-  { src: bgWaveImage.src, alt: 'Premium wave finishing', title: 'Premium Finishing' },
-  { src: bgBrandImage.src, alt: 'Global tech printing showcase', title: 'Global Tech Printing' },
-  { src: bgRedBrandImage.src, alt: 'GT Printing brand artwork', title: 'GT Printing Brand' },
-  { src: bgShowcaseImage.src, alt: 'Production capabilities showcase', title: 'Production Showcase' },
+const DEFAULT_HERO_ITEMS: CarouselItem[] = [
+  {
+    src: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80',
+    alt: '3D Architectural Signage',
+    title: '3D Architectural Signage',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1200&q=80',
+    alt: 'High-Volume Commercial Offset',
+    title: 'High-Volume Commercial Offset',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=1200&q=80',
+    alt: 'Luxury Rigid Packaging',
+    title: 'Luxury Rigid Packaging',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80',
+    alt: 'Automated PUR Book Binding',
+    title: 'Automated PUR Book Binding',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1513530534585-c7b1394c6d51?auto=format&fit=crop&w=1200&q=80',
+    alt: 'Retail & Store Signage',
+    title: 'Retail & Store Signage',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=1200&q=80',
+    alt: 'Hospitality & Corporate Collateral',
+    title: 'Hospitality & Corporate Collateral',
+  },
 ];
-
-const HERO_CAROUSEL_ITEMS: CarouselItem[] = HERO_GALLERY;
 import {
   ArrowRight,
   ChevronLeft,
@@ -147,9 +153,40 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
   const [isPlaying, setIsPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [carouselItems, setCarouselItems] = useState<CarouselItem[]>(DEFAULT_HERO_ITEMS);
+  const [backgroundImages, setBackgroundImages] = useState<string[]>(
+    DEFAULT_HERO_ITEMS.map((item) => item.src)
+  );
 
   const CYCLE_MS = 3000; // Changes every 3 seconds as requested
   const STEP_MS = 30;
+
+  // Fetch verified showcase and project images from MongoDB database
+  useEffect(() => {
+    let isMounted = true;
+    async function loadDbImages() {
+      try {
+        const res = await fetch('/api/carousel');
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.items && Array.isArray(data.items) && data.items.length > 0 && isMounted) {
+            setCarouselItems(data.items);
+            setBackgroundImages(
+              data.backgrounds && Array.isArray(data.backgrounds) && data.backgrounds.length > 0
+                ? data.backgrounds
+                : data.items.map((i: CarouselItem) => i.src)
+            );
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load hero images from DB:', err);
+      }
+    }
+    loadDbImages();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const currentSlide = SLIDES[currentIndex];
 
@@ -186,16 +223,16 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
     return () => clearInterval(interval);
   }, [isPlaying, isHovered, handleNext]);
 
-  // Independent 3-second animated asset background cross-fade
+  // Independent 3-second animated background cross-fade from DB images
   useEffect(() => {
-    if (!isPlaying || isHovered) return;
+    if (!isPlaying || isHovered || backgroundImages.length === 0) return;
 
     const bgInterval = setInterval(() => {
-      setBgIndex((prev) => (prev + 1) % HERO_BACKGROUNDS.length);
+      setBgIndex((prev) => (prev + 1) % backgroundImages.length);
     }, CYCLE_MS);
 
     return () => clearInterval(bgInterval);
-  }, [isPlaying, isHovered, CYCLE_MS]);
+  }, [isPlaying, isHovered, CYCLE_MS, backgroundImages.length]);
 
   return (
     <div
@@ -203,13 +240,13 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Animated slow-motion dissolving background — every image in /assets */}
+      {/* Animated slow-motion dissolving background — dynamically fetched from DB */}
       <div className="absolute inset-0 -z-20 overflow-hidden bg-black">
-        {HERO_BACKGROUNDS.map((bg, idx) => {
-          const isActive = idx === bgIndex;
+        {backgroundImages.map((imgSrc, idx) => {
+          const isActive = idx === (bgIndex % backgroundImages.length);
           return (
             <motion.div
-              key={idx}
+              key={`${imgSrc}-${idx}`}
               className="absolute inset-0 w-full h-full"
               initial={false}
               animate={{ opacity: isActive ? 1 : 0 }}
@@ -227,8 +264,8 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
                 transition={{ duration: 18, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
               >
                 <img
-                  src={bg.src}
-                  alt="GT Printing Press background showcase"
+                  src={imgSrc}
+                  alt="GT Printing Press showcase background"
                   className="w-full h-full object-cover object-center"
                   loading="eager"
                   decoding="async"
@@ -355,11 +392,10 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
                         key={slide.id}
                         type="button"
                         onClick={() => handleSelect(idx)}
-                        className={`relative min-w-0 overflow-hidden rounded-lg sm:rounded-xl p-1.5 sm:p-2 text-center transition-all ${
-                          isActive
+                        className={`relative min-w-0 overflow-hidden rounded-lg sm:rounded-xl p-1.5 sm:p-2 text-center transition-all ${isActive
                             ? 'border border-brand-red/50 bg-white/20 text-white shadow-inner'
                             : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                        }`}
+                          }`}
                       >
                         {/* Active 3-second Progress Filler Bar */}
                         {isActive && (
@@ -411,7 +447,7 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
             </div>
           </div>
 
-          {/* Right: circular 3D carousel built from the asset images */}
+          {/* Right: circular 3D carousel built from database showcase images */}
           <div className="min-w-0 lg:col-span-5 xl:col-span-6">
             <div className="relative h-[240px] w-full overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-white/10 bg-black/30 shadow-2xl backdrop-blur-md sm:h-[420px] lg:h-[560px]">
               {/* Ambient glow behind the orbit */}
@@ -426,7 +462,7 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
 
               <div className="relative h-full w-full">
                 <CircularCarousel
-                  items={HERO_CAROUSEL_ITEMS}
+                  items={carouselItems}
                   preset="cylinder"
                   intro="rise"
                   cardWidth={190}
@@ -451,15 +487,6 @@ export function HeroBackgroundSlider({ onOpenQuoteModal }: HeroBackgroundSliderP
                   cornerRadius={14}
                   captions={false}
                 />
-              </div>
-
-              <div className="pointer-events-none absolute inset-x-4 bottom-3 flex items-center justify-between gap-2 text-[10px] sm:text-[11px]">
-                <span className="rounded-full border border-white/15 bg-black/60 px-3 py-1 font-mono text-white/80 backdrop-blur-md">
-                  3D Asset Orbit
-                </span>
-                <span className="rounded-full border border-brand-red/25 bg-brand-red/15 px-3 py-1 font-semibold text-brand-red backdrop-blur-md">
-                  Drag to rotate
-                </span>
               </div>
             </div>
           </div>
