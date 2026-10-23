@@ -7,7 +7,8 @@ export type ServiceType =
   | "large-format-signage"
   | "graphic-design-prepress"
   | "corporate-promotional-items"
-  | "other";
+  | "other"
+  | (string & {});
 
 export type ContactMethod = "phone" | "telegram" | "email";
 
@@ -40,6 +41,7 @@ export interface IQuoteRequest {
   artworkStatus: ArtworkStatus;
   locale: Locale;
   attachments?: IAttachment[];
+  externalFileUrl?: string;
   status: QuoteStatus;
   notes?: string;
   telegramDeliveryStatus: TelegramDeliveryStatus;

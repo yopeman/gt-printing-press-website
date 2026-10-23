@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
       artworkStatus: data.artworkStatus,
       locale: data.locale,
       attachments: data.attachments || [],
+      externalFileUrl: data.externalFileUrl || "",
       status: "New",
       notes: data.externalFileUrl ? `External File Share: ${data.externalFileUrl}` : "",
       telegramDeliveryStatus: "pending",
@@ -69,8 +70,9 @@ export async function POST(req: NextRequest) {
       const doc = await QuoteRequest.create(quoteDocument);
       savedQuoteId = doc._id ? doc._id.toString() : "";
       quoteDocument = doc.toObject();
+      console.log(`[QUOTE] Successfully created quote #${reference} in MongoDB (ID: ${savedQuoteId})`);
     } catch (dbErr: any) {
-      console.warn("MongoDB connection unavailable; continuing with Telegram notification dispatch:", dbErr?.message);
+      console.error("[QUOTE] MongoDB save error:", dbErr?.message || dbErr);
     }
 
     // 5. Instant Dispatch to Telegram
@@ -93,6 +95,7 @@ export async function POST(req: NextRequest) {
         reference,
         quoteId: savedQuoteId || reference,
         telegramDelivered: telegramResult.success,
+        telegramError: telegramResult.error,
       },
       { status: 201 }
     );

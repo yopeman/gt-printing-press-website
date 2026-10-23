@@ -22,6 +22,7 @@ import {
   Sparkles,
   FileCheck,
   Layers,
+  X,
 } from "lucide-react";
 
 interface MultiStepQuoteFormProps {
@@ -64,8 +65,19 @@ export function MultiStepQuoteForm({
 
   const totalSteps = 4;
 
-  const nextStep = () => {
+  const nextStep = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
     setValidationError(null);
+
+    // Step 1 validation
+    if (step === 1) {
+      if (!formData.serviceType) {
+        setValidationError("Please choose a manufacturing division to continue.");
+        return;
+      }
+    }
 
     // Step 2 validation
     if (step === 2) {
@@ -73,10 +85,10 @@ export function MultiStepQuoteForm({
         setValidationError("Please enter your full name (minimum 2 characters)");
         return;
       }
-      const cleanPhone = formData.phone.replace(/[\s-]/g, "");
-      const ethiopianPhoneRegex = /^(\+251|0)(9|7)\d{8}$/;
-      if (!ethiopianPhoneRegex.test(cleanPhone)) {
-        setValidationError("Please enter a valid Ethiopian mobile number (+251 9... / 09... / +251 7... / 07...)");
+      const cleanPhone = formData.phone.replace(/[\s\-()]/g, "");
+      const phoneRegex = /^(\+?251|0)?[1-9]\d{7,10}$/;
+      if (!phoneRegex.test(cleanPhone)) {
+        setValidationError("Please enter a valid phone number (e.g. +251 9... / 09... / +251 7... / 07... / 011...)");
         return;
       }
     }
@@ -95,7 +107,10 @@ export function MultiStepQuoteForm({
     }
   };
 
-  const prevStep = () => {
+  const prevStep = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
     setValidationError(null);
     if (step > 1) {
       setDirection(-1);
@@ -103,12 +118,18 @@ export function MultiStepQuoteForm({
     }
   };
 
+  // Remove individual attachment
+  const removeAttachment = (indexToRemove: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      attachments: prev.attachments.filter((_, idx) => idx !== indexToRemove),
+    }));
+  };
+
   // Handle local file drop and base64 conversion
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
-
-    const fileList: { fileName: string; fileUrl: string; size: number }[] = [];
 
     Array.from(files).forEach((file) => {
       // Limit to 10MB per file
@@ -133,10 +154,38 @@ export function MultiStepQuoteForm({
     });
   };
 
-  // Submission to backend
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Submission to backend (Strictly only callable on Step 4)
+  const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    // CRITICAL: Block submission if user is on Step 1, 2, or 3
+    if (step !== totalSteps) {
+      return;
+    }
+
     setValidationError(null);
+
+    // Final integrity checks across all fields
+    if (!formData.name || formData.name.trim().length < 2) {
+      setStep(2);
+      setValidationError("Please enter your full name (minimum 2 characters)");
+      return;
+    }
+    const cleanPhone = formData.phone.replace(/[\s\-()]/g, "");
+    const phoneRegex = /^(\+?251|0)?[1-9]\d{7,10}$/;
+    if (!phoneRegex.test(cleanPhone)) {
+      setStep(2);
+      setValidationError("Please enter a valid phone number (e.g. +251 9... / 09...)");
+      return;
+    }
+    if (!formData.specification || formData.specification.trim().length < 5) {
+      setStep(3);
+      setValidationError("Please describe your job specifications (minimum 5 characters)");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -322,7 +371,14 @@ export function MultiStepQuoteForm({
         />
       </div>
 
-      <form onSubmit={step === totalSteps ? handleSubmit : (e) => { e.preventDefault(); nextStep(); }}>
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "TEXTAREA") {
+            e.preventDefault();
+          }
+        }}
+      >
         <AnimatePresence mode="wait" custom={direction}>
           {/* STEP 1: SERVICE SELECTION */}
           {step === 1 && (
@@ -651,8 +707,22 @@ export function MultiStepQuoteForm({
                         key={i}
                         className="p-2.5 rounded-xl bg-surface-secondary border border-border flex items-center justify-between text-xs text-foreground"
                       >
-                        <span className="min-w-0 font-mono truncate mr-2">{f.fileName}</span>
-                        <span className="text-foreground-muted shrink-0">{(f.size / 1024).toFixed(0)} KB</span>
+                        <div className="flex items-center gap-2 min-w-0 mr-2">
+                          <FileCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+                          <span className="min-w-0 font-mono truncate">{f.fileName}</span>
+                        </div>
+                        <div className="flex items-center gap-2.5 shrink-0">
+                          <span className="text-foreground-muted">{(f.size / 1024).toFixed(0)} KB</span>
+                          <button
+                            type="button"
+                            onClick={() => removeAttachment(i)}
+                            className="p-1 rounded-lg text-foreground-muted hover:text-red-500 hover:bg-red-500/10 transition-colors"
+                            title="Remove attachment"
+                            aria-label={`Remove ${f.fileName}`}
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -694,6 +764,7 @@ export function MultiStepQuoteForm({
         <div className="pt-6 border-t border-border flex flex-wrap items-center justify-between gap-3 sm:gap-4">
           {step > 1 ? (
             <button
+              key="btn-step-back"
               type="button"
               onClick={prevStep}
               className="px-5 py-3 rounded-xl bg-surface hover:bg-surface-secondary border border-border text-foreground font-semibold text-xs sm:text-sm flex items-center gap-1.5 transition-colors"
@@ -707,6 +778,7 @@ export function MultiStepQuoteForm({
 
           {step < totalSteps ? (
             <button
+              key={`btn-step-next-${step}`}
               type="button"
               onClick={nextStep}
               className="ml-auto px-6 py-3 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-xs sm:text-sm shadow-glow-sm transition-all flex items-center justify-center gap-2"
@@ -716,12 +788,17 @@ export function MultiStepQuoteForm({
             </button>
           ) : (
             <button
-              type="submit"
+              key="btn-step-submit-final"
+              type="button"
+              onClick={handleSubmit}
               disabled={isSubmitting}
               className="ml-auto flex-1 sm:flex-none justify-center px-5 sm:px-8 py-3.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-xs sm:text-base shadow-glow-md hover:shadow-glow-lg transition-all flex items-center gap-2 disabled:opacity-50"
             >
               {isSubmitting ? (
-                <span>Transmitting Quote...</span>
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Transmitting Quote...</span>
+                </>
               ) : (
                 <>
                   <span>Transmit Order Request</span>

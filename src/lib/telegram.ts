@@ -1,12 +1,65 @@
+import https from "node:https";
+import dns from "node:dns";
 import { IQuoteRequest, IContactMessage } from "@/types/database";
 import { dbConnect } from "@/lib/db";
 import SiteSetting from "@/models/SiteSetting";
 import { DEFAULT_SETTINGS } from "@/lib/default-settings";
 
+// Enforce IPv4 resolution to prevent ENETUNREACH / ETIMEDOUT on IPv6-unroutable networks
+try {
+  dns.setDefaultResultOrder("ipv4first");
+} catch (_) {}
+
 export interface TelegramAlertResult {
   success: boolean;
   messageId?: number;
   error?: string;
+}
+
+/**
+ * Robust IPv4-enforced HTTPS transport for Telegram Bot API
+ */
+async function postTelegramApi(
+  token: string,
+  method: string,
+  payload: any,
+  timeoutMs = 12000
+): Promise<{ ok: boolean; result?: any; description?: string }> {
+  return new Promise((resolve, reject) => {
+    const data = JSON.stringify(payload);
+    const req = https.request(
+      `https://api.telegram.org/bot${token}/${method}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(data),
+        },
+        family: 4, // Force IPv4 socket connection
+        timeout: timeoutMs,
+      },
+      (res) => {
+        let raw = "";
+        res.on("data", (chunk) => (raw += chunk));
+        res.on("end", () => {
+          try {
+            resolve(JSON.parse(raw));
+          } catch (e) {
+            resolve({ ok: false, description: raw });
+          }
+        });
+      }
+    );
+
+    req.on("error", (err) => reject(err));
+    req.on("timeout", () => {
+      req.destroy();
+      reject(new Error("Telegram API request timed out"));
+    });
+
+    req.write(data);
+    req.end();
+  });
 }
 
 /**
@@ -71,7 +124,7 @@ export async function sendTelegramQuoteAlert(
     other: "Other / Custom",
   };
 
-  const serviceName = serviceLabels[quote.serviceType] || quote.serviceType;
+  const serviceName = serviceLabels[quote.serviceType] || quote.serviceType.replace(/-/g, " ");
   const fileCount = quote.attachments ? quote.attachments.length : 0;
   const artworkStatusLabel =
     quote.artworkStatus === "ready"
@@ -92,7 +145,7 @@ ${quote.email ? `✉️ <b>Email:</b> ${escapeHtml(quote.email)}\n` : ""}💬 <b
 ${escapeHtml(quote.specification)}
 
 ${quote.quantity ? `📦 <b>Quantity:</b> ${escapeHtml(quote.quantity)}\n` : ""}${quote.neededBy ? `📅 <b>Needed By:</b> ${escapeHtml(quote.neededBy)}\n` : ""}🎨 <b>Artwork Status:</b> ${escapeHtml(artworkStatusLabel)}
-📎 <b>Attachments:</b> ${fileCount} file(s) attached
+${quote.externalFileUrl ? `🔗 <b>File Share Link:</b> ${escapeHtml(quote.externalFileUrl)}\n` : ""}📎 <b>Attachments:</b> ${fileCount} file(s) attached
 🌐 <b>Language:</b> ${escapeHtml(quote.locale.toUpperCase())}
 🕒 <b>Submitted:</b> ${escapeHtml(submittedAt)} (EAT)
 `.trim();
@@ -122,28 +175,14 @@ ${quote.quantity ? `📦 <b>Quantity:</b> ${escapeHtml(quote.quantity)}\n` : ""}
   };
 
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: messageText,
-        parse_mode: "HTML",
-        reply_markup: replyMarkup,
-      }),
-      signal: controller.signal,
+    const data = await postTelegramApi(token, "sendMessage", {
+      chat_id: chatId,
+      text: messageText,
+      parse_mode: "HTML",
+      reply_markup: replyMarkup,
     });
 
-    clearTimeout(timeoutId);
-
-    const data = await response.json();
-
-    if (!response.ok || !data.ok) {
+    if (!data.ok) {
       console.error("Telegram Bot API Error:", data);
       return {
         success: false,
@@ -227,28 +266,14 @@ ${escapeHtml(contact.message)}
   };
 
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: messageText,
-        parse_mode: "HTML",
-        reply_markup: replyMarkup,
-      }),
-      signal: controller.signal,
+    const data = await postTelegramApi(token, "sendMessage", {
+      chat_id: chatId,
+      text: messageText,
+      parse_mode: "HTML",
+      reply_markup: replyMarkup,
     });
 
-    clearTimeout(timeoutId);
-
-    const data = await response.json();
-
-    if (!response.ok || !data.ok) {
+    if (!data.ok) {
       console.error("Telegram Bot API Error (Contact):", data);
       return {
         success: false,
@@ -294,21 +319,13 @@ This test dispatch verifies that your Telegram Bot Token and Chat ID stored in t
   `.trim();
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: testMessage,
-        parse_mode: "HTML",
-      }),
+    const data = await postTelegramApi(token, "sendMessage", {
+      chat_id: chatId,
+      text: testMessage,
+      parse_mode: "HTML",
     });
 
-    const data = await response.json();
-
-    if (!response.ok || !data.ok) {
+    if (!data.ok) {
       return {
         success: false,
         error: data.description || "Failed to deliver Telegram test message",

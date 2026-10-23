@@ -413,41 +413,66 @@ function QuotesPageContent() {
               </div>
 
               {/* Attachments & External Links */}
-              {(selectedQuote.externalFileUrl || (selectedQuote.attachments && selectedQuote.attachments.length > 0)) && (
-                <div className="space-y-2">
-                  <span className="text-xs font-bold text-foreground uppercase tracking-wider font-mono">
-                    Supplied Artwork & Links
-                  </span>
-                  {selectedQuote.externalFileUrl && (
-                    <a
-                      href={selectedQuote.externalFileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-3 rounded-xl bg-surface-secondary border border-border hover:border-primary/40 text-xs font-semibold text-primary flex items-center justify-between transition-colors"
-                    >
-                      <div className="flex items-center gap-2 truncate">
-                        <LinkIcon className="w-4 h-4 shrink-0" />
-                        <span className="truncate">{selectedQuote.externalFileUrl}</span>
+              {(() => {
+                const externalUrl =
+                  selectedQuote.externalFileUrl ||
+                  (selectedQuote.notes?.startsWith("External File Share: ")
+                    ? selectedQuote.notes.replace("External File Share: ", "").trim()
+                    : null);
+                const hasAttachments = selectedQuote.attachments && selectedQuote.attachments.length > 0;
+
+                if (!externalUrl && !hasAttachments) return null;
+
+                return (
+                  <div className="space-y-2">
+                    <span className="text-xs font-bold text-foreground uppercase tracking-wider font-mono">
+                      Supplied Artwork & Links
+                    </span>
+                    {externalUrl && (
+                      <a
+                        href={externalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-3 rounded-xl bg-surface-secondary border border-border hover:border-primary/40 text-xs font-semibold text-primary flex items-center justify-between transition-colors"
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          <LinkIcon className="w-4 h-4 shrink-0" />
+                          <span className="truncate">{externalUrl}</span>
+                        </div>
+                        <ExternalLink className="w-4 h-4 shrink-0" />
+                      </a>
+                    )}
+                    {selectedQuote.attachments?.map((att: any, i: number) => (
+                      <div
+                        key={i}
+                        className="p-3 rounded-xl bg-surface-secondary border border-border text-xs flex items-center justify-between"
+                      >
+                        <div className="flex items-center gap-2 min-w-0 mr-2">
+                          <FileCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+                          <span className="font-medium text-foreground truncate">{att.fileName}</span>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <span className="text-[11px] text-foreground-muted">
+                            {(att.size / 1024 / 1024).toFixed(2)} MB
+                          </span>
+                          {att.fileUrl && (
+                            <a
+                              href={att.fileUrl}
+                              download={att.fileName}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-2.5 py-1 rounded-lg bg-primary/10 hover:bg-primary hover:text-white text-primary text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                            >
+                              <Download className="w-3.5 h-3.5" />
+                              <span>Download</span>
+                            </a>
+                          )}
+                        </div>
                       </div>
-                      <ExternalLink className="w-4 h-4 shrink-0" />
-                    </a>
-                  )}
-                  {selectedQuote.attachments?.map((att: any, i: number) => (
-                    <div
-                      key={i}
-                      className="p-3 rounded-xl bg-surface-secondary border border-border text-xs flex items-center justify-between"
-                    >
-                      <div className="flex items-center gap-2">
-                        <FileCheck className="w-4 h-4 text-emerald-500" />
-                        <span className="font-medium text-foreground">{att.fileName}</span>
-                      </div>
-                      <span className="text-[11px] text-foreground-muted">
-                        {(att.size / 1024 / 1024).toFixed(2)} MB
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                );
+              })()}
 
               {/* Internal Notes / Sales Staff Log */}
               <div className="space-y-2 pt-2 border-t border-border">

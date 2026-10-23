@@ -1,27 +1,18 @@
 import { z } from "zod";
 
-// Ethiopian phone number validation regex:
-// Valid formats: +251 9XXXXXXXX, +251 7XXXXXXXX, 09XXXXXXXX, 07XXXXXXXX (with optional spaces/dashes)
-export const ethiopianPhoneRegex = /^(\+251|0)(9|7)\d{8}$/;
+// Flexible phone validation regex allowing Ethiopian mobile/landlines and international formats
+export const ethiopianPhoneRegex = /^(\+?251|0)?[1-9]\d{7,10}$/;
 
 export const QuoteSubmissionSchema = z.object({
-  serviceType: z.enum([
-    "offset-digital-printing",
-    "publishing-binding",
-    "packaging-solutions",
-    "large-format-signage",
-    "graphic-design-prepress",
-    "corporate-promotional-items",
-    "other",
-  ]),
+  serviceType: z.string().trim().min(1, "Please select a service type"),
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(100),
   company: z.string().trim().max(120).optional().default(""),
   phone: z
     .string()
     .trim()
-    .transform((val) => val.replace(/[\s-]/g, ""))
+    .transform((val) => val.replace(/[\s\-()]/g, ""))
     .refine((val) => ethiopianPhoneRegex.test(val), {
-      message: "Please enter a valid Ethiopian mobile number (e.g., +251 91 123 4567 or 0911234567)",
+      message: "Please enter a valid phone number (e.g., +251 91 123 4567, 0911234567, or 0115512345)",
     }),
   email: z.string().trim().email("Please enter a valid email address").or(z.literal("")).optional().default(""),
   preferredContact: z.enum(["phone", "telegram", "email"]).default("phone"),

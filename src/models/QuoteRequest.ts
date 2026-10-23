@@ -21,15 +21,13 @@ const QuoteRequestSchema = new Schema<IQuoteRequest>(
     serviceType: {
       type: String,
       required: true,
-      enum: [
-        "offset-digital-printing",
-        "publishing-binding",
-        "packaging-solutions",
-        "large-format-signage",
-        "graphic-design-prepress",
-        "corporate-promotional-items",
-        "other",
-      ],
+      trim: true,
+      index: true,
+    },
+    externalFileUrl: {
+      type: String,
+      trim: true,
+      default: "",
     },
     name: {
       type: String,
