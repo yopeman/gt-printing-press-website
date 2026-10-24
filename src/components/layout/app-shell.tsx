@@ -36,8 +36,8 @@ export function AppShell({ children }: AppShellProps) {
         onMobileMenuChange={setMobileMenuOpen}
       />
 
-      {/* Main Page Body */}
-      <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
+      {/* Main Page Body (offset for fixed top header: h-16 sm:h-20) */}
+      <main id="main-content" tabIndex={-1} className="flex-1 outline-none pt-16 sm:pt-20">
         {children}
       </main>
 

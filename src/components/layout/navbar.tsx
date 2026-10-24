@@ -77,7 +77,7 @@ export function Navbar({
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
           scrolled
             ? "glass-panel shadow-md border-b border-border/80"
             : "bg-background/80 backdrop-blur-md border-b border-border/40"
@@ -201,7 +201,7 @@ export function Navbar({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 220 }}
-            className="fixed inset-x-0 bottom-0 top-16 sm:top-20 z-40 xl:hidden bg-background/95 backdrop-blur-xl border-t border-border flex flex-col justify-between p-4 sm:p-6 pb-[max(1rem,env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain"
+            className="fixed inset-x-0 bottom-0 top-16 sm:top-20 z-50 xl:hidden bg-background/95 backdrop-blur-xl border-t border-border flex flex-col justify-between p-4 sm:p-6 pb-[max(1rem,env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain"
           >
             {/* Nav list */}
             <nav className="flex flex-col space-y-2 pt-2">
